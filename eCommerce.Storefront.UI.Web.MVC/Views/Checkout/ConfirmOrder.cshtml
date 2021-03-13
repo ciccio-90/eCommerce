@@ -1,0 +1,33 @@
+@{
+    Layout = "Checkout";
+    ViewData["Title"] = "Confirm Order";
+}
+
+@model eCommerce.Storefront.Controllers.ViewModels.Checkout.OrderConfirmationView
+
+<h2>Confirm Order</h2>    
+@using (Html.BeginForm("PlaceOrder", "Checkout")) 
+{
+    <text>Delivery Address</text>
+    <select id="DeliveryAddress" name="DeliveryAddress">
+    @foreach (var deliveryAddress in Model.DeliveryAddresses)
+    {
+        <option value="@deliveryAddress.Id">
+            @deliveryAddress.Name
+        </option>
+    }
+    </select>    
+    <text>- </text>@Html.ActionLink("Create new address", "AddDeliveryAddress", "Checkout")
+    <ul>
+    @foreach(var item in Model.Basket.Items) 
+    {
+        <li>
+            @item.Qty of @item.ProductName at @string.Format("{0:F}", item.ProductPrice)
+        </li>
+    }
+    </ul>
+    <p>Total: @string.Format("{0:F}", Model.Basket.ItemsTotal)</p>
+    <p>Delivery Charge: @string.Format("{0:F}", Model.Basket.DeliveryCost)</p>
+    <p>Total: @string.Format("{0:F}", Model.Basket.BasketTotal)</p>
+    <input id="Submit" type="submit" value="Place Order" /><br /><br />
+}

@@ -1,0 +1,27 @@
+@model eCommerce.Storefront.Services.ViewModels.DeliveryAddressView
+
+@Html.Hidden("Id", Model.Id)
+<p>
+    <label for="Name">Name</label><br />
+    @Html.TextBox("Name", Model.Name)
+</p>
+<p>
+    <label for="AddressLine">Address Line</label><br />
+    @Html.TextBox("AddressLine", Model.AddressLine)
+</p>
+<p>
+    <label for="City">City</label><br />
+    @Html.TextBox("City", Model.City)
+</p>
+<p>
+    <label for="State">State</label><br />
+    @Html.TextBox("State", Model.State)
+</p>
+<p>
+    <label for="Country">Country</label><br />
+    @Html.TextBox("Country", Model.Country)
+</p>
+<p>
+    <label for="ZipCode">Zip Code</label><br />
+    @Html.TextBox("ZipCode", Model.ZipCode)
+</p>

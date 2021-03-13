@@ -1,0 +1,59 @@
+@page "/admin/account/register"
+@attribute [Authorize(Roles = "Admin")]
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+
+<div class="row">
+    <div class="col-12">
+        @if ((registerResponse?.IsSuccess).GetValueOrDefault() == false)
+        {
+            <h2>Create new account</h2>
+            <EditForm Model="model" OnValidSubmit="RegisterUser">
+                <RadzenCard>
+                    
+                    <label>Email</label>
+                    <RadzenTextBox @bind-Value="model.Email"></RadzenTextBox>
+
+                    <label>Password</label>
+                    <RadzenPassword @bind-Value="model.Password"></RadzenPassword>
+
+                    <label>Confirm Password</label>
+                    <RadzenPassword @bind-Value="model.ConfirmPassword"></RadzenPassword>
+
+                    <hr />
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+
+                    <Alert Title="Attention" ErrorList="registerResponse?.Errors" />
+
+                    <div class="row row-cols-2">
+                        <RadzenButton ButtonType="Radzen.ButtonType.Submit" Text="Register" ButtonStyle="Radzen.ButtonStyle.Primary" class="mr-2 col ml-3"></RadzenButton>
+                        <RadzenButton ButtonType="Radzen.ButtonType.Button" Click="@(() => NavigationManager.NavigateTo("/account/list"))" Text="Cancel" ButtonStyle="Radzen.ButtonStyle.Warning" class="mr-3 col" />
+                    </div>
+                </RadzenCard>
+            </EditForm>
+        }
+        else
+        {
+            @if ((registerResponse?.EmailConfirmed).GetValueOrDefault() == false)
+            {
+                <EmailSent Email="@model.Email" />
+            }
+        }
+    </div>
+</div>
+
+@code {
+    RegisterRequest model = new RegisterRequest();
+    RegisterResponse registerResponse = null;
+        
+    public async Task RegisterUser()
+    {
+        registerResponse = await (await HttpClient.PostAsJsonAsync<RegisterRequest>("api/accounts", model))?.Content?.ReadFromJsonAsync<RegisterResponse>();
+
+        if (registerResponse != null && registerResponse.IsSuccess && registerResponse.EmailConfirmed)
+        {
+            NavigationManager.NavigateTo("/account/list");
+        }
+    }
+}

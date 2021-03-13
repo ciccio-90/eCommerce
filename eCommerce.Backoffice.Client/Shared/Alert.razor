@@ -1,0 +1,33 @@
+@if (IsVisible)
+{
+    <div class="alert alert-@CSSClass" role="alert">
+        <h4 class="alert-heading">@Title</h4>
+        @if (ErrorList != null && ErrorList.Count() > 0)
+        {
+            <ul>
+                @foreach (string error in ErrorList)
+                {
+                    <li>@error</li>
+                }
+            </ul>
+        }
+    </div>
+}
+
+@code {
+    private bool IsVisible = false;
+
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public IEnumerable<string> ErrorList { get; set; }
+
+    [Parameter]
+    public string CSSClass { get; set; } = "warning";
+
+    protected override void OnParametersSet()
+    {
+        IsVisible = !string.IsNullOrEmpty(Title) && ErrorList != null;
+    }
+}

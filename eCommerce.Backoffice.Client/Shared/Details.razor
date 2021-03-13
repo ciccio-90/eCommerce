@@ -1,0 +1,68 @@
+@typeparam TItem
+@inject HttpClient HttpClient
+
+@if (Item != null)
+{
+    <h2>@Title</h2>
+    <EditForm Model="@Item" OnValidSubmit="@(() => OnSave.InvokeAsync(Item))">
+        <RadzenCard>
+
+            @FormFields(Item)
+
+            <hr />
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="row row-cols-3">
+                @if (CanSave)
+                {
+                    <RadzenButton ButtonType="Radzen.ButtonType.Submit" Text="Save" ButtonStyle="Radzen.ButtonStyle.Info" class="mr-2 col ml-3" />
+                }
+
+                @if (CanDelete)
+                {
+                    <RadzenButton ButtonType="Radzen.ButtonType.Button" Text="Delete" Click="@(() => OnDelete.InvokeAsync(Item))" ButtonStyle="Radzen.ButtonStyle.Danger" class="mr-2 col" />
+                }
+
+                @if (CanCancel)
+                {
+                    <RadzenButton ButtonType="Radzen.ButtonType.Button" Text="Cancel" Click="@(() => OnCancel.InvokeAsync(Item))" ButtonStyle="Radzen.ButtonStyle.Warning" class="mr-3 col" />
+                }          
+            </div>
+        </RadzenCard>
+    </EditForm>
+}
+else
+{
+    <p><em>Loading...</em></p>
+}
+
+@code 
+{
+    [Parameter]
+    public RenderFragment<TItem> FormFields { get; set; }
+
+    [Parameter]
+    public TItem Item { get; set; }
+
+    [Parameter] 
+    public string Title { get; set; }
+
+    [Parameter] 
+    public bool CanSave { get; set; } = true;
+
+    [Parameter] 
+    public bool CanDelete { get; set; } = true;
+
+    [Parameter] 
+    public bool CanCancel { get; set; } = true;
+
+    [Parameter]
+    public EventCallback OnSave { get; set; }
+
+    [Parameter]
+    public EventCallback OnDelete { get; set; }
+
+    [Parameter]
+    public EventCallback OnCancel { get; set; }
+}

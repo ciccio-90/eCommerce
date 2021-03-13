@@ -1,0 +1,23 @@
+@{
+    Layout = "CustomerAccount";
+    ViewData["Title"] = "Your Order History";
+}
+
+@model eCommerce.Storefront.Controllers.ViewModels.CustomerAccount.CustomersOrderSummaryView
+
+<h2>Your Orders</h2>    
+<ul>
+    @foreach(var order in Model.Orders)
+    {
+        <li>
+            @order.Created.ToLongDateString() 
+
+            @if (order.IsSubmitted == false)
+            {
+                @Html.ActionLink("Pay", "CreatePaymentFor", "Payment", new { orderId = order.Id}, null)
+            }
+            
+            @Html.ActionLink("View Detail", "Detail", "Order", new { orderId = order .Id}, null)
+        </li>    
+    }
+</ul>

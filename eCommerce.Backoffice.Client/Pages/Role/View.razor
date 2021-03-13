@@ -1,0 +1,182 @@
+@page "/admin/role/view"
+@attribute [Authorize(Roles = "Admin")]
+@layout MainLayout
+@inject HttpClient Http
+
+<h2>Manage Roles</h2>
+<div class="row">
+
+    <div class="col-4">
+        @if (roleResponses?.Count > 0)
+        {
+            <RadzenListBox @bind-Value="@value" Data="@roleResponses" Style="width:100%;min-height:200px;" TextProperty="Name" ValueProperty="Id" Change="@(args => Selected(args))" />
+        }
+        else
+        {
+            <p class="card-text"><small class="text-muted">empty</small></p>
+        }
+        <RadzenButton ButtonType="Radzen.ButtonType.Button" Click="@((args) => AddRole(args))" Text="New role" Icon="https" ButtonStyle="Radzen.ButtonStyle.Warning" class="btn-block btn-sm mr-2"></RadzenButton>
+    </div>
+
+    @if (model != null)
+    {
+        <div class="col-4">
+            <EditForm Model="model" OnValidSubmit="SaveRole">
+                <RadzenCard>
+                    <label>Name</label>
+                    <RadzenTextBox @bind-Value="model.Name"></RadzenTextBox>
+                    <hr />
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <Alert Title="Attention" ErrorList="editRoleResponse?.Errors" />
+                    <div class="row row-cols-2">
+                        <RadzenButton ButtonType="Radzen.ButtonType.Submit" Text="@buttonTitle" Icon="save" ButtonStyle="Radzen.ButtonStyle.Info" class="mr-2 col ml-3"></RadzenButton>
+                        <RadzenButton ButtonType="Radzen.ButtonType.Button" Click="DeleteRole" Text="Delete" Icon="delete" ButtonStyle="Radzen.ButtonStyle.Danger" class="mr-3 col"></RadzenButton>
+                    </div>
+                </RadzenCard>
+            </EditForm>
+
+            @if (roleUserResponse != null && roleUserResponse.Any(x => x.OnRule)) 
+            {
+                <h4 class="mt-3">Users in role</h4>
+                <RadzenDataList Data="@roleUserResponse.Where(x => x.OnRule)" TItem="RoleUserResponse">
+                    <Template Context="roleUser">
+                        <div class="row">
+                            <div class="col-10 mt-2">
+                                @roleUser.Name
+                            </div>
+                            <div class="col-2">
+                                <RadzenButton Icon="delete" Click="@((args) => RemoveRoleUser(roleUser.Id))" />
+                            </div>
+                        </div>
+                    </Template>
+                </RadzenDataList>
+            }
+        </div>
+        <div class="col-4">
+            <EditForm Model="model" OnValidSubmit="SaveRoleUser">
+                <RadzenCard>
+                    <label>Add User</label>
+                    <RadzenDropDown @bind-Value="userId" AllowClear="true" TValue="string" Data="@roleUserResponse" TextProperty="Name" ValueProperty="Id" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterOperator="StringFilterOperator.Contains" AllowFiltering="true" />
+                    <hr />
+                    <RadzenButton ButtonType="Radzen.ButtonType.Submit" Text="Save" Icon="save" ButtonStyle="Radzen.ButtonStyle.Info" class="btn-block mr-2"></RadzenButton>
+                </RadzenCard>
+            </EditForm>
+        </div>
+    }
+</div>
+
+@code {
+    EditRoleRequest model;
+    EditRoleResponse editRoleResponse;
+    List<RoleModel> roleResponses = null;
+    string value;
+    string buttonTitle = "Save";
+    List<RoleUserResponse> roleUserResponse = null;
+    string userId = null;
+
+    protected async override Task OnInitializedAsync()
+    {
+        roleResponses = await Http.GetFromJsonAsync<List<RoleModel>>("api/roles");
+
+        StateHasChanged();
+    }
+
+    async Task Selected(object value)
+    {
+        buttonTitle = "Save";
+        model = new EditRoleRequest
+        {
+            Id = value.ToString(),
+            Name = roleResponses.First(x=> x.Id.Equals(value.ToString())).Name
+        };
+        roleUserResponse = await Http.GetFromJsonAsync<List<RoleUserResponse>>($"api/roles/{model.Id}/users");
+
+        StateHasChanged();
+    }
+
+    void AddRole(MouseEventArgs args)
+    {
+        buttonTitle = "Add";
+        model = new EditRoleRequest();
+        roleUserResponse = null;
+            
+        StateHasChanged();
+    }
+
+    public async Task SaveRole()
+    {
+        if (string.IsNullOrEmpty(model.Id))
+        {
+            editRoleResponse = await (await Http.PostAsJsonAsync<EditRoleRequest>("api/roles", model))?.Content?.ReadFromJsonAsync<EditRoleResponse>();
+        } 
+        else
+        {
+            editRoleResponse = await (await Http.PutAsJsonAsync<EditRoleRequest>($"api/roles/{model.Id}", model))?.Content?.ReadFromJsonAsync<EditRoleResponse>();
+        }
+
+        if (editRoleResponse.IsSuccess)
+        {
+            if (string.IsNullOrEmpty(model.Id))
+            {
+                roleResponses.Add(new RoleModel { Id = editRoleResponse.Id, Name = model.Name });
+            } 
+            else
+            {
+                roleResponses.First(x => x.Id.Equals(model.Id)).Name = model.Name;
+            }
+
+            roleUserResponse = await Http.GetFromJsonAsync<List<RoleUserResponse>>($"api/roles/{editRoleResponse.Id}/users");
+
+            StateHasChanged();  
+
+            model = null;
+        }
+    }
+
+    public async Task SaveRoleUser()
+    {
+        bool isSuccess = false;
+
+        if (!string.IsNullOrEmpty(model.Id) && !string.IsNullOrEmpty(userId))
+        {
+            isSuccess = await (await Http.PutAsJsonAsync<AddRemoveRoleRequest>($"api/roles/{model.Id}/user/{userId}", new AddRemoveRoleRequest { RoleId = model.Id, UserId = userId, Add = true }))?.Content?.ReadFromJsonAsync<bool>();
+        } 
+
+        if (isSuccess)
+        {
+            roleUserResponse = await Http.GetFromJsonAsync<List<RoleUserResponse>>($"api/roles/{model.Id}/users");
+
+            StateHasChanged();
+        }
+    }
+
+    public async Task RemoveRoleUser(string id)
+    {
+        bool isSuccess = false;
+
+        if (!string.IsNullOrEmpty(model.Id) && !string.IsNullOrEmpty(id))
+        {
+            isSuccess = await (await Http.PutAsJsonAsync<AddRemoveRoleRequest>($"api/roles/{model.Id}/user/{id}", new AddRemoveRoleRequest { RoleId = model.Id, UserId = id, Add = false }))?.Content?.ReadFromJsonAsync<bool>();
+        } 
+
+        if (isSuccess)
+        {
+            roleUserResponse = await Http.GetFromJsonAsync<List<RoleUserResponse>>($"api/roles/{model.Id}/users");
+
+            StateHasChanged();
+        }
+    }
+
+    public async Task DeleteRole()
+    {
+        if (!string.IsNullOrEmpty(model.Id))
+        {
+            await Http.DeleteAsync($"api/roles/{model.Id}");
+            roleResponses?.RemoveAll(r => r.Id.Equals(model.Id));
+            StateHasChanged();
+
+            model = null;
+        }
+    }
+}

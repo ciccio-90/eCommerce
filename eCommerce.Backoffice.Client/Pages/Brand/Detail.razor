@@ -1,0 +1,85 @@
+@page "/admin/brand/detail/{Id:int?}"
+@attribute [Authorize(Roles = "Admin")]
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+
+<Alert Title="@error" ErrorList="new List<string>()" CSSClass="danger" />
+
+<Details Title="Brand" TItem="Brand" Item="brand" CanDelete="@(brand?.Id > 0)" OnSave="@((item) => SaveBrand(item as Brand))" OnDelete="@((item) => DeleteBrand(item as Brand))" OnCancel="@((item) => NavigationManager.NavigateTo("/brand/list"))">       
+    <FormFields Context="brand">
+        <label>Name</label>
+        <RadzenTextBox @bind-Value="brand.Name"></RadzenTextBox>
+    </FormFields>
+</Details>
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+
+    string route = "api/brands";
+    string listUrl = "/brand/list";
+    Brand brand;
+    string error;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id.HasValue)
+        {
+            brand = await HttpClient.GetFromJsonAsync<Brand>($"{route}/{Id}");
+        }
+        else
+        {
+            brand = new Brand();   
+        }
+    }
+
+    async Task SaveBrand(Brand item)
+    {
+        if (item != null)
+        {
+            if (item.Id > 0)
+            {
+                HttpResponseMessage httpResponseMessage = await HttpClient.PutAsJsonAsync<Brand>($"{route}/{item.Id}", item);
+
+                if (httpResponseMessage != null && httpResponseMessage.IsSuccessStatusCode)
+                {
+                    NavigationManager.NavigateTo(listUrl);
+                }
+                else
+                {
+                    error = await httpResponseMessage.Content.ReadAsStringAsync();
+                }
+            }
+            else 
+            {
+                HttpResponseMessage httpResponseMessage = await HttpClient.PostAsJsonAsync<Brand>(route, item);
+
+                if (httpResponseMessage != null && httpResponseMessage.IsSuccessStatusCode)
+                {
+                    NavigationManager.NavigateTo(listUrl);
+                }
+                else
+                {
+                    error = await httpResponseMessage.Content.ReadAsStringAsync();
+                }
+            }
+        } 
+    }
+
+    async Task DeleteBrand(Brand item)
+    {
+        if (item != null && item.Id > 0)
+        {
+            HttpResponseMessage httpResponseMessage = await HttpClient.DeleteAsync($"{route}/{item.Id}");
+
+            if (httpResponseMessage != null && httpResponseMessage.IsSuccessStatusCode)
+            {
+                NavigationManager.NavigateTo(listUrl);
+            }
+            else
+            {
+                error = await httpResponseMessage.Content.ReadAsStringAsync();
+            }
+        }
+    }
+}

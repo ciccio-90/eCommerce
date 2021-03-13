@@ -1,0 +1,18 @@
+@{
+    Layout = "Checkout";
+    ViewData["Title"] = "Add Delivery Address";
+}
+
+@model eCommerce.Storefront.Services.ViewModels.DeliveryAddressView
+
+<h2>Add Delivery Address</h2>    
+@using (Html.BeginForm("AddDeliveryAddress", "Checkout"))
+{
+    @await Html.PartialAsync("~/Views/Shared/AddressEdit.cshtml", Model)
+    <p>
+        <input type="submit" value="Create Address and Checkout" />
+    </p>        
+}
+<div>
+    @Html.ActionLink("Check Out", "Checkout", "Checkout")
+</div><br />

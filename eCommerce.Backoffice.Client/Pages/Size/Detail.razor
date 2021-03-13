@@ -1,0 +1,85 @@
+@page "/admin/size/detail/{Id:int?}"
+@attribute [Authorize(Roles = "Admin")]
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+
+<Alert Title="@error" ErrorList="new List<string>()" CSSClass="danger" />
+
+<Details Title="Size" TItem="ProductSize" Item="size" CanDelete="@(size?.Id > 0)" OnSave="@((item) => SaveSize(item as ProductSize))" OnDelete="@((item) => DeleteSize(item as ProductSize))" OnCancel="@((item) => NavigationManager.NavigateTo("/size/list"))">       
+    <FormFields Context="size">
+        <label>Name</label>
+        <RadzenTextBox @bind-Value="size.Name"></RadzenTextBox>
+    </FormFields>
+</Details>
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+
+    string route = "api/sizes";
+    string listUrl = "/size/list";
+    ProductSize size;
+    string error;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id.HasValue)
+        {
+            size = await HttpClient.GetFromJsonAsync<ProductSize>($"{route}/{Id}");
+        }
+        else
+        {
+            size = new ProductSize();   
+        }
+    }
+
+    async Task SaveSize(ProductSize item)
+    {
+        if (item != null)
+        {
+            if (item.Id > 0)
+            {
+                HttpResponseMessage httpResponseMessage = await HttpClient.PutAsJsonAsync<ProductSize>($"{route}/{item.Id}", item);
+
+                if (httpResponseMessage != null && httpResponseMessage.IsSuccessStatusCode)
+                {
+                    NavigationManager.NavigateTo(listUrl);
+                }
+                else
+                {
+                    error = await httpResponseMessage.Content.ReadAsStringAsync();
+                }
+            }
+            else 
+            {
+                HttpResponseMessage httpResponseMessage = await HttpClient.PostAsJsonAsync<ProductSize>(route, item);
+
+                if (httpResponseMessage != null && httpResponseMessage.IsSuccessStatusCode)
+                {
+                    NavigationManager.NavigateTo(listUrl);
+                }
+                else
+                {
+                    error = await httpResponseMessage.Content.ReadAsStringAsync();
+                }
+            }
+        } 
+    }
+
+    async Task DeleteSize(ProductSize item)
+    {
+        if (item != null && item.Id > 0)
+        {
+            HttpResponseMessage httpResponseMessage = await HttpClient.DeleteAsync($"{route}/{item.Id}");
+
+            if (httpResponseMessage != null && httpResponseMessage.IsSuccessStatusCode)
+            {
+                NavigationManager.NavigateTo(listUrl);
+            }
+            else
+            {
+                error = await httpResponseMessage.Content.ReadAsStringAsync();
+            }
+        }
+    }
+}

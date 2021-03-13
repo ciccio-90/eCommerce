@@ -1,0 +1,85 @@
+@page "/admin/color/detail/{Id:int?}"
+@attribute [Authorize(Roles = "Admin")]
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+
+<Alert Title="@error" ErrorList="new List<string>()" CSSClass="danger" />
+
+<Details Title="Color" TItem="ProductColor" Item="color" CanDelete="@(color?.Id > 0)" OnSave="@((item) => SaveColor(item as ProductColor))" OnDelete="@((item) => DeleteColor(item as ProductColor))" OnCancel="@((item) => NavigationManager.NavigateTo("/color/list"))">       
+    <FormFields Context="color">
+        <label>Name</label>
+        <RadzenTextBox @bind-Value="color.Name"></RadzenTextBox>
+    </FormFields>
+</Details>
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+
+    string route = "api/colors";
+    string listUrl = "/color/list";
+    ProductColor color;
+    string error;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id.HasValue)
+        {
+            color = await HttpClient.GetFromJsonAsync<ProductColor>($"{route}/{Id}");
+        }
+        else
+        {
+            color = new ProductColor();   
+        }
+    }
+
+    async Task SaveColor(ProductColor item)
+    {
+        if (item != null)
+        {
+            if (item.Id > 0)
+            {
+                HttpResponseMessage httpResponseMessage = await HttpClient.PutAsJsonAsync<ProductColor>($"{route}/{item.Id}", item);
+
+                if (httpResponseMessage != null && httpResponseMessage.IsSuccessStatusCode)
+                {
+                    NavigationManager.NavigateTo(listUrl);
+                }
+                else
+                {
+                    error = await httpResponseMessage.Content.ReadAsStringAsync();
+                }
+            }
+            else 
+            {
+                HttpResponseMessage httpResponseMessage = await HttpClient.PostAsJsonAsync<ProductColor>(route, item);
+
+                if (httpResponseMessage != null && httpResponseMessage.IsSuccessStatusCode)
+                {
+                    NavigationManager.NavigateTo(listUrl);
+                }
+                else
+                {
+                    error = await httpResponseMessage.Content.ReadAsStringAsync();
+                }
+            }
+        } 
+    }
+
+    async Task DeleteColor(ProductColor item)
+    {
+        if (item != null && item.Id > 0)
+        {
+            HttpResponseMessage httpResponseMessage = await HttpClient.DeleteAsync($"{route}/{item.Id}");
+
+            if (httpResponseMessage != null && httpResponseMessage.IsSuccessStatusCode)
+            {
+                NavigationManager.NavigateTo(listUrl);
+            }
+            else
+            {
+                error = await httpResponseMessage.Content.ReadAsStringAsync();
+            }
+        }
+    }
+}

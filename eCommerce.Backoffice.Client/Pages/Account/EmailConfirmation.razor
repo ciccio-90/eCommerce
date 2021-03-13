@@ -1,0 +1,41 @@
+@page "/admin/account/emailconfirmation"
+@layout AuthLayout
+@using Microsoft.AspNetCore.WebUtilities
+@inject HttpClient Http
+@inject NavigationManager navManager
+
+<div class="row">
+    <div class="col-12">
+            <div class="alert alert-warning" role="alert">
+                <h4 class="alert-heading">Oops...</h4>
+                <p>Something went wrong, check the address that was emailed to you.</p>
+                <hr>
+                <p class="mb-0">The email address is not confirmed so you will not be able to login.</p>
+            </div>
+    </div>
+</div>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        EmailConfirmationRequest emailConfirmationRequest = new EmailConfirmationRequest();
+
+        var uri = navManager.ToAbsoluteUri(navManager.Uri);
+
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("userid", out var userid) && QueryHelpers.ParseQuery(uri.Query).TryGetValue("code", out var code))
+        {
+            emailConfirmationRequest.UserId = userid.First();
+            emailConfirmationRequest.Code = code.First();
+        }
+
+        if (!String.IsNullOrEmpty(emailConfirmationRequest.UserId) && !String.IsNullOrEmpty(emailConfirmationRequest.Code))
+        {
+            bool IsValid = await (await Http.PutAsJsonAsync<EmailConfirmationRequest>($"api/accounts/{emailConfirmationRequest.UserId}/emailconfirmation", emailConfirmationRequest))?.Content?.ReadFromJsonAsync<bool>();
+                
+            if (IsValid)
+            {
+                navManager.NavigateTo("/account/login");
+            }
+        }
+    }
+}

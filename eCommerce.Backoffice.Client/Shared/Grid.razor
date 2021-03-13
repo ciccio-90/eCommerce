@@ -1,0 +1,131 @@
+@typeparam ElementsType
+
+@if (Model?.Rows != null)
+{
+    <h2>@Title</h2>
+    
+    @if (CanCreate)
+    {
+        <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@(() => OnCreate.InvokeAsync())" />
+    }
+
+    <RadzenGrid Count="@Model.Rows.Count" Data="Model.Rows" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterMode="FilterMode.Advanced" AllowSorting="true" AllowFiltering="true" AllowPaging="true" PageSize="15">
+        <Columns>
+            @for (int col = 0; col < columns.Length; col++)
+            {                
+                @if (!string.IsNullOrEmpty(displayFormat[col]))
+                {
+                    <RadzenGridColumn TItem="ElementsType" Property="@properties?[col]?.Name" Title="@columns[col]" Sortable="true" Filterable="true">
+                        <Template Context="data">
+                            @string.Format(displayFormat[col], properties[col].GetValue(data))
+                        </Template>
+                    </RadzenGridColumn>
+                }
+                else 
+                {
+                    <RadzenGridColumn TItem="ElementsType" Property="@properties?[col]?.Name" Title="@columns[col]" Sortable="true" Filterable="true" />
+                }
+            }
+
+            @if (CanEdit)
+            {
+                <RadzenGridColumn TItem="ElementsType" Context="item" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+                    <Template Context="item">
+                        <RadzenButton Icon="edit" Size="ButtonSize.Small" Click="@(() => OnEdit.InvokeAsync(item))" />
+                    </Template>
+                </RadzenGridColumn>
+            }
+
+            @if (CanDelete)
+            {
+                <RadzenGridColumn TItem="ElementsType" Context="item" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+                    <Template Context="item">
+                        <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@(() => OnDelete.InvokeAsync(item))" />
+                    </Template>
+                </RadzenGridColumn>
+            }
+        </Columns>
+    </RadzenGrid>
+}
+else
+{
+    <p><em>Loading...</em></p>
+}
+
+@code 
+{
+    [Parameter]
+    public GridModel<ElementsType> Model { get; set; }
+
+    [Parameter] 
+    public string Title { get; set; }
+
+    [Parameter]
+    public EventCallback OnCreate { get; set; }
+
+    [Parameter]
+    public EventCallback OnEdit { get; set; }
+
+    [Parameter]
+    public EventCallback OnDelete { get; set; }
+
+    [Parameter]
+    public bool CanCreate { get; set; } = true;
+
+    [Parameter]
+    public bool CanEdit { get; set; } = true;
+
+    [Parameter]
+    public bool CanDelete { get; set; } = true;
+
+    private PropertyInfo[] properties;
+    private string[] columns;
+    private string[] displayFormat;
+    private string[,] rows;
+
+    protected override void OnParametersSet()
+    {
+        if (Model != null)
+        {
+            properties = typeof(ElementsType).GetProperties();
+            
+            LoadColumns(properties);
+            LoadRows(properties);    
+        }
+    }
+
+    private void LoadColumns(PropertyInfo[] properties)
+    {
+        columns = new string[properties.Length];
+        displayFormat = new string[properties.Length];
+
+        if (Model.UseAnnotations)
+        {
+            for (int col = 0; col < properties.Length; col++)
+            {  
+                var display = properties[col].GetCustomAttributes(typeof(DisplayAttribute), false).FirstOrDefault() as DisplayAttribute;
+                var format = properties[col].GetCustomAttributes(typeof(DisplayFormatAttribute), false).FirstOrDefault() as DisplayFormatAttribute;
+                columns[col] = display == null ? properties[col].Name : display.ShortName;
+                displayFormat[col] = format != null ? format.DataFormatString  : null;
+            }
+        }
+        else
+        {
+            columns = Model.Columns.Select(x => x.Caption).ToArray();
+            displayFormat = Model.Columns.Select(x => x.Format).ToArray();
+        }
+    }
+
+    private void LoadRows(PropertyInfo[] properties)
+    {
+        rows = new string[Model.Rows.Count, properties.Length];
+
+        for (int row = 0; row < Model.Rows.Count; row++)
+        {
+            for (int col = 0; col < properties.Length; col++)
+            {
+                rows[row, col] = displayFormat[col] == null ? properties[col].GetValue(Model.Rows[row]).ToString() : string.Format(displayFormat[col], properties[col].GetValue(Model.Rows[row]));
+            }
+        }
+    }
+}

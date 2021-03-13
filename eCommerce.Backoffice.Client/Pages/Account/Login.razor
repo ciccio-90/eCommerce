@@ -1,0 +1,60 @@
+@page "/admin/account/login"
+@layout AuthLayout
+@inject HttpClient Http
+@inject NavigationManager navManager
+@inject ILoginService loginService
+
+<div class="row">
+    <div class="col-12">
+        <h2>Login</h2>
+        <EditForm Model="model" OnValidSubmit="UserLogin">
+            <RadzenCard>
+                <label>Email</label>
+                <RadzenTextBox @bind-Value="model.Email"></RadzenTextBox>
+
+                <label>Password</label>
+                <RadzenPassword @bind-Value="model.Password"></RadzenPassword>
+
+                <hr />
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+
+                <Alert Title="Attention" ErrorList="loginResponse?.Errors" />
+
+                <RadzenButton ButtonType="Radzen.ButtonType.Submit" Text="Login" Icon="account_circle" ButtonStyle="Radzen.ButtonStyle.Info" class="btn-block mr-2"></RadzenButton>
+                <hr />
+                <RadzenButton ButtonType="Radzen.ButtonType.Button" Click="@((args) => GoToPage(args, "forgotpassword"))" Text="Reset password" Icon="lock_open" ButtonStyle="Radzen.ButtonStyle.Secondary" class="btn-block btn-sm mr-2"></RadzenButton>
+            </RadzenCard>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    LoginRequest model = new LoginRequest();
+    LoginResponse loginResponse = null;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await loginService.Logout();
+        }
+    }
+
+    public async Task UserLogin()
+    {
+        loginResponse = await (await Http.PostAsJsonAsync<LoginRequest>("api/accounts/login", model))?.Content?.ReadFromJsonAsync<LoginResponse>();
+
+        if (loginResponse.IsSuccess)
+        {
+            await loginService.Login(loginResponse.Token);
+            navManager.NavigateTo("");
+        }
+    }
+
+    void GoToPage(MouseEventArgs args, string page)
+    {
+        navManager.NavigateTo($"/account/{page}");
+    }
+}

@@ -1,0 +1,40 @@
+@page "/admin/size/list"
+@attribute [Authorize(Roles = "Admin")]
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+
+<Grid Model="model" Title="Sizes" ElementsType="ProductSize" OnCreate="@(() => NavigationManager.NavigateTo("/size/detail"))" OnEdit="@((item) => NavigationManager.NavigateTo($"/size/detail/{(item as ProductSize)?.Id}"))" OnDelete="@((item) => DeleteSize(item as ProductSize))" />
+
+@code {
+    string route = "api/sizes";
+    GridModel<ProductSize> model;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var sizes = await HttpClient.GetFromJsonAsync<List<ProductSize>>(route);
+
+        model = new GridModel<ProductSize>
+        {
+            Rows = sizes,
+            UseAnnotations = true
+        };
+    }
+
+    async Task DeleteSize(ProductSize item)
+    {
+        HttpResponseMessage httpResponseMessage = await HttpClient.DeleteAsync($"{route}/{item?.Id}");
+
+        if (httpResponseMessage != null && httpResponseMessage.IsSuccessStatusCode)
+        {                
+            model.Rows.Remove(item);
+
+            var rows = model.Rows.ToList();
+            model = new GridModel<ProductSize>
+            {
+                Rows = rows,
+                UseAnnotations = true
+            };
+        }
+    }
+}
+

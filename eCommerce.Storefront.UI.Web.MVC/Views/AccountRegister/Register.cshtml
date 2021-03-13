@@ -1,0 +1,61 @@
+@{
+    Layout = "Site";
+    ViewData["Title"] = "Register";
+}
+
+@model eCommerce.Storefront.Controllers.ViewModels.Account.AccountView
+
+@if (Model.HasIssue) 
+{
+    <p>
+        <div style="color: #D63301; background-color: #FFCCBA; padding:15px 10px 15px 50px;" >
+            @Model.Message
+        </div>
+    </p>
+}
+
+<h2>Don't have an account? Create it.</h2>
+
+@using (Html.BeginForm()) {
+    <div>
+        <p>
+            <label for="Email">Email</label><br />
+            @Html.TextBox("Email")
+        </p>
+        <p>
+            <label for="Password">Password</label><br />
+            @Html.Password("Password")
+        </p>
+        <p>
+            <label for="FirstName">First Name</label><br />
+            @Html.TextBox("FirstName")
+        </p>
+        <p>
+            <label for="SecondName">Second Name</label><br />
+            @Html.TextBox("SecondName")
+        </p>
+        <p>
+            <input type="submit" value="Register" />
+        </p>
+    </div>
+}
+
+<script>
+    $(document).ready(function() {
+        if (!$('#Email').val()) {
+            $('#Email').val('@ViewData["Email"]');
+        }
+
+        if (!$('#Password').val()) {            
+            $('#Password').val('@ViewData["Password"]');   
+        }
+
+        if (!$('#FirstName').val()) {
+            $('#FirstName').val('@ViewData["FirstName"]');
+        }
+
+        if (!$('#SecondName').val()) {            
+            $('#SecondName').val('@ViewData["SecondName"]');   
+        }
+    });
+</script>

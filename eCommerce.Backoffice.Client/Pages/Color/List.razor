@@ -1,0 +1,40 @@
+@page "/admin/color/list"
+@attribute [Authorize(Roles = "Admin")]
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+
+<Grid Model="model" Title="Colors" ElementsType="ProductColor" OnCreate="@(() => NavigationManager.NavigateTo("/color/detail"))" OnEdit="@((item) => NavigationManager.NavigateTo($"/color/detail/{(item as ProductColor)?.Id}"))" OnDelete="@((item) => DeleteColor(item as ProductColor))" />
+
+@code {
+    string route = "api/colors";
+    GridModel<ProductColor> model;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var colors = await HttpClient.GetFromJsonAsync<List<ProductColor>>(route);
+
+        model = new GridModel<ProductColor>
+        {
+            Rows = colors,
+            UseAnnotations = true
+        };
+    }
+
+    async Task DeleteColor(ProductColor item)
+    {
+        HttpResponseMessage httpResponseMessage = await HttpClient.DeleteAsync($"{route}/{item?.Id}");
+
+        if (httpResponseMessage != null && httpResponseMessage.IsSuccessStatusCode)
+        {                
+            model.Rows.Remove(item);
+
+            var rows = model.Rows.ToList();
+            model = new GridModel<ProductColor>
+            {
+                Rows = rows,
+                UseAnnotations = true
+            };
+        }
+    }
+}
+

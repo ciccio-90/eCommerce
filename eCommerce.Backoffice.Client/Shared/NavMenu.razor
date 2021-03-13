@@ -1,0 +1,29 @@
+﻿<div class="top-row pl-4 navbar navbar-dark">
+    <a class="navbar-brand" href="">eCommerce back office</a>
+    <button class="navbar-toggler" @onclick="ToggleNavMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</div>
+
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    <RadzenPanelMenu>
+        <RadzenPanelMenuItem Text="Accounts" Path="/admin/account/list" Icon="account_box" />
+        <RadzenPanelMenuItem Text="Roles" Path="/admin/role/view" Icon="admin_panel_settings" />
+        <RadzenPanelMenuItem Text="Categories" Path="/admin/category/list" Icon="category" />
+        <RadzenPanelMenuItem Text="Brands" Path="/admin/brand/list" Icon="branding_watermark" />
+        <RadzenPanelMenuItem Text="Colors" Path="/admin/color/list" Icon="color_lens" />
+        <RadzenPanelMenuItem Text="Sizes" Path="/admin/size/list" Icon="line_weight" />
+    </RadzenPanelMenu>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}
+

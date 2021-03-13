@@ -1,0 +1,6 @@
+/*/bin
+/*/obj
+/*/Logs
+/*/TestResults
+/.sonarqube
+.DS_Store

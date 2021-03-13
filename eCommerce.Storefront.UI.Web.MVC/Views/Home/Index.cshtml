@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = "ProductCatalog";
+}
+
+@model eCommerce.Storefront.Controllers.ViewModels.ProductCatalog.HomePageView
+
+<img width="559" height="297" src="/content/images/products/product-lifestyle.jpg" style="border-width: 0px; padding: 0px; margin: 0px" alt="Product lifestyle" />
+<div style="clear: both;"></div>
+<h2>Top Products</h2>
+<div id="items" style="border-width: 1px; padding: 0px; margin: 0px">
+    <ul class="items-list">
+    @foreach (var product in Model.Products)
+    {
+        <li class="item-detail">
+            <a class="item-productimage-link" href="@Url.Action("Detail", "Product", new { id = product.Id }, null)">
+                <img class="item-productimage" src=@("/content/images/products/" + product.Id.ToString() + ".jpg") alt="Product @product.Id.ToString()" />
+            </a>
+            <div class="item-productname">
+                @Html.ActionLink(product.BrandName + " " + product.Name, "Detail", "Product", new { id = product.Id }, null)
+            </div>
+            <div class="item-price">
+                @product.Price
+            </div>
+        </li>
+    }
+    </ul>
+</div>

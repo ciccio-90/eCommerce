@@ -1,0 +1,22 @@
+@{
+    Layout = "Site";
+}
+
+@model eCommerce.Storefront.Controllers.ViewModels.ProductCatalog.BaseProductCatalogPageView
+
+@RenderBody()
+
+@section headerBasketSummary { 
+    @await Html.PartialAsync("~/Views/Shared/BasketSummary.cshtml", Model.BasketSummary)
+}
+
+@section MenuContent { 
+    @if (IsSectionDefined("MenuContent"))
+    {
+        @RenderSection("MenuContent")
+    }
+    else
+    {
+        @await Html.PartialAsync("~/Views/Shared/Categories.cshtml", Model.Categories)
+    }
+}

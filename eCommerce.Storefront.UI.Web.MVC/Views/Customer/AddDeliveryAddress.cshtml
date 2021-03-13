@@ -1,0 +1,15 @@
+@{
+    Layout = "CustomerAccount";
+    ViewData["Title"] = "Add Delivery Address";
+}
+
+@model eCommerce.Storefront.Controllers.ViewModels.CustomerAccount.CustomerDeliveryAddressView
+
+<h2>Add Delivery Address</h2>
+@using (Html.BeginForm())
+{
+    @await Html.PartialAsync("~/Views/Shared/AddressEdit.cshtml", Model.Address)
+    <p>
+        <input type="submit" value="Save" />
+    </p> 
+}

@@ -1,0 +1,35 @@
+@{
+    Layout = "CustomerAccount";
+    ViewData["Title"] = "Customer Details";
+}
+
+@model eCommerce.Storefront.Controllers.ViewModels.CustomerAccount.CustomerDetailView
+
+@if (!string.IsNullOrWhiteSpace(ViewData["IssueMessage"]?.ToString()))
+{
+    <p>
+        <div style="color: #D63301; background-color: #FFCCBA; padding:15px 10px 15px 50px;" >
+            @ViewData["IssueMessage"]
+        </div>
+    </p>
+}
+
+<h2>Your Details</h2>
+@using (Html.BeginForm()) 
+{
+    <p>
+        <label for="FirstName">First Name</label><br />
+        @Html.TextBox("FirstName", Model.Customer.FirstName)
+    </p>
+    <p>
+        <label for="SecondName">Second Name</label><br />
+        @Html.TextBox("SecondName", Model.Customer.SecondName)
+    </p>
+    <p>
+        <label for="Email">Email</label><br />
+        @Html.TextBox("Email", Model.Customer.Email)
+    </p>
+    <p>
+        <input type="submit" value="Save" />
+    </p>
+}  

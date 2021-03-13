@@ -1,0 +1,40 @@
+@page "/admin/brand/list"
+@attribute [Authorize(Roles = "Admin")]
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+
+<Grid Model="model" Title="Brands" ElementsType="Brand" OnCreate="@(() => NavigationManager.NavigateTo("/brand/detail"))" OnEdit="@((item) => NavigationManager.NavigateTo($"/brand/detail/{(item as Brand)?.Id}"))" OnDelete="@((item) => DeleteBrand(item as Brand))" />
+
+@code {
+    string route = "api/brands";
+    GridModel<Brand> model;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var brands = await HttpClient.GetFromJsonAsync<List<Brand>>(route);
+
+        model = new GridModel<Brand>
+        {
+            Rows = brands,
+            UseAnnotations = true
+        };
+    }
+
+    async Task DeleteBrand(Brand item)
+    {
+        HttpResponseMessage httpResponseMessage = await HttpClient.DeleteAsync($"{route}/{item?.Id}");
+
+        if (httpResponseMessage != null && httpResponseMessage.IsSuccessStatusCode)
+        {                
+            model.Rows.Remove(item);
+
+            var rows = model.Rows.ToList();
+            model = new GridModel<Brand>
+            {
+                Rows = rows,
+                UseAnnotations = true
+            };
+        }
+    }
+}
+

@@ -1,0 +1,85 @@
+@page "/admin/category/detail/{Id:int?}"
+@attribute [Authorize(Roles = "Admin")]
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+
+<Alert Title="@error" ErrorList="new List<string>()" CSSClass="danger" />
+
+<Details Title="Category" TItem="Category" Item="category" CanDelete="@(category?.Id > 0)" OnSave="@((item) => SaveCategory(item as Category))" OnDelete="@((item) => DeleteCategory(item as Category))" OnCancel="@((item) => NavigationManager.NavigateTo("/category/list"))">       
+    <FormFields Context="category">
+        <label>Name</label>
+        <RadzenTextBox @bind-Value="category.Name"></RadzenTextBox>
+    </FormFields>
+</Details>
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+
+    string route = "api/categories";
+    string listUrl = "/category/list";
+    Category category;
+    string error;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id.HasValue)
+        {
+            category = await HttpClient.GetFromJsonAsync<Category>($"{route}/{Id}");
+        }
+        else
+        {
+            category = new Category();   
+        }
+    }
+
+    async Task SaveCategory(Category item)
+    {
+        if (item != null)
+        {
+            if (item.Id > 0)
+            {
+                HttpResponseMessage httpResponseMessage = await HttpClient.PutAsJsonAsync<Category>($"{route}/{item.Id}", item);
+
+                if (httpResponseMessage != null && httpResponseMessage.IsSuccessStatusCode)
+                {
+                    NavigationManager.NavigateTo(listUrl);
+                }
+                else
+                {
+                    error = await httpResponseMessage.Content.ReadAsStringAsync();
+                }
+            }
+            else 
+            {
+                HttpResponseMessage httpResponseMessage = await HttpClient.PostAsJsonAsync<Category>(route, item);
+
+                if (httpResponseMessage != null && httpResponseMessage.IsSuccessStatusCode)
+                {
+                    NavigationManager.NavigateTo(listUrl);
+                }
+                else
+                {
+                    error = await httpResponseMessage.Content.ReadAsStringAsync();
+                }
+            }
+        } 
+    }
+
+    async Task DeleteCategory(Category item)
+    {
+        if (item != null && item.Id > 0)
+        {
+            HttpResponseMessage httpResponseMessage = await HttpClient.DeleteAsync($"{route}/{item.Id}");
+
+            if (httpResponseMessage != null && httpResponseMessage.IsSuccessStatusCode)
+            {
+                NavigationManager.NavigateTo(listUrl);
+            }
+            else
+            {
+                error = await httpResponseMessage.Content.ReadAsStringAsync();
+            }
+        }
+    }
+}

@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/jquery-ui.min.css" />
+    <link rel="stylesheet" href="~/css/jquery-ui.structure.min.css" />
+    <link rel="stylesheet" href="~/css/jquery-ui.theme.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <script src="~/js/jquery.min.js"></script>
+    <script src="~/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/jquery.validate.min.js"></script>
+    <script src="~/js/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/jquery-ui.min.js"></script>
+    <script src="~/js/jquery-jtemplates.js"></script>
+    <script src="~/js/json2.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</head>
+
+<body>
+    <div id="main">
+        <div id="header">
+            <span>
+                <a href="/">
+                    <img alt="Agatha's Clothing Store" src="/content/images/structure/lg_logo.png" border="0" />
+                </a>
+            </span>
+        </div>
+        <div id="headerSummary">
+            <span class="basket-details">
+            @if (User.Identity.IsAuthenticated) 
+            {
+                @Html.ActionLink("Your Account", "Detail", "Customer") 
+                <text> / </text>
+                @Html.ActionLink("Log Off", "SignOut", "AccountLogOn")
+            }
+            else 
+            {
+                @Html.ActionLink("Create Account", "Register", "AccountRegister")
+                <text> / </text>
+                @Html.ActionLink("Log On", "LogOn", "AccountLogOn")<br />
+            }
+            </span>  
+            @RenderSection("headerBasketSummary", required: false)  
+        </div>
+        <div class="topBarContainer">
+            <div id="background">
+                <div id="navigation">
+                    @RenderSection("MenuContent", required: false)  
+                </div>
+                <div id="content">
+                    @RenderBody()
+                </div>
+                <div style="clear: both;" />
+            </div>
+        </div>
+        @await Html.PartialAsync("~/Views/Shared/SiteFooter.cshtml")
+    </div>
+</body>
+
+</html>
