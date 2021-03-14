@@ -30,7 +30,7 @@
             </p>
             <p>
                 <label for="password">Password</label><br />
-                @Html.Password("password")
+                @Html.Password("password", null, new { @autocomplete = "off" })
                 @Html.ValidationMessage("password")
             </p>
             <p>

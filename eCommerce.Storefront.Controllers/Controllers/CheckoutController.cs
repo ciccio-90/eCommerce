@@ -43,23 +43,31 @@ namespace eCommerce.Storefront.Controllers.Controllers
                 CustomerIdentityToken = _cookieAuthentication.GetAuthenticationToken()
             };
             GetCustomerResponse customerResponse = _customerService.GetCustomer(customerRequest);
-            CustomerView customerView = customerResponse.Customer;
 
-            if (customerView.DeliveryAddressBook.Any())
+            if (customerResponse.CustomerFound)
             {
-                OrderConfirmationView orderConfirmationView = new OrderConfirmationView();
-                GetBasketRequest getBasketRequest = new GetBasketRequest
+                CustomerView customerView = customerResponse.Customer;
+
+                if (customerView.DeliveryAddressBook.Any())
                 {
-                    BasketId = base.GetBasketId()
-                };
-                GetBasketResponse basketResponse = _basketService.GetBasket(getBasketRequest);
-                orderConfirmationView.Basket = basketResponse.Basket;
-                orderConfirmationView.DeliveryAddresses = customerView.DeliveryAddressBook;
+                    OrderConfirmationView orderConfirmationView = new OrderConfirmationView();
+                    GetBasketRequest getBasketRequest = new GetBasketRequest
+                    {
+                        BasketId = base.GetBasketId()
+                    };
+                    GetBasketResponse basketResponse = _basketService.GetBasket(getBasketRequest);
+                    orderConfirmationView.Basket = basketResponse.Basket;
+                    orderConfirmationView.DeliveryAddresses = customerView.DeliveryAddressBook;
 
-                return View("ConfirmOrder", orderConfirmationView);
+                    return View("ConfirmOrder", orderConfirmationView);
+                }
+
+                return AddDeliveryAddress();
             }
-
-            return AddDeliveryAddress();
+            else 
+            {
+                return RedirectToAction("LogOn", "AccountLogOn");
+            }
         }
 
         public IActionResult AddDeliveryAddress()
@@ -70,6 +78,7 @@ namespace eCommerce.Storefront.Controllers.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult AddDeliveryAddress(DeliveryAddressView deliveryAddressView)
         {
             DeliveryAddressAddRequest request = new DeliveryAddressAddRequest();

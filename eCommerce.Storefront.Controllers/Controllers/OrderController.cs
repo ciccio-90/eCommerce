@@ -34,11 +34,19 @@ namespace eCommerce.Storefront.Controllers.Controllers
                 LoadOrderSummary = true
             };
             GetCustomerResponse response = _customerService.GetCustomer(request);
-            CustomersOrderSummaryView customersOrderSummaryView = new CustomersOrderSummaryView();
-            customersOrderSummaryView.Orders = response.Orders;
-            customersOrderSummaryView.BasketSummary = base.GetBasketSummaryView();
 
-            return View(customersOrderSummaryView);
+            if (response.CustomerFound)
+            {    
+                CustomersOrderSummaryView customersOrderSummaryView = new CustomersOrderSummaryView();
+                customersOrderSummaryView.Orders = response.Orders;
+                customersOrderSummaryView.BasketSummary = base.GetBasketSummaryView();
+
+                return View(customersOrderSummaryView);
+            }
+            else 
+            {
+                return RedirectToAction("LogOn", "AccountLogOn");
+            }
         }
         
         public IActionResult Detail(int orderId)

@@ -29,6 +29,7 @@ namespace eCommerce.Storefront.Controllers.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> LogOn(string email, string password, string returnUrl)
         {
             User user = await _authenticationService.Login(email, password);
@@ -44,14 +45,7 @@ namespace eCommerce.Storefront.Controllers.Controllers
                     _customerService.SetCustomerIdentityToken(setCustomerIdentityTokenRequest);
                     await _cookieAuthentication.SetAuthenticationToken(user.AuthenticationToken);
 
-                    if (!string.IsNullOrEmpty(returnUrl))
-                    {
-                        return Redirect(returnUrl);
-                    }
-                    else
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
+                    return RedirectToAction("Index", "Home");
                 }
                 catch (EntityBaseIsInvalidException ex)
                 {

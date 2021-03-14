@@ -30,14 +30,23 @@ namespace eCommerce.Storefront.Controllers.Controllers
             GetCustomerRequest customerRequest = new GetCustomerRequest();
             customerRequest.CustomerIdentityToken = _cookieAuthentication.GetAuthenticationToken();
             GetCustomerResponse response = _customerService.GetCustomer(customerRequest);
-            CustomerDetailView customerDetailView = new CustomerDetailView();
-            customerDetailView.Customer = response.Customer;
-            customerDetailView.BasketSummary = base.GetBasketSummaryView();
 
-            return View(customerDetailView);
+            if (response.CustomerFound)
+            {
+                CustomerDetailView customerDetailView = new CustomerDetailView();
+                customerDetailView.Customer = response.Customer;
+                customerDetailView.BasketSummary = base.GetBasketSummaryView();
+
+                return View(customerDetailView);
+            }
+            else 
+            {
+                return RedirectToAction("LogOn", "AccountLogOn");
+            }
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Detail(CustomerView customerView)
         {          
             ModifyCustomerRequest request = new ModifyCustomerRequest();
@@ -67,11 +76,19 @@ namespace eCommerce.Storefront.Controllers.Controllers
             GetCustomerRequest customerRequest = new GetCustomerRequest();
             customerRequest.CustomerIdentityToken = _cookieAuthentication.GetAuthenticationToken();
             GetCustomerResponse response = _customerService.GetCustomer(customerRequest);
-            CustomerDetailView customerDetailView = new CustomerDetailView();
-            customerDetailView.Customer = response.Customer;
-            customerDetailView.BasketSummary = base.GetBasketSummaryView();
 
-            return View("DeliveryAddresses", customerDetailView);
+            if (response.CustomerFound)
+            {                
+                CustomerDetailView customerDetailView = new CustomerDetailView();
+                customerDetailView.Customer = response.Customer;
+                customerDetailView.BasketSummary = base.GetBasketSummaryView();
+
+                return View("DeliveryAddresses", customerDetailView);
+            }
+            else 
+            {
+                return RedirectToAction("LogOn", "AccountLogOn");
+            }
         }
 
         public IActionResult EditDeliveryAddress(int deliveryAddressId)
@@ -79,15 +96,24 @@ namespace eCommerce.Storefront.Controllers.Controllers
             GetCustomerRequest customerRequest = new GetCustomerRequest();
             customerRequest.CustomerIdentityToken = _cookieAuthentication.GetAuthenticationToken();
             GetCustomerResponse response = _customerService.GetCustomer(customerRequest);
-            CustomerDeliveryAddressView deliveryAddressView = new CustomerDeliveryAddressView();
-            deliveryAddressView.CustomerView = response.Customer;
-            deliveryAddressView.Address = response.Customer.DeliveryAddressBook.FirstOrDefault(d => d.Id == deliveryAddressId);
-            deliveryAddressView.BasketSummary = base.GetBasketSummaryView();
 
-            return View(deliveryAddressView);
+            if (response.CustomerFound)
+            {                
+                CustomerDeliveryAddressView deliveryAddressView = new CustomerDeliveryAddressView();
+                deliveryAddressView.CustomerView = response.Customer;
+                deliveryAddressView.Address = response.Customer.DeliveryAddressBook.FirstOrDefault(d => d.Id == deliveryAddressId);
+                deliveryAddressView.BasketSummary = base.GetBasketSummaryView();
+
+                return View(deliveryAddressView);
+            }
+            else 
+            {
+                return RedirectToAction("LogOn", "AccountLogOn");
+            }
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult EditDeliveryAddress(DeliveryAddressView deliveryAddressView)
         {
             DeliveryAddressModifyRequest request = new DeliveryAddressModifyRequest();
@@ -109,6 +135,7 @@ namespace eCommerce.Storefront.Controllers.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult AddDeliveryAddress(DeliveryAddressView deliveryAddressView)
         {
             DeliveryAddressAddRequest request = new DeliveryAddressAddRequest();
