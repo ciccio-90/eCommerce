@@ -122,7 +122,7 @@ namespace eCommerce.Storefront.UI.Web.MVC
             app.UseAuthorization();
             app.Use(async (context, next) =>
             {
-                context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+                context.Response.Headers.Add("X-content-type-options", "nosniff");
                 context.Response.Headers.Add("Cache-control", "no-store");
                 context.Response.Headers.Add("Pragma", "no-cache");
                 context.Response.Headers.Add("X-XSS-Protection", "1; mode=block");
