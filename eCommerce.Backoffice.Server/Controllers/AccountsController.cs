@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Email;
 using Infrastructure.Configuration;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace eCommerce.Backoffice.Server.Controllers
 {
@@ -43,14 +44,14 @@ namespace eCommerce.Backoffice.Server.Controllers
 
         [HttpGet]
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-        [Authorize(Roles = "Admin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<RegisterRequest>>> GetAccounts()
         {
             return await _userManager.Users.AsNoTracking().Select(u => new RegisterRequest { Id = u.Id, Email = u.Email, Password = u.PasswordHash, ConfirmPassword = u.PasswordHash }).ToListAsync();
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<ActionResult<RegisterResponse>> CreateAccount(RegisterRequest registerRequest)
         {
             var user = new IdentityUser
@@ -221,7 +222,7 @@ namespace eCommerce.Backoffice.Server.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<IActionResult> DeleteAccount(string id)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == id);

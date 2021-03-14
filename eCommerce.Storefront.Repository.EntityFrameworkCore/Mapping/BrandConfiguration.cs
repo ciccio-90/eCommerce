@@ -16,7 +16,7 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Mapping
                    .HasColumnName("Name")
                    .HasMaxLength(50)
                    .IsRequired();
-            builder.HasAlternateKey(b => b.Name);
+            builder.HasIndex(b => b.Name).IsUnique();
         }
     }
 }

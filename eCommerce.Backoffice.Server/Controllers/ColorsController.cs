@@ -1,10 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using eCommerce.Backoffice.Shared.Model.Products;
-using Infrastructure.Cqrs.Commands.Requests;
-using Infrastructure.Cqrs.Queries.Requests;
-using MediatR;
+using Infrastructure.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,21 +11,21 @@ namespace eCommerce.Backoffice.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
     public class ColorsController : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly IDataService<eCommerce.Storefront.Model.Products.ProductColor, int> _dataService;
 
-        public ColorsController(IMediator mediator)
+        public ColorsController(IDataService<eCommerce.Storefront.Model.Products.ProductColor, int> dataService)
         {
-            _mediator = mediator;
+            _dataService = dataService;
         }
 
         [HttpGet]
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-        public async Task<IEnumerable<ProductColor>> GetColors()
+        public IEnumerable<ProductColor> GetColors()
         {
-            return (await _mediator.Send(new GetRequest<eCommerce.Storefront.Model.Products.ProductColor, int>(null, null, null))).Select(p => new ProductColor
+            return _dataService.Get().Select(p => new ProductColor
             {
                 Id = p.Id,
                 Name = p.Name
@@ -36,9 +34,9 @@ namespace eCommerce.Backoffice.Server.Controllers
 
         [HttpGet("{id}")]
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-        public async Task<ActionResult<ProductColor>> GetColor(int id)
+        public ActionResult<ProductColor> GetColor(int id)
         {
-            var productColor = await _mediator.Send(new GetByIdRequest<eCommerce.Storefront.Model.Products.ProductColor, int>(id));
+            var productColor = _dataService.Get(id);
 
             if (productColor == null)
             { 
@@ -49,11 +47,11 @@ namespace eCommerce.Backoffice.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ProductColor>> CreateColor(ProductColor color)
+        public ActionResult<ProductColor> CreateColor(ProductColor color)
         {
             try
             {
-                var productColor = await _mediator.Send(new CreateRequest<eCommerce.Storefront.Model.Products.ProductColor, int>(new eCommerce.Storefront.Model.Products.ProductColor { Id = color.Id, Name = color.Name }));
+                var productColor = _dataService.Create(new eCommerce.Storefront.Model.Products.ProductColor { Id = color.Id, Name = color.Name });
                 color.Id = productColor.Id;
             }
             catch (DbUpdateException ex)
@@ -72,7 +70,7 @@ namespace eCommerce.Backoffice.Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateColor(int id, ProductColor color)
+        public IActionResult UpdateColor(int id, ProductColor color)
         {
             if (id != color.Id)
             {
@@ -81,7 +79,7 @@ namespace eCommerce.Backoffice.Server.Controllers
 
             try
             {
-                await _mediator.Send(new ModifyRequest<eCommerce.Storefront.Model.Products.ProductColor, int>(new eCommerce.Storefront.Model.Products.ProductColor { Id = color.Id, Name = color.Name }));
+                _dataService.Modify(new eCommerce.Storefront.Model.Products.ProductColor { Id = color.Id, Name = color.Name });
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -103,11 +101,11 @@ namespace eCommerce.Backoffice.Server.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteColor(int id)
+        public IActionResult DeleteColor(int id)
         {
             try
             {
-                await _mediator.Send(new DeleteRequest<eCommerce.Storefront.Model.Products.ProductColor, int>(id));
+                _dataService.Delete(id);
             }
             catch (DbUpdateException ex)
             {

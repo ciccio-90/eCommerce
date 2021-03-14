@@ -5,7 +5,7 @@
 
 <Alert Title="@error" ErrorList="new List<string>()" CSSClass="danger" />
 
-<Details Title="Category" TItem="Category" Item="category" CanDelete="@(category?.Id > 0)" OnSave="@((item) => SaveCategory(item as Category))" OnDelete="@((item) => DeleteCategory(item as Category))" OnCancel="@((item) => NavigationManager.NavigateTo("/category/list"))">       
+<Details Title="Category" TItem="Category" Item="category" CanDelete="@(category?.Id > 0)" OnSave="@((item) => SaveCategory(item as Category))" OnDelete="@((item) => DeleteCategory(item as Category))" OnCancel="@((item) => NavigationManager.NavigateTo("/admin/category/list"))">       
     <FormFields Context="category">
         <label>Name</label>
         <RadzenTextBox @bind-Value="category.Name"></RadzenTextBox>
@@ -17,7 +17,7 @@
     public int? Id { get; set; }
 
     string route = "api/categories";
-    string listUrl = "/category/list";
+    string listUrl = "/admin/category/list";
     Category category;
     string error;
 

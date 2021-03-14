@@ -17,6 +17,8 @@ using eCommerce.Storefront.Services.Cache;
 using Infrastructure.Domain;
 using Infrastructure.Logging;
 using Infrastructure.Email;
+using Infrastructure.Services.Implementations;
+using Infrastructure.Services.Interfaces;
 
 namespace eCommerce.Storefront.UI.Web.MVC
 {
@@ -27,12 +29,14 @@ namespace eCommerce.Storefront.UI.Web.MVC
             // Repositories
             serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
             serviceCollection.AddScoped(typeof(IReadOnlyRepository<,>), typeof(Repository<,>));
+            serviceCollection.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
             serviceCollection.AddScoped<IBasketRepository, BasketRepository>();
             serviceCollection.AddScoped<IProductTitleRepository, ProductTitleRepository>();
             serviceCollection.AddScoped<IProductRepository, ProductRepository>();
             serviceCollection.AddScoped<ICustomerRepository, CustomerRepository>();
             serviceCollection.AddScoped<IOrderRepository, OrderRepository>();
             // Product Catalogue
+            serviceCollection.AddScoped(typeof(IDataService<,>), typeof(DataService<,>));
             serviceCollection.AddScoped<IProductCatalogService, ProductCatalogService>();
             serviceCollection.AddScoped<IBasketService, BasketService>();
             serviceCollection.AddScoped<ICookieStorageService, CookieStorageService>();

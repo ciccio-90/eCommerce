@@ -28,7 +28,7 @@
 
                     <div class="row row-cols-2">
                         <RadzenButton ButtonType="Radzen.ButtonType.Submit" Text="Register" ButtonStyle="Radzen.ButtonStyle.Primary" class="mr-2 col ml-3"></RadzenButton>
-                        <RadzenButton ButtonType="Radzen.ButtonType.Button" Click="@(() => NavigationManager.NavigateTo("/account/list"))" Text="Cancel" ButtonStyle="Radzen.ButtonStyle.Warning" class="mr-3 col" />
+                        <RadzenButton ButtonType="Radzen.ButtonType.Button" Click="@(() => NavigationManager.NavigateTo("/admin/account/list"))" Text="Cancel" ButtonStyle="Radzen.ButtonStyle.Warning" class="mr-3 col" />
                     </div>
                 </RadzenCard>
             </EditForm>
@@ -53,7 +53,7 @@
 
         if (registerResponse != null && registerResponse.IsSuccess && registerResponse.EmailConfirmed)
         {
-            NavigationManager.NavigateTo("/account/list");
+            NavigationManager.NavigateTo("/admin/account/list");
         }
     }
 }

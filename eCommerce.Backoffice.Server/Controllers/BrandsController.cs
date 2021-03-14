@@ -1,33 +1,31 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using eCommerce.Backoffice.Shared.Model.Products;
-using Infrastructure.Cqrs.Queries.Requests;
-using Infrastructure.Cqrs.Commands.Requests;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Infrastructure.Services.Interfaces;
 
 namespace eCommerce.Backoffice.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
     public class BrandsController : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly IDataService<eCommerce.Storefront.Model.Products.Brand, int> _dataService;
 
-        public BrandsController(IMediator mediator)
+        public BrandsController(IDataService<eCommerce.Storefront.Model.Products.Brand, int> dataService)
         {
-            _mediator = mediator;
+            _dataService = dataService;
         }
 
         [HttpGet]
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-        public async Task<IEnumerable<Brand>> GetBrands()
+        public IEnumerable<Brand> GetBrands()
         {
-            return (await _mediator.Send(new GetRequest<eCommerce.Storefront.Model.Products.Brand, int>(null, null, null))).Select(b => new Brand
+            return _dataService.Get().Select(b => new Brand
             {
                 Id = b.Id,
                 Name = b.Name
@@ -36,9 +34,9 @@ namespace eCommerce.Backoffice.Server.Controllers
 
         [HttpGet("{id}")]
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-        public async Task<ActionResult<Brand>> GetBrand(int id)
+        public ActionResult<Brand> GetBrand(int id)
         {
-            var brand = await _mediator.Send(new GetByIdRequest<eCommerce.Storefront.Model.Products.Brand, int>(id));
+            var brand = _dataService.Get(id);
 
             if (brand == null)
             { 
@@ -49,11 +47,11 @@ namespace eCommerce.Backoffice.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Brand>> CreateBrand(Brand brand)
+        public ActionResult<Brand> CreateBrand(Brand brand)
         {
             try
             {
-                var b = await _mediator.Send(new CreateRequest<eCommerce.Storefront.Model.Products.Brand, int>(new eCommerce.Storefront.Model.Products.Brand { Id = brand.Id, Name = brand.Name }));
+                var b = _dataService.Create(new eCommerce.Storefront.Model.Products.Brand { Id = brand.Id, Name = brand.Name });
                 brand.Id = b.Id;
             }
             catch (DbUpdateException ex)
@@ -72,7 +70,7 @@ namespace eCommerce.Backoffice.Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBrand(int id, Brand brand)
+        public IActionResult UpdateBrand(int id, Brand brand)
         {
             if (id != brand.Id)
             {
@@ -81,7 +79,7 @@ namespace eCommerce.Backoffice.Server.Controllers
 
             try
             {
-                await _mediator.Send(new ModifyRequest<eCommerce.Storefront.Model.Products.Brand, int>(new eCommerce.Storefront.Model.Products.Brand { Id = brand.Id, Name = brand.Name }));
+                _dataService.Modify(new eCommerce.Storefront.Model.Products.Brand { Id = brand.Id, Name = brand.Name });
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -103,11 +101,11 @@ namespace eCommerce.Backoffice.Server.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBrand(int id)
+        public IActionResult DeleteBrand(int id)
         {            
             try
             {
-                await _mediator.Send(new DeleteRequest<eCommerce.Storefront.Model.Products.Brand, int>(id));
+                _dataService.Delete(id);
             }
             catch (DbUpdateException ex)
             {

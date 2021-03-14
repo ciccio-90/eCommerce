@@ -3,7 +3,7 @@
 @inject HttpClient HttpClient
 @inject NavigationManager NavigationManager
 
-<Grid Model="model" Title="Accounts" ElementsType="RegisterRequest" OnCreate="@(() => NavigationManager.NavigateTo("/account/register"))" CanEdit="false" OnDelete="@((item) => DeleteAccount(item as RegisterRequest))" />
+<Grid Model="model" Title="Accounts" ElementsType="RegisterRequest" OnCreate="@(() => NavigationManager.NavigateTo("/admin/account/register"))" CanEdit="false" OnDelete="@((item) => DeleteAccount(item as RegisterRequest))" />
 
 @code {
     string route = "api/accounts";

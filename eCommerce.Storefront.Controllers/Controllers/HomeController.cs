@@ -3,6 +3,8 @@ using Infrastructure.CookieStorage;
 using eCommerce.Storefront.Services.Messaging.ProductCatalogService;
 using Microsoft.AspNetCore.Mvc;
 using eCommerce.Storefront.Services.Cache;
+using eCommerce.Storefront.Controllers.ViewModels;
+using System.Diagnostics;
 
 namespace eCommerce.Storefront.Controllers.Controllers
 {
@@ -25,6 +27,12 @@ namespace eCommerce.Storefront.Controllers.Controllers
             homePageView.Products = response.Products;
             
             return View(homePageView);
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

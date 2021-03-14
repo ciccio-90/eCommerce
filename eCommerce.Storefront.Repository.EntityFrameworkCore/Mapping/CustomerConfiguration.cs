@@ -36,7 +36,7 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Mapping
                    .WithOne(d => d.Customer)
                    .OnDelete(DeleteBehavior.Cascade)
                    .IsRequired();
-            builder.HasAlternateKey(b => b.Email);
+            builder.HasIndex(c => c.Email).IsUnique();
         }
     }
 }

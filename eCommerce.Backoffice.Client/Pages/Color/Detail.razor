@@ -5,7 +5,7 @@
 
 <Alert Title="@error" ErrorList="new List<string>()" CSSClass="danger" />
 
-<Details Title="Color" TItem="ProductColor" Item="color" CanDelete="@(color?.Id > 0)" OnSave="@((item) => SaveColor(item as ProductColor))" OnDelete="@((item) => DeleteColor(item as ProductColor))" OnCancel="@((item) => NavigationManager.NavigateTo("/color/list"))">       
+<Details Title="Color" TItem="ProductColor" Item="color" CanDelete="@(color?.Id > 0)" OnSave="@((item) => SaveColor(item as ProductColor))" OnDelete="@((item) => DeleteColor(item as ProductColor))" OnCancel="@((item) => NavigationManager.NavigateTo("/admin/color/list"))">       
     <FormFields Context="color">
         <label>Name</label>
         <RadzenTextBox @bind-Value="color.Name"></RadzenTextBox>
@@ -17,7 +17,7 @@
     public int? Id { get; set; }
 
     string route = "api/colors";
-    string listUrl = "/color/list";
+    string listUrl = "/admin/color/list";
     ProductColor color;
     string error;
 

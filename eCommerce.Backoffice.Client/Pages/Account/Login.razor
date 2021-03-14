@@ -49,12 +49,12 @@
         if (loginResponse.IsSuccess)
         {
             await loginService.Login(loginResponse.Token);
-            navManager.NavigateTo("");
+            navManager.NavigateTo("/admin/");
         }
     }
 
     void GoToPage(MouseEventArgs args, string page)
     {
-        navManager.NavigateTo($"/account/{page}");
+        navManager.NavigateTo($"/admin/account/{page}");
     }
 }

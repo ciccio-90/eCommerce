@@ -11,7 +11,6 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.4" />
-    <PackageReference Include="MediatR" Version="9.0.0" />
   </ItemGroup>
   
   <ItemGroup>

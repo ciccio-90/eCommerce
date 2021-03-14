@@ -3,7 +3,7 @@
 @inject HttpClient HttpClient
 @inject NavigationManager NavigationManager
 
-<Grid Model="model" Title="Brands" ElementsType="Brand" OnCreate="@(() => NavigationManager.NavigateTo("/brand/detail"))" OnEdit="@((item) => NavigationManager.NavigateTo($"/brand/detail/{(item as Brand)?.Id}"))" OnDelete="@((item) => DeleteBrand(item as Brand))" />
+<Grid Model="model" Title="Brands" ElementsType="Brand" OnCreate="@(() => NavigationManager.NavigateTo("/admin/brand/detail"))" OnEdit="@((item) => NavigationManager.NavigateTo($"/admin/brand/detail/{(item as Brand)?.Id}"))" OnDelete="@((item) => DeleteBrand(item as Brand))" />
 
 @code {
     string route = "api/brands";

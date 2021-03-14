@@ -5,7 +5,7 @@
 
 <Alert Title="@error" ErrorList="new List<string>()" CSSClass="danger" />
 
-<Details Title="Brand" TItem="Brand" Item="brand" CanDelete="@(brand?.Id > 0)" OnSave="@((item) => SaveBrand(item as Brand))" OnDelete="@((item) => DeleteBrand(item as Brand))" OnCancel="@((item) => NavigationManager.NavigateTo("/brand/list"))">       
+<Details Title="Brand" TItem="Brand" Item="brand" CanDelete="@(brand?.Id > 0)" OnSave="@((item) => SaveBrand(item as Brand))" OnDelete="@((item) => DeleteBrand(item as Brand))" OnCancel="@((item) => NavigationManager.NavigateTo("/admin/brand/list"))">       
     <FormFields Context="brand">
         <label>Name</label>
         <RadzenTextBox @bind-Value="brand.Name"></RadzenTextBox>
@@ -17,7 +17,7 @@
     public int? Id { get; set; }
 
     string route = "api/brands";
-    string listUrl = "/brand/list";
+    string listUrl = "/admin/brand/list";
     Brand brand;
     string error;
 

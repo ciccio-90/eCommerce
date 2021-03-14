@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using eCommerce.Backoffice.Shared.Model.Products;
-using Infrastructure.Cqrs.Commands.Requests;
-using Infrastructure.Cqrs.Queries.Requests;
-using MediatR;
+using Infrastructure.EntityFrameworkCore;
+using Infrastructure.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,21 +12,23 @@ namespace eCommerce.Backoffice.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
     public class SizesController : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly IDataService<eCommerce.Storefront.Model.Products.ProductSize, int> _dataService;
+        private readonly DataContext _dataContext;
 
-        public SizesController(IMediator mediator)
+        public SizesController(IDataService<eCommerce.Storefront.Model.Products.ProductSize, int> dataService, DataContext dataContext)
         {
-            _mediator = mediator;
+            _dataService = dataService;
+            _dataContext = dataContext;
         }
 
         [HttpGet]
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-        public async Task<IEnumerable<ProductSize>> GetSizes()
+        public IEnumerable<ProductSize> GetSizes()
         {
-            return (await _mediator.Send(new GetRequest<eCommerce.Storefront.Model.Products.ProductSize, int>(null, null, null))).Select(p => new ProductSize
+            return _dataService.Get().Select(p => new ProductSize
             {
                 Id = p.Id,
                 Name = p.Name
@@ -36,9 +37,9 @@ namespace eCommerce.Backoffice.Server.Controllers
 
         [HttpGet("{id}")]
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-        public async Task<ActionResult<ProductSize>> GetSize(int id)
+        public ActionResult<ProductSize> GetSize(int id)
         {
-            var productSize = await _mediator.Send(new GetByIdRequest<eCommerce.Storefront.Model.Products.ProductSize, int>(id));
+            var productSize = _dataService.Get(id);
 
             if (productSize == null)
             { 
@@ -49,11 +50,11 @@ namespace eCommerce.Backoffice.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ProductSize>> CreateSize(ProductSize size)
+        public ActionResult<ProductSize> CreateSize(ProductSize size)
         {
             try
             {
-                var productSize = await _mediator.Send(new CreateRequest<eCommerce.Storefront.Model.Products.ProductSize, int>(new eCommerce.Storefront.Model.Products.ProductSize { Id = size.Id, Name = size.Name }));
+                var productSize = _dataService.Create(new eCommerce.Storefront.Model.Products.ProductSize { Id = size.Id, Name = size.Name });
                 size.Id = productSize.Id;
             }
             catch (DbUpdateException ex)
@@ -72,7 +73,7 @@ namespace eCommerce.Backoffice.Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateSize(int id, ProductSize size)
+        public IActionResult UpdateSize(int id, ProductSize size)
         {
             if (id != size.Id)
             {
@@ -81,7 +82,7 @@ namespace eCommerce.Backoffice.Server.Controllers
 
             try
             {
-                await _mediator.Send(new ModifyRequest<eCommerce.Storefront.Model.Products.ProductSize, int>(new eCommerce.Storefront.Model.Products.ProductSize { Id = size.Id, Name = size.Name }));
+                _dataService.Modify(new eCommerce.Storefront.Model.Products.ProductSize { Id = size.Id, Name = size.Name });
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -103,11 +104,11 @@ namespace eCommerce.Backoffice.Server.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteSize(int id)
+        public IActionResult DeleteSize(int id)
         {
             try
             {
-                await _mediator.Send(new DeleteRequest<eCommerce.Storefront.Model.Products.ProductSize, int>(id));
+                _dataService.Delete(id);
             }
             catch (DbUpdateException ex)
             {

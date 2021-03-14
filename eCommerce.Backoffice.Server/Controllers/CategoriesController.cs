@@ -1,10 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using eCommerce.Backoffice.Shared.Model.Products;
-using Infrastructure.Cqrs.Commands.Requests;
-using Infrastructure.Cqrs.Queries.Requests;
-using MediatR;
+using Infrastructure.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,21 +11,21 @@ namespace eCommerce.Backoffice.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
     public class CategoriesController : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly IDataService<eCommerce.Storefront.Model.Products.Category, int> _dataService;
 
-        public CategoriesController(IMediator mediator)
+        public CategoriesController(IDataService<eCommerce.Storefront.Model.Products.Category, int> dataService)
         {
-            _mediator = mediator;
+            _dataService = dataService;
         }
 
         [HttpGet]
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-        public async Task<IEnumerable<Category>> GetCategories()
+        public IEnumerable<Category> GetCategories()
         {
-            return (await _mediator.Send(new GetRequest<eCommerce.Storefront.Model.Products.Category, int>(null, null, null))).Select(c => new Category
+            return _dataService.Get().Select(c => new Category
             {
                 Id = c.Id,
                 Name = c.Name
@@ -36,9 +34,9 @@ namespace eCommerce.Backoffice.Server.Controllers
 
         [HttpGet("{id}")]
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-        public async Task<ActionResult<Category>> GetCategory(int id)
+        public ActionResult<Category> GetCategory(int id)
         {
-            var category = await _mediator.Send(new GetByIdRequest<eCommerce.Storefront.Model.Products.Category, int>(id));
+            var category = _dataService.Get(id);
 
             if (category == null)
             { 
@@ -49,11 +47,11 @@ namespace eCommerce.Backoffice.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Category>> CreateCategory(Category category)
+        public ActionResult<Category> CreateCategory(Category category)
         {
             try
             {
-                var c = await _mediator.Send(new CreateRequest<eCommerce.Storefront.Model.Products.Category, int>(new eCommerce.Storefront.Model.Products.Category { Id = category.Id, Name = category.Name }));
+                var c = _dataService.Create(new eCommerce.Storefront.Model.Products.Category { Id = category.Id, Name = category.Name });
                 category.Id = c.Id;
             }
             catch (DbUpdateException ex)
@@ -72,7 +70,7 @@ namespace eCommerce.Backoffice.Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCategory(int id, Category category)
+        public IActionResult UpdateCategory(int id, Category category)
         {
             if (id != category.Id)
             {
@@ -81,7 +79,7 @@ namespace eCommerce.Backoffice.Server.Controllers
 
             try
             {
-                await _mediator.Send(new ModifyRequest<eCommerce.Storefront.Model.Products.Category, int>(new eCommerce.Storefront.Model.Products.Category { Id = category.Id, Name = category.Name }));
+                _dataService.Modify(new eCommerce.Storefront.Model.Products.Category { Id = category.Id, Name = category.Name });
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -103,11 +101,11 @@ namespace eCommerce.Backoffice.Server.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategory(int id)
+        public IActionResult DeleteCategory(int id)
         {
             try
             {
-                await _mediator.Send(new DeleteRequest<eCommerce.Storefront.Model.Products.Category, int>(id));
+                _dataService.Delete(id);
             }
             catch (DbUpdateException ex)
             {
