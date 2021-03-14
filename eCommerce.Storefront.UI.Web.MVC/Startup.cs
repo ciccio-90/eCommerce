@@ -36,8 +36,6 @@ namespace eCommerce.Storefront.UI.Web.MVC
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(AutoMapperBootStrapper));
-            services.AddControllersWithViews(options => options.ModelBinderProviders.RemoveType<DateTimeModelBinderProvider>()).AddNewtonsoftJson();
-            services.AddRazorPages();
             services.AddHttpContextAccessor();
             services.AddDbContext<DataContext, ShopDataContext>(options => 
             {
@@ -59,16 +57,7 @@ namespace eCommerce.Storefront.UI.Web.MVC
                 options.Lockout.AllowedForNewUsers = true;
                 // User settings.
                 options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-                options.User.RequireUniqueEmail = false;
-            });
-            services.ConfigureApplicationCookie(options =>
-            {
-                // Cookie settings
-                options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(_applicationSettings?.CookieAuthenticationTimeout ?? 30);
-                options.LoginPath = "/AccountLogOn/LogOn";
-                options.AccessDeniedPath = "/AccountRegister/Register";
-                options.SlidingExpiration = true;
+                options.User.RequireUniqueEmail = true;
             });
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddCookie(options =>
@@ -92,6 +81,7 @@ namespace eCommerce.Storefront.UI.Web.MVC
                             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecurityKey"]))
                         };
                     });
+            services.AddControllersWithViews(options => options.ModelBinderProviders.RemoveType<DateTimeModelBinderProvider>()).AddNewtonsoftJson();
             services.AddSingleton(_applicationSettings);
             services.ConfigureDependencies();
         }
@@ -112,7 +102,7 @@ namespace eCommerce.Storefront.UI.Web.MVC
             }
             else
             {
-                app.UseExceptionHandler("/Error");
+                app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days.
                 app.UseHsts();
             }
@@ -133,7 +123,6 @@ namespace eCommerce.Storefront.UI.Web.MVC
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapRazorPages();
                 endpoints.MapControllers();
                 endpoints.MapFallbackToFile("index.html");
             });
@@ -141,7 +130,6 @@ namespace eCommerce.Storefront.UI.Web.MVC
             AutoMigration autoMigration = new AutoMigration(dataContext, logger);
             
             autoMigration.Migrate().GetAwaiter().GetResult();
-            
             logger.Log("Application Started");
         }
     }
