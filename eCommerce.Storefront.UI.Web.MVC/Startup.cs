@@ -132,7 +132,6 @@ namespace eCommerce.Storefront.UI.Web.MVC
             {
                 endpoints.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllers();
-                endpoints.MapFallbackToFile("index.html");
             });
             
             AutoMigration autoMigration = new AutoMigration(dataContext, logger);
