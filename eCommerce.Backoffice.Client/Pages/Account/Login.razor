@@ -49,7 +49,7 @@
         if (loginResponse.IsSuccess)
         {
             await loginService.Login(loginResponse.Token);
-            navManager.NavigateTo("/admin/");
+            navManager.NavigateTo("/admin");
         }
     }
 

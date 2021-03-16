@@ -126,12 +126,19 @@ namespace eCommerce.Storefront.UI.Web.MVC
                 context.Response.Headers.Add("Cache-control", "no-store");
                 context.Response.Headers.Add("Pragma", "no-cache");
                 context.Response.Headers.Add("X-XSS-Protection", "1; mode=block");
+
+                if (context.Request.Path.Value.Contains("/admin"))
+                {
+                    context.Response.Redirect($"{context.Request.Scheme}://{context.Request.Host.Value}/index.html");
+                
+                    return;
+                }
+
                 await next();
             });
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapControllers();
             });
             
             AutoMigration autoMigration = new AutoMigration(dataContext, logger);
