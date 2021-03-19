@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using System.Text;
+using Infrastructure.Helpers;
 
 namespace eCommerce.Storefront.UI.Web.MVC
 {
@@ -156,9 +157,9 @@ namespace eCommerce.Storefront.UI.Web.MVC
                 endpoints.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
             });
             
-            AutoMigration autoMigration = new AutoMigration(dataContext, logger);
+            var autoMigration = new AutoMigration(dataContext, logger);
             
-            autoMigration.Migrate().GetAwaiter().GetResult();
+            AsyncHelper.RunSync(() => autoMigration.Migrate());
             logger.Log("Application Started");
         }
     }
