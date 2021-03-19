@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using eCommerce.Backoffice.Shared.Model.Products;
-using Infrastructure.EntityFrameworkCore;
 using Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -16,12 +15,10 @@ namespace eCommerce.Backoffice.Server.Controllers
     public class SizesController : ControllerBase
     {
         private readonly IDataService<eCommerce.Storefront.Model.Products.ProductSize, int> _dataService;
-        private readonly DataContext _dataContext;
 
-        public SizesController(IDataService<eCommerce.Storefront.Model.Products.ProductSize, int> dataService, DataContext dataContext)
+        public SizesController(IDataService<eCommerce.Storefront.Model.Products.ProductSize, int> dataService)
         {
             _dataService = dataService;
-            _dataContext = dataContext;
         }
 
         [HttpGet]
