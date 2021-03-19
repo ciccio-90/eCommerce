@@ -122,10 +122,25 @@ namespace eCommerce.Storefront.UI.Web.MVC
             app.UseAuthorization();
             app.Use(async (context, next) =>
             {
-                context.Response.Headers.Add("X-content-type-options", "nosniff");
-                context.Response.Headers.Add("Cache-control", "no-store");
-                context.Response.Headers.Add("Pragma", "no-cache");
-                context.Response.Headers.Add("X-XSS-Protection", "1; mode=block");
+                if (!context.Response.Headers.ContainsKey("X-content-type-options"))
+                {
+                    context.Response.Headers.Add("X-content-type-options", "nosniff");
+                }
+
+                if (!context.Response.Headers.ContainsKey("Cache-control"))
+                {
+                    context.Response.Headers.Add("Cache-control", "no-cache, no-store");
+                }
+
+                if (!context.Response.Headers.ContainsKey("Pragma"))
+                {
+                    context.Response.Headers.Add("Pragma", "no-cache");
+                }
+
+                if (!context.Response.Headers.ContainsKey("X-XSS-Protection"))
+                {
+                    context.Response.Headers.Add("X-XSS-Protection", "1; mode=block");
+                }
 
                 if (context.Request.Path.Value.Contains("/admin"))
                 {
