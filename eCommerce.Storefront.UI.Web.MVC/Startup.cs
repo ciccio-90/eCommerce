@@ -19,6 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using System.Text;
 using Infrastructure.Helpers;
+using Microsoft.AspNetCore.Mvc;
 
 namespace eCommerce.Storefront.UI.Web.MVC
 {
@@ -82,9 +83,17 @@ namespace eCommerce.Storefront.UI.Web.MVC
                             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecurityKey"]))
                         };
                     });
-            services.AddControllersWithViews(options => options.ModelBinderProviders.RemoveType<DateTimeModelBinderProvider>()).AddNewtonsoftJson();
+            services.AddControllersWithViews(options => 
+            {
+                options.ModelBinderProviders.RemoveType<DateTimeModelBinderProvider>();
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            }).AddNewtonsoftJson();
             services.AddSingleton(_applicationSettings);
             services.ConfigureDependencies();
+            services.AddAntiforgery(options =>
+            {
+                options.HeaderName = "RequestVerificationToken";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

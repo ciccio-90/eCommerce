@@ -29,7 +29,6 @@ namespace eCommerce.Storefront.Controllers.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> LogOn(string email, string password, string returnUrl)
         {
             User user = await _authenticationService.Login(email, password);

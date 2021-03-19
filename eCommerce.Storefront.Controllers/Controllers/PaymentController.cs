@@ -29,6 +29,7 @@ namespace eCommerce.Storefront.Controllers.Controllers
         }
 
         [HttpPost]
+        [IgnoreAntiforgeryToken]
         public async Task PaymentCallBack(IFormCollection collection)
         {
             int orderId = _paymentService.GetOrderIdFor(collection);

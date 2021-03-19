@@ -46,7 +46,6 @@ namespace eCommerce.Storefront.Controllers.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult Detail(CustomerView customerView)
         {          
             ModifyCustomerRequest request = new ModifyCustomerRequest();
@@ -113,7 +112,6 @@ namespace eCommerce.Storefront.Controllers.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult EditDeliveryAddress(DeliveryAddressView deliveryAddressView)
         {
             DeliveryAddressModifyRequest request = new DeliveryAddressModifyRequest();
@@ -135,7 +133,6 @@ namespace eCommerce.Storefront.Controllers.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult AddDeliveryAddress(DeliveryAddressView deliveryAddressView)
         {
             DeliveryAddressAddRequest request = new DeliveryAddressAddRequest();

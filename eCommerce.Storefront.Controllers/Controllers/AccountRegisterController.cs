@@ -31,7 +31,6 @@ namespace eCommerce.Storefront.Controllers.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(IFormCollection collection)
         {
             User user = null;
