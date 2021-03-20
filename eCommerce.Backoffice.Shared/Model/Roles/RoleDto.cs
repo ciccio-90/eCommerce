@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace eCommerce.Backoffice.Shared.Model.Roles
 {
-    public class RoleModel
+    public class RoleDto
     {
         [Required]
         public string Id { get; set; }

@@ -6,26 +6,28 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Infrastructure.Services.Interfaces;
+using eCommerce.Storefront.Model.Products;
 
 namespace eCommerce.Backoffice.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
+    [IgnoreAntiforgeryToken]
     public class BrandsController : ControllerBase
     {
-        private readonly IDataService<eCommerce.Storefront.Model.Products.Brand, int> _dataService;
+        private readonly IDataService<Brand, int> _dataService;
 
-        public BrandsController(IDataService<eCommerce.Storefront.Model.Products.Brand, int> dataService)
+        public BrandsController(IDataService<Brand, int> dataService)
         {
             _dataService = dataService;
         }
 
         [HttpGet]
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-        public IEnumerable<Brand> GetBrands()
+        public IEnumerable<BrandDto> GetBrands()
         {
-            return _dataService.Get().Select(b => new Brand
+            return _dataService.Get().Select(b => new BrandDto
             {
                 Id = b.Id,
                 Name = b.Name
@@ -34,7 +36,7 @@ namespace eCommerce.Backoffice.Server.Controllers
 
         [HttpGet("{id}")]
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-        public ActionResult<Brand> GetBrand(int id)
+        public ActionResult<BrandDto> GetBrand(int id)
         {
             var brand = _dataService.Get(id);
 
@@ -43,15 +45,15 @@ namespace eCommerce.Backoffice.Server.Controllers
                 return NotFound();
             }
 
-            return new Brand { Id = brand.Id, Name = brand.Name };
+            return new BrandDto { Id = brand.Id, Name = brand.Name };
         }
 
         [HttpPost]
-        public ActionResult<Brand> CreateBrand(Brand brand)
+        public ActionResult<BrandDto> CreateBrand(BrandDto brand)
         {
             try
             {
-                var b = _dataService.Create(new eCommerce.Storefront.Model.Products.Brand { Id = brand.Id, Name = brand.Name });
+                var b = _dataService.Create(new Brand { Id = brand.Id, Name = brand.Name });
                 brand.Id = b.Id;
             }
             catch (DbUpdateException ex)
@@ -70,7 +72,7 @@ namespace eCommerce.Backoffice.Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateBrand(int id, Brand brand)
+        public IActionResult UpdateBrand(int id, BrandDto brand)
         {
             if (id != brand.Id)
             {
@@ -79,7 +81,7 @@ namespace eCommerce.Backoffice.Server.Controllers
 
             try
             {
-                _dataService.Modify(new eCommerce.Storefront.Model.Products.Brand { Id = brand.Id, Name = brand.Name });
+                _dataService.Modify(new Brand { Id = brand.Id, Name = brand.Name });
             }
             catch (DbUpdateConcurrencyException)
             {

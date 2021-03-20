@@ -5,7 +5,7 @@
 
 <Alert Title="@error" ErrorList="new List<string>()" CSSClass="danger" />
 
-<Details Title="Brand" TItem="Brand" Item="brand" CanDelete="@(brand?.Id > 0)" OnSave="@((item) => SaveBrand(item as Brand))" OnDelete="@((item) => DeleteBrand(item as Brand))" OnCancel="@((item) => NavigationManager.NavigateTo("/admin/brand/list"))">       
+<Details Title="Brand" TItem="BrandDto" Item="brand" CanDelete="@(brand?.Id > 0)" OnSave="@((item) => SaveBrand(item as BrandDto))" OnDelete="@((item) => DeleteBrand(item as BrandDto))" OnCancel="@((item) => NavigationManager.NavigateTo("/admin/brand/list"))">       
     <FormFields Context="brand">
         <label>Name</label>
         <RadzenTextBox @bind-Value="brand.Name"></RadzenTextBox>
@@ -18,28 +18,28 @@
 
     string route = "api/brands";
     string listUrl = "/admin/brand/list";
-    Brand brand;
+    BrandDto brand;
     string error;
 
     protected override async Task OnParametersSetAsync()
     {
         if (Id.HasValue)
         {
-            brand = await HttpClient.GetFromJsonAsync<Brand>($"{route}/{Id}");
+            brand = await HttpClient.GetFromJsonAsync<BrandDto>($"{route}/{Id}");
         }
         else
         {
-            brand = new Brand();   
+            brand = new BrandDto();   
         }
     }
 
-    async Task SaveBrand(Brand item)
+    async Task SaveBrand(BrandDto item)
     {
         if (item != null)
         {
             if (item.Id > 0)
             {
-                HttpResponseMessage httpResponseMessage = await HttpClient.PutAsJsonAsync<Brand>($"{route}/{item.Id}", item);
+                HttpResponseMessage httpResponseMessage = await HttpClient.PutAsJsonAsync<BrandDto>($"{route}/{item.Id}", item);
 
                 if (httpResponseMessage != null && httpResponseMessage.IsSuccessStatusCode)
                 {
@@ -52,7 +52,7 @@
             }
             else 
             {
-                HttpResponseMessage httpResponseMessage = await HttpClient.PostAsJsonAsync<Brand>(route, item);
+                HttpResponseMessage httpResponseMessage = await HttpClient.PostAsJsonAsync<BrandDto>(route, item);
 
                 if (httpResponseMessage != null && httpResponseMessage.IsSuccessStatusCode)
                 {
@@ -66,7 +66,7 @@
         } 
     }
 
-    async Task DeleteBrand(Brand item)
+    async Task DeleteBrand(BrandDto item)
     {
         if (item != null && item.Id > 0)
         {

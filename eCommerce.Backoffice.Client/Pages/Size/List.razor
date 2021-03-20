@@ -3,24 +3,24 @@
 @inject HttpClient HttpClient
 @inject NavigationManager NavigationManager
 
-<Grid Model="model" Title="Sizes" ElementsType="ProductSize" OnCreate="@(() => NavigationManager.NavigateTo("/admin/size/detail"))" OnEdit="@((item) => NavigationManager.NavigateTo($"/admin/size/detail/{(item as ProductSize)?.Id}"))" OnDelete="@((item) => DeleteSize(item as ProductSize))" />
+<Grid Model="model" Title="Sizes" ElementsType="ProductSizeDto" OnCreate="@(() => NavigationManager.NavigateTo("/admin/size/detail"))" OnEdit="@((item) => NavigationManager.NavigateTo($"/admin/size/detail/{(item as ProductSizeDto)?.Id}"))" OnDelete="@((item) => DeleteSize(item as ProductSizeDto))" />
 
 @code {
     string route = "api/sizes";
-    GridModel<ProductSize> model;
+    GridModel<ProductSizeDto> model;
 
     protected override async Task OnInitializedAsync()
     {
-        var sizes = await HttpClient.GetFromJsonAsync<List<ProductSize>>(route);
+        var sizes = await HttpClient.GetFromJsonAsync<List<ProductSizeDto>>(route);
 
-        model = new GridModel<ProductSize>
+        model = new GridModel<ProductSizeDto>
         {
             Rows = sizes,
             UseAnnotations = true
         };
     }
 
-    async Task DeleteSize(ProductSize item)
+    async Task DeleteSize(ProductSizeDto item)
     {
         HttpResponseMessage httpResponseMessage = await HttpClient.DeleteAsync($"{route}/{item?.Id}");
 
@@ -29,7 +29,7 @@
             model.Rows.Remove(item);
 
             var rows = model.Rows.ToList();
-            model = new GridModel<ProductSize>
+            model = new GridModel<ProductSizeDto>
             {
                 Rows = rows,
                 UseAnnotations = true

@@ -3,24 +3,24 @@
 @inject HttpClient HttpClient
 @inject NavigationManager NavigationManager
 
-<Grid Model="model" Title="Brands" ElementsType="Brand" OnCreate="@(() => NavigationManager.NavigateTo("/admin/brand/detail"))" OnEdit="@((item) => NavigationManager.NavigateTo($"/admin/brand/detail/{(item as Brand)?.Id}"))" OnDelete="@((item) => DeleteBrand(item as Brand))" />
+<Grid Model="model" Title="Brands" ElementsType="BrandDto" OnCreate="@(() => NavigationManager.NavigateTo("/admin/brand/detail"))" OnEdit="@((item) => NavigationManager.NavigateTo($"/admin/brand/detail/{(item as BrandDto)?.Id}"))" OnDelete="@((item) => DeleteBrand(item as BrandDto))" />
 
 @code {
     string route = "api/brands";
-    GridModel<Brand> model;
+    GridModel<BrandDto> model;
 
     protected override async Task OnInitializedAsync()
     {
-        var brands = await HttpClient.GetFromJsonAsync<List<Brand>>(route);
+        var brands = await HttpClient.GetFromJsonAsync<List<BrandDto>>(route);
 
-        model = new GridModel<Brand>
+        model = new GridModel<BrandDto>
         {
             Rows = brands,
             UseAnnotations = true
         };
     }
 
-    async Task DeleteBrand(Brand item)
+    async Task DeleteBrand(BrandDto item)
     {
         HttpResponseMessage httpResponseMessage = await HttpClient.DeleteAsync($"{route}/{item?.Id}");
 
@@ -29,7 +29,7 @@
             model.Rows.Remove(item);
 
             var rows = model.Rows.ToList();
-            model = new GridModel<Brand>
+            model = new GridModel<BrandDto>
             {
                 Rows = rows,
                 UseAnnotations = true

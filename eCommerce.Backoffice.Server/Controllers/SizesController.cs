@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using eCommerce.Backoffice.Shared.Model.Products;
+using eCommerce.Storefront.Model.Products;
 using Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -12,20 +13,21 @@ namespace eCommerce.Backoffice.Server.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
+    [IgnoreAntiforgeryToken]
     public class SizesController : ControllerBase
     {
-        private readonly IDataService<eCommerce.Storefront.Model.Products.ProductSize, int> _dataService;
+        private readonly IDataService<ProductSize, int> _dataService;
 
-        public SizesController(IDataService<eCommerce.Storefront.Model.Products.ProductSize, int> dataService)
+        public SizesController(IDataService<ProductSize, int> dataService)
         {
             _dataService = dataService;
         }
 
         [HttpGet]
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-        public IEnumerable<ProductSize> GetSizes()
+        public IEnumerable<ProductSizeDto> GetSizes()
         {
-            return _dataService.Get().Select(p => new ProductSize
+            return _dataService.Get().Select(p => new ProductSizeDto
             {
                 Id = p.Id,
                 Name = p.Name
@@ -34,7 +36,7 @@ namespace eCommerce.Backoffice.Server.Controllers
 
         [HttpGet("{id}")]
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-        public ActionResult<ProductSize> GetSize(int id)
+        public ActionResult<ProductSizeDto> GetSize(int id)
         {
             var productSize = _dataService.Get(id);
 
@@ -43,15 +45,15 @@ namespace eCommerce.Backoffice.Server.Controllers
                 return NotFound();
             }
 
-            return new ProductSize { Id = productSize.Id, Name = productSize.Name };
+            return new ProductSizeDto { Id = productSize.Id, Name = productSize.Name };
         }
 
         [HttpPost]
-        public ActionResult<ProductSize> CreateSize(ProductSize size)
+        public ActionResult<ProductSizeDto> CreateSize(ProductSizeDto size)
         {
             try
             {
-                var productSize = _dataService.Create(new eCommerce.Storefront.Model.Products.ProductSize { Id = size.Id, Name = size.Name });
+                var productSize = _dataService.Create(new ProductSize { Id = size.Id, Name = size.Name });
                 size.Id = productSize.Id;
             }
             catch (DbUpdateException ex)
@@ -70,7 +72,7 @@ namespace eCommerce.Backoffice.Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateSize(int id, ProductSize size)
+        public IActionResult UpdateSize(int id, ProductSizeDto size)
         {
             if (id != size.Id)
             {
@@ -79,7 +81,7 @@ namespace eCommerce.Backoffice.Server.Controllers
 
             try
             {
-                _dataService.Modify(new eCommerce.Storefront.Model.Products.ProductSize { Id = size.Id, Name = size.Name });
+                _dataService.Modify(new ProductSize { Id = size.Id, Name = size.Name });
             }
             catch (DbUpdateConcurrencyException)
             {

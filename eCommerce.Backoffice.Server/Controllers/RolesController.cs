@@ -13,6 +13,7 @@ namespace eCommerce.Backoffice.Server.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
+    [IgnoreAntiforgeryToken]
     public class RolesController : ControllerBase
     {
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -27,9 +28,9 @@ namespace eCommerce.Backoffice.Server.Controllers
 
         [HttpGet]
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-        public async Task<ActionResult<IEnumerable<RoleModel>>> GetRoles()
+        public async Task<ActionResult<IEnumerable<RoleDto>>> GetRoles()
         {
-            return await _roleManager.Roles.AsNoTracking().Select(x => new RoleModel { Id = x.Id, Name = x.Name }).ToListAsync();
+            return await _roleManager.Roles.AsNoTracking().Select(x => new RoleDto { Id = x.Id, Name = x.Name }).ToListAsync();
         }
 
         [HttpGet("{id}/users")]

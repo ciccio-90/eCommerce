@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using eCommerce.Backoffice.Shared.Model.Products;
+using eCommerce.Storefront.Model.Products;
 using Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -12,20 +13,21 @@ namespace eCommerce.Backoffice.Server.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
+    [IgnoreAntiforgeryToken]
     public class CategoriesController : ControllerBase
     {
-        private readonly IDataService<eCommerce.Storefront.Model.Products.Category, int> _dataService;
+        private readonly IDataService<Category, int> _dataService;
 
-        public CategoriesController(IDataService<eCommerce.Storefront.Model.Products.Category, int> dataService)
+        public CategoriesController(IDataService<Category, int> dataService)
         {
             _dataService = dataService;
         }
 
         [HttpGet]
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-        public IEnumerable<Category> GetCategories()
+        public IEnumerable<CategoryDto> GetCategories()
         {
-            return _dataService.Get().Select(c => new Category
+            return _dataService.Get().Select(c => new CategoryDto
             {
                 Id = c.Id,
                 Name = c.Name
@@ -34,7 +36,7 @@ namespace eCommerce.Backoffice.Server.Controllers
 
         [HttpGet("{id}")]
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-        public ActionResult<Category> GetCategory(int id)
+        public ActionResult<CategoryDto> GetCategory(int id)
         {
             var category = _dataService.Get(id);
 
@@ -43,15 +45,15 @@ namespace eCommerce.Backoffice.Server.Controllers
                 return NotFound();
             }
 
-            return new Category { Id = category.Id, Name = category.Name };
+            return new CategoryDto { Id = category.Id, Name = category.Name };
         }
 
         [HttpPost]
-        public ActionResult<Category> CreateCategory(Category category)
+        public ActionResult<CategoryDto> CreateCategory(CategoryDto category)
         {
             try
             {
-                var c = _dataService.Create(new eCommerce.Storefront.Model.Products.Category { Id = category.Id, Name = category.Name });
+                var c = _dataService.Create(new Category { Id = category.Id, Name = category.Name });
                 category.Id = c.Id;
             }
             catch (DbUpdateException ex)
@@ -70,7 +72,7 @@ namespace eCommerce.Backoffice.Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateCategory(int id, Category category)
+        public IActionResult UpdateCategory(int id, CategoryDto category)
         {
             if (id != category.Id)
             {
@@ -79,7 +81,7 @@ namespace eCommerce.Backoffice.Server.Controllers
 
             try
             {
-                _dataService.Modify(new eCommerce.Storefront.Model.Products.Category { Id = category.Id, Name = category.Name });
+                _dataService.Modify(new Category { Id = category.Id, Name = category.Name });
             }
             catch (DbUpdateConcurrencyException)
             {

@@ -4,7 +4,6 @@ namespace eCommerce.Backoffice.Shared.Model.Accounts
 {
     public class RegisterRequest
     {
-        [Key]
         [Display(ShortName = "Identifier")]
         public string Id { get; set; }
 

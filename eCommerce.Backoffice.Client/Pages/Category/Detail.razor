@@ -5,7 +5,7 @@
 
 <Alert Title="@error" ErrorList="new List<string>()" CSSClass="danger" />
 
-<Details Title="Category" TItem="Category" Item="category" CanDelete="@(category?.Id > 0)" OnSave="@((item) => SaveCategory(item as Category))" OnDelete="@((item) => DeleteCategory(item as Category))" OnCancel="@((item) => NavigationManager.NavigateTo("/admin/category/list"))">       
+<Details Title="Category" TItem="CategoryDto" Item="category" CanDelete="@(category?.Id > 0)" OnSave="@((item) => SaveCategory(item as CategoryDto))" OnDelete="@((item) => DeleteCategory(item as CategoryDto))" OnCancel="@((item) => NavigationManager.NavigateTo("/admin/category/list"))">       
     <FormFields Context="category">
         <label>Name</label>
         <RadzenTextBox @bind-Value="category.Name"></RadzenTextBox>
@@ -18,28 +18,28 @@
 
     string route = "api/categories";
     string listUrl = "/admin/category/list";
-    Category category;
+    CategoryDto category;
     string error;
 
     protected override async Task OnParametersSetAsync()
     {
         if (Id.HasValue)
         {
-            category = await HttpClient.GetFromJsonAsync<Category>($"{route}/{Id}");
+            category = await HttpClient.GetFromJsonAsync<CategoryDto>($"{route}/{Id}");
         }
         else
         {
-            category = new Category();   
+            category = new CategoryDto();   
         }
     }
 
-    async Task SaveCategory(Category item)
+    async Task SaveCategory(CategoryDto item)
     {
         if (item != null)
         {
             if (item.Id > 0)
             {
-                HttpResponseMessage httpResponseMessage = await HttpClient.PutAsJsonAsync<Category>($"{route}/{item.Id}", item);
+                HttpResponseMessage httpResponseMessage = await HttpClient.PutAsJsonAsync<CategoryDto>($"{route}/{item.Id}", item);
 
                 if (httpResponseMessage != null && httpResponseMessage.IsSuccessStatusCode)
                 {
@@ -52,7 +52,7 @@
             }
             else 
             {
-                HttpResponseMessage httpResponseMessage = await HttpClient.PostAsJsonAsync<Category>(route, item);
+                HttpResponseMessage httpResponseMessage = await HttpClient.PostAsJsonAsync<CategoryDto>(route, item);
 
                 if (httpResponseMessage != null && httpResponseMessage.IsSuccessStatusCode)
                 {
@@ -66,7 +66,7 @@
         } 
     }
 
-    async Task DeleteCategory(Category item)
+    async Task DeleteCategory(CategoryDto item)
     {
         if (item != null && item.Id > 0)
         {

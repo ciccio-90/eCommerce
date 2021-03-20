@@ -21,6 +21,7 @@ namespace eCommerce.Backoffice.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [IgnoreAntiforgeryToken]
     public class AccountsController : ControllerBase
     {
         private readonly UserManager<IdentityUser> _userManager;

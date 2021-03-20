@@ -20,8 +20,8 @@ namespace eCommerce.Backoffice.Client.Services.Implementations
 
         public CustomAuthStateProvider(ILocalStorageService localStorage, HttpClient httpClient)
         {
-            this._localStorage = localStorage;
-            this._httpClient = httpClient;
+            _localStorage = localStorage;
+            _httpClient = httpClient;
         }
 
         public async override Task<AuthenticationState> GetAuthenticationStateAsync()
@@ -89,7 +89,7 @@ namespace eCommerce.Backoffice.Client.Services.Implementations
         {
             try
             {
-                if (String.IsNullOrEmpty(token))
+                if (string.IsNullOrEmpty(token))
                 {
                     return null;
                 }

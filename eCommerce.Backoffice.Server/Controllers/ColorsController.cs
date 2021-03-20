@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using eCommerce.Backoffice.Shared.Model.Products;
+using eCommerce.Storefront.Model.Products;
 using Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -12,20 +13,21 @@ namespace eCommerce.Backoffice.Server.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
+    [IgnoreAntiforgeryToken]
     public class ColorsController : ControllerBase
     {
-        private readonly IDataService<eCommerce.Storefront.Model.Products.ProductColor, int> _dataService;
+        private readonly IDataService<ProductColor, int> _dataService;
 
-        public ColorsController(IDataService<eCommerce.Storefront.Model.Products.ProductColor, int> dataService)
+        public ColorsController(IDataService<ProductColor, int> dataService)
         {
             _dataService = dataService;
         }
 
         [HttpGet]
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-        public IEnumerable<ProductColor> GetColors()
+        public IEnumerable<ProductColorDto> GetColors()
         {
-            return _dataService.Get().Select(p => new ProductColor
+            return _dataService.Get().Select(p => new ProductColorDto
             {
                 Id = p.Id,
                 Name = p.Name
@@ -34,7 +36,7 @@ namespace eCommerce.Backoffice.Server.Controllers
 
         [HttpGet("{id}")]
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-        public ActionResult<ProductColor> GetColor(int id)
+        public ActionResult<ProductColorDto> GetColor(int id)
         {
             var productColor = _dataService.Get(id);
 
@@ -43,15 +45,15 @@ namespace eCommerce.Backoffice.Server.Controllers
                 return NotFound();
             }
 
-            return new ProductColor { Id = productColor.Id, Name = productColor.Name };
+            return new ProductColorDto { Id = productColor.Id, Name = productColor.Name };
         }
 
         [HttpPost]
-        public ActionResult<ProductColor> CreateColor(ProductColor color)
+        public ActionResult<ProductColorDto> CreateColor(ProductColorDto color)
         {
             try
             {
-                var productColor = _dataService.Create(new eCommerce.Storefront.Model.Products.ProductColor { Id = color.Id, Name = color.Name });
+                var productColor = _dataService.Create(new ProductColor { Id = color.Id, Name = color.Name });
                 color.Id = productColor.Id;
             }
             catch (DbUpdateException ex)
@@ -70,7 +72,7 @@ namespace eCommerce.Backoffice.Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateColor(int id, ProductColor color)
+        public IActionResult UpdateColor(int id, ProductColorDto color)
         {
             if (id != color.Id)
             {
@@ -79,7 +81,7 @@ namespace eCommerce.Backoffice.Server.Controllers
 
             try
             {
-                _dataService.Modify(new eCommerce.Storefront.Model.Products.ProductColor { Id = color.Id, Name = color.Name });
+                _dataService.Modify(new ProductColor { Id = color.Id, Name = color.Name });
             }
             catch (DbUpdateConcurrencyException)
             {
