@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using eCommerce.Storefront.Model.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -17,6 +18,13 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Mapping
                    .HasMaxLength(50)
                    .IsRequired();
             builder.HasIndex(s => s.Name).IsUnique();
+            builder.HasData(new List<ProductSize>()
+            {
+                new ProductSize { Id = 1, Name = "L" },
+                new ProductSize { Id = 2, Name = "XL" },
+                new ProductSize { Id = 3, Name = "M" },
+                new ProductSize { Id = 4, Name = "S" }
+            });
         }
     }
 }

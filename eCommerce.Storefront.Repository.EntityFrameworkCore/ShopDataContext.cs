@@ -5,6 +5,7 @@ using eCommerce.Storefront.Model.Products;
 using eCommerce.Storefront.Model.Shipping;
 using eCommerce.Storefront.Repository.EntityFrameworkCore.Mapping;
 using Infrastructure.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace eCommerce.Storefront.Repository.EntityFrameworkCore
@@ -34,6 +35,36 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.Entity<IdentityRole>().HasData(new IdentityRole
+            {
+                Id = "f01eb6e7-a59f-4094-a38e-db1acb888a27",
+                Name = "Admin",
+                NormalizedName = "ADMIN",
+                ConcurrencyStamp = "c25e7311-4d62-4cd1-a42a-43fadecdac0a"
+            });
+            builder.Entity<IdentityUser>().HasData(new IdentityUser
+            {
+                Id = "c8dd25ca-5d15-4a39-8023-7199a7f84286",
+                UserName = "francescoguagnano@alice.it",
+                NormalizedUserName = "FRANCESCOGUAGNANO@ALICE.IT",
+                Email = "francescoguagnano@alice.it",
+                NormalizedEmail = "FRANCESCOGUAGNANO@ALICE.IT",
+                EmailConfirmed = true,
+                PasswordHash = "AQAAAAEAACcQAAAAEMlv8lrB6gzwN+Icpe4qmD0BQqw72MxJM9VwCUwzrdBcuBJtF8tiIGaim10UtNy51g==",
+                SecurityStamp = "SMKW4WM6MF266XGGFASDTP7H4Y2TK3QO",
+                ConcurrencyStamp = "b2205356-7b1b-4955-9142-d02c78c94651",
+                PhoneNumber = null,
+                PhoneNumberConfirmed = false,
+                TwoFactorEnabled = false,
+                LockoutEnd = null,
+                LockoutEnabled = true,
+                AccessFailedCount = 0
+            });
+            builder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
+            {
+                RoleId = "f01eb6e7-a59f-4094-a38e-db1acb888a27",
+                UserId = "c8dd25ca-5d15-4a39-8023-7199a7f84286"
+            });
             builder.ApplyConfiguration(new BrandConfiguration());
             builder.ApplyConfiguration(new CategoryConfiguration());
             builder.ApplyConfiguration(new ProductColorConfiguration());
