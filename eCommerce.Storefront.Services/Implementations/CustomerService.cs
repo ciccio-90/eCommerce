@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using AutoMapper;
-using Infrastructure.Domain;
 using Infrastructure.UnitOfWork;
 using eCommerce.Storefront.Model.Customers;
 using eCommerce.Storefront.Model.Orders;

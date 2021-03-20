@@ -1,5 +1,4 @@
 using System.Linq;
-using eCommerce.Storefront.Model;
 using eCommerce.Storefront.Model.Customers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
