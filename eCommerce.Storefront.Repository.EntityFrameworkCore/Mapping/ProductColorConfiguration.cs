@@ -21,7 +21,9 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Mapping
             builder.HasData(new List<ProductColor>()
             {
                 new ProductColor { Id = 1, Name = "Black" },
-                new ProductColor { Id = 2, Name = "Blue" }
+                new ProductColor { Id = 2, Name = "Blue" },
+                new ProductColor { Id = 3, Name = "Red" },
+                new ProductColor { Id = 4, Name = "Green" }
             });
         }
     }

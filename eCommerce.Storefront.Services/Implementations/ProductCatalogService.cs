@@ -40,7 +40,7 @@ namespace eCommerce.Storefront.Services.Implementations
         public GetFeaturedProductsResponse GetFeaturedProducts()
         {
             GetFeaturedProductsResponse response = new GetFeaturedProductsResponse();
-            response.Products = _productTitleRepository.FindBy(p => true, 0, 6).OrderByDescending(p => p.Price).Select(p => _mapper.Map<ProductTitle, ProductSummaryView>(p));
+            response.Products = _productTitleRepository.FindAll().OrderByDescending(p => p.Price).ThenBy(p => p.Brand.Name).ThenBy(p => p.Name).Take(6).Select(p => _mapper.Map<ProductTitle, ProductSummaryView>(p));
 
             return response;
         }
@@ -71,11 +71,11 @@ namespace eCommerce.Storefront.Services.Implementations
             switch (request.SortBy)
             {
                 case ProductsSortBy.PriceLowToHigh:
-                    productsMatchingRefinement = productsMatchingRefinement.OrderBy(p => p.Price);
+                    productsMatchingRefinement = productsMatchingRefinement.OrderBy(p => p.Price).ThenBy(p => p.Brand.Name).ThenBy(p => p.Name);
                     
                     break;
                 case ProductsSortBy.PriceHighToLow:
-                    productsMatchingRefinement = productsMatchingRefinement.OrderByDescending(p => p.Price);
+                    productsMatchingRefinement = productsMatchingRefinement.OrderByDescending(p => p.Price).ThenBy(p => p.Brand.Name).ThenBy(p => p.Name);
                     
                     break;
             }
@@ -86,9 +86,9 @@ namespace eCommerce.Storefront.Services.Implementations
         public GetProductsByCategoryResponse CreateProductSearchResultFrom(IEnumerable<Product> productsMatchingRefinement, GetProductsByCategoryRequest request)
         {
             GetProductsByCategoryResponse productSearchResultView = new GetProductsByCategoryResponse();
-            IEnumerable<ProductTitle> productsFound = productsMatchingRefinement.Select(p => p.Title).Distinct();
+            IEnumerable<ProductTitle> productsFound = productsMatchingRefinement.Select(p => p.Title);
             productSearchResultView.SelectedCategory = request.CategoryId;
-            productSearchResultView.NumberOfTitlesFound = productsFound.Count();
+            productSearchResultView.NumberOfTitlesFound = productsFound.GroupBy(t => t.Id).Select(g => g.First()).Count();
             productSearchResultView.TotalNumberOfPages = NoOfResultPagesGiven(request.NumberOfResultsPerPage, productSearchResultView.NumberOfTitlesFound);
             productSearchResultView.RefinementGroups = GenerateAvailableProductRefinementsFrom(productsFound);
             productSearchResultView.Products = CropProductListToSatisfyGivenIndex(request.Index, request.NumberOfResultsPerPage, productsFound);
@@ -102,11 +102,11 @@ namespace eCommerce.Storefront.Services.Implementations
             {
                 int numToSkip = (pageIndex - 1) * numberOfResultsPerPage;
 
-                return _mapper.Map<IEnumerable<ProductTitle>, IEnumerable<ProductSummaryView>>(productsFound.OrderBy(p => p.Name).Skip(numToSkip).Take(numberOfResultsPerPage));
+                return _mapper.Map<IEnumerable<ProductTitle>, IEnumerable<ProductSummaryView>>(productsFound.GroupBy(t => t.Id).Select(g => g.First()).Skip(numToSkip).Take(numberOfResultsPerPage));
             }
             else
             {
-                return _mapper.Map<IEnumerable<ProductTitle>, IEnumerable<ProductSummaryView>>(productsFound.OrderBy(p => p.Name).Take(numberOfResultsPerPage));
+                return _mapper.Map<IEnumerable<ProductTitle>, IEnumerable<ProductSummaryView>>(productsFound.GroupBy(t => t.Id).Select(g => g.First()).Take(numberOfResultsPerPage));
             }
         }
 
@@ -124,11 +124,9 @@ namespace eCommerce.Storefront.Services.Implementations
 
         private IList<RefinementGroup> GenerateAvailableProductRefinementsFrom(IEnumerable<ProductTitle> productsFound)
         {
-            var brandsRefinementGroup = ConvertToRefinementGroup(productsFound.Select(p => p.Brand).Distinct().ToList().ConvertAll<IProductAttribute>(b => (IProductAttribute)b), RefinementGroupings.Brand);
-            var colorsRefinementGroup = ConvertToRefinementGroup(productsFound.Select(p => p.Color).Distinct().ToList().ConvertAll<IProductAttribute>(c => (IProductAttribute)c), RefinementGroupings.Color);
-            var sizesRefinementGroup = ConvertToRefinementGroup((from p in productsFound
-                                                                 from si in p.Products
-                                                                 select si.Size).Distinct().ToList().ConvertAll<IProductAttribute>(s => (IProductAttribute)s), RefinementGroupings.Size);
+            var brandsRefinementGroup = ConvertToRefinementGroup(productsFound.SelectMany(p => p.Products).Select(p => p.Brand).GroupBy(b => b.Id).Select(g => g.First()).ToList().ConvertAll<IProductAttribute>(b => (IProductAttribute)b), RefinementGroupings.Brand);
+            var colorsRefinementGroup = ConvertToRefinementGroup(productsFound.SelectMany(p => p.Products).Select(p => p.Color).GroupBy(c => c.Id).Select(g => g.First()).ToList().ConvertAll<IProductAttribute>(c => (IProductAttribute)c), RefinementGroupings.Color);
+            var sizesRefinementGroup = ConvertToRefinementGroup(productsFound.SelectMany(p => p.Products).Select(p => p.Size).GroupBy(s => s.Id).Select(g => g.First()).ToList().ConvertAll<IProductAttribute>(s => (IProductAttribute)s), RefinementGroupings.Size);
             IList<RefinementGroup> refinementGroups = new List<RefinementGroup>();
             
             refinementGroups.Add(brandsRefinementGroup);

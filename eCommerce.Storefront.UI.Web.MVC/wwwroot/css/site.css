@@ -138,8 +138,7 @@ body {
 }
 
 .refinement-box {
-  border: 1px solid #CCCCCC;
-  height: 100px;
+  border: 1px solid #FFFFFF;
   overflow: auto;
   margin-right: 10px;
 }
@@ -188,7 +187,7 @@ li a.availableItem {
 ul li.item-detail {
   float: left;
   width: 17em;
-  border: 1px solid #D1D1D1;
+  border: 1px solid #FFFFFF;
   margin-right: 2em;
   margin-bottom: 2em;
 }

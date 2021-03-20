@@ -366,18 +366,67 @@
             @Model.SelectedCategoryName
         </h2>
     </div>
-    <div style="margin-bottom: 41px;">
-        <span class="item-displayoptions-sort">Sort by
-            <select class="item-sortdropdown" id="ddlSortBy">
-                <option value="1">Price - High to Low</option>
-                <option value="2">Price - Low to High</option>
-            </select>
-        </span>
-        <span class="item-displayoptions-pages">products found
-            <span id="numberOfProductsFound">
-                @Model.NumberOfTitlesFound
+    @if (Model?.Products?.Count() > 0)
+    {
+        <div style="margin-bottom: 41px;">
+            <span class="item-displayoptions-sort">Sort by
+                <select class="item-sortdropdown" id="ddlSortBy">
+                    <option value="1">Price - High to Low</option>
+                    <option value="2">Price - Low to High</option>
+                </select>
             </span>
-            <span id="pageLinksTop">
+            <span class="item-displayoptions-pages">products found
+                <span id="numberOfProductsFound">
+                    @Model.NumberOfTitlesFound
+                </span>
+                @if (Model?.Products?.Count() > 0 && Model.TotalNumberOfPages > 1)
+                {
+                    <span id="pageLinksTop">
+                        @for (int i = 1; i <= Model.TotalNumberOfPages; i++)
+                        {
+                            <a class="@(Model.CurrentPage == i ? "selected" : "notselected")" href="@("JavaScript:displayPage(" + i + ")")">
+                                @i
+                            </a>
+                        }
+                    </span>
+                }
+            </span>
+        </div>
+    }
+    <div style="clear: both;"></div>
+    <div id="overlay" class="overlay"></div>
+    <div id="items">
+        @if (Model?.Products?.Count() > 0)
+        {
+            <ul class="items-list">
+            @foreach (var product in Model.Products)
+            {
+                <li class="item-detail">
+                    <a class="item-productimage-link" href="@Url.Action("Detail", "Product", new { id = product.Id }, null)">
+                        <img class="item-productimage" src="@("/content/images/products/" + product.Id.ToString() + ".jpg")" alt="Product @product.Id.ToString()" />
+                    </a>
+                    <div class="item-productname">
+                        @Html.ActionLink(product.BrandName + " " + product.Name, "Detail", "Product", new { id = product.Id }, null)
+                    </div>
+                    <div class="item-price">
+                        @product.Price
+                    </div>
+                </li>
+            }
+            </ul>
+        }
+        else
+        {
+            <div title="No products found matching your refinement">
+                <p>Your selection caused no results to be returned - please widen your search criteria.</p>
+            </div>
+        }
+    </div>
+    <div style="clear: both;"></div>
+    <span class="item-displayoptions-pages">
+        @if (Model?.Products?.Count() > 0 && Model.TotalNumberOfPages > 1)
+        {
+            <span id="pageLinksBottom">
                 @for (int i = 1; i <= Model.TotalNumberOfPages; i++)
                 {
                     <a class="@(Model.CurrentPage == i ? "selected" : "notselected")" href="@("JavaScript:displayPage(" + i + ")")">
@@ -385,38 +434,7 @@
                     </a>
                 }
             </span>
-        </span>
-    </div>
-    <div style="clear: both;"></div>
-    <div id="overlay" class="overlay"></div>
-    <div id="items">
-        <ul class="items-list">
-        @foreach (var product in Model.Products)
-        {
-            <li class="item-detail">
-                <a class="item-productimage-link" href="@Url.Action("Detail", "Product", new { id = product.Id }, null)">
-                    <img class="item-productimage" src="@("/content/images/products/" + product.Id.ToString() + ".jpg")" alt="Product @product.Id.ToString()" />
-                </a>
-                <div class="item-productname">
-                    @Html.ActionLink(product.BrandName + " " + product.Name, "Detail", "Product", new { id = product.Id }, null)
-                </div>
-                <div class="item-price">
-                    @product.Price
-                </div>
-            </li>
         }
-        </ul>
-    </div>
-    <div style="clear: both;"></div>
-    <span class="item-displayoptions-pages">
-        <span id="pageLinksBottom">
-            @for (int i = 1; i <= Model.TotalNumberOfPages; i++)
-            {
-                <a class="@(Model.CurrentPage == i ? "selected" : "notselected")" href="@("JavaScript:displayPage(" + i + ")")">
-                    @i
-                </a>
-            }
-        </span>
     </span>
     <p>&nbsp;</p>
 
