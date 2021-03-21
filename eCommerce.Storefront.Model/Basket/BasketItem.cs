@@ -33,7 +33,7 @@ namespace eCommerce.Storefront.Model.Basket
         
         public bool Contains(Product product)
         {
-            return Product == product;
+            return Product.Id == product.Id;
         }
 
         public void IncreaseItemQtyBy(int qty)

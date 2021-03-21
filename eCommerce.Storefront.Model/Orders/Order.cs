@@ -166,7 +166,7 @@ namespace eCommerce.Storefront.Model.Orders
 
         private bool OrderContains(Product product)
         {
-            return _items.Any(i => i.Product.Id == product.Id);
+            return _items.Any(i => i.Contains(product));
         }
 
         protected override void Validate()

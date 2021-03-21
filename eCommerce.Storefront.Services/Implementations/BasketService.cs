@@ -111,7 +111,7 @@ namespace eCommerce.Storefront.Services.Implementations
 
                 if (product != null)
                 {
-                    _basketRepository.RemoveBasketItems(basket.Items.Where(i => i.Product.Id == product.Id));
+                    _basketRepository.RemoveBasketItems(basket.Items.Where(i => i.Contains(product)));
                     basket.Remove(product);
                 }
             }
