@@ -104,14 +104,14 @@ namespace eCommerce.Storefront.Model.Basket
         {
             if (DeliveryOption == null)
             {
-                base.AddBrokenRule(BasketBusinessRules.DeliveryOptionRequired);
+                AddBrokenRule(BasketBusinessRules.DeliveryOptionRequired);
             }
 
-            foreach (BasketItem item in this.Items)
+            foreach (BasketItem item in Items)
             {
                 if (item.GetBrokenRules().Any())
                 {
-                    base.AddBrokenRule(BasketBusinessRules.ItemInvalid);
+                    AddBrokenRule(BasketBusinessRules.ItemInvalid);
                 }
             }
         }
