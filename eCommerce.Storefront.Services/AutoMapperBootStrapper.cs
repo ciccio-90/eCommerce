@@ -37,7 +37,9 @@ namespace eCommerce.Storefront.Services
                                            .ForMember(b => b.ItemsTotal, 
                                                       b => b.MapFrom(b => b.ItemsTotal.FormatMoney()))
                                            .ForMember(b => b.DeliveryCost, 
-                                                      b => b.MapFrom(b => b.DeliveryCost().FormatMoney()));
+                                                      b => b.MapFrom(b => b.DeliveryCost().FormatMoney()))
+                                           .ForMember(b => b.ShippingServiceDescription, 
+                                                      b => b.MapFrom(b => b.DeliveryOption.ShippingService.Description));
             // Customer
             CreateMap<Customer, CustomerView>();
             CreateMap<DeliveryAddress, DeliveryAddressView>();

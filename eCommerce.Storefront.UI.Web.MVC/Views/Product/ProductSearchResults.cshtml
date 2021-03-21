@@ -108,6 +108,16 @@
 
             showOverlay("overlay", "main", 10);
 
+            if (refinementSelections) {
+                refinementSelections.forEach(function (refinementSelection) {
+                    if (refinementSelection && refinementSelection.SelectedRefinements) {
+                        refinementSelection.SelectedRefinements = refinementSelection.SelectedRefinements.filter(function (value, index, self) {
+                            return self.indexOf(value) === index;
+                        });
+                    }
+                });
+            }
+
             var jsonData = JSON.stringify({ 
                 "CategoryId": categoryId,
                 "Index": index,
@@ -126,16 +136,16 @@
 
                     if (data.products.length == 0) {
                         showNoProductsFoundDialogBoxAndRevertSelection();
-                    } else {
-                        $("#items").setTemplate($("#productItemTemplate").html());
-                        $("#items").processTemplate(mydata);
-                        $('#numberOfProductsFound').text(data.numberOfTitlesFound);
-                        buildPageLinksFor("#pageLinksTop", data.currentPage, data.totalNumberOfPages);
-                        buildPageLinksFor("#pageLinksBottom", data.currentPage, data.totalNumberOfPages);
-                        
-                        for (var i = data.refinementGroups.length - 1; i >= 0; --i) {
-                            filterOutRefinements(data.refinementGroups[i].GroupId, data.refinementGroups[i].Refinements);
-                        }
+                    }
+
+                    $("#items").setTemplate($("#productItemTemplate").html());
+                    $("#items").processTemplate(mydata);
+                    $('#numberOfProductsFound').text(data.numberOfTitlesFound);
+                    buildPageLinksFor("#pageLinksTop", data.currentPage, data.totalNumberOfPages);
+                    buildPageLinksFor("#pageLinksBottom", data.currentPage, data.totalNumberOfPages);
+                    
+                    for (var i = data.refinementGroups.length - 1; i >= 0; --i) {
+                        filterOutRefinements(data.refinementGroups[i].GroupId, data.refinementGroups[i].Refinements);
                     }
 
                     hideOverlay("overlay");
@@ -147,7 +157,7 @@
     }
 
     //  Method used to work out which refinements to mark as available/disabled/selected 
-    //  based on the list of products taht matched the customers last selection.
+    //  based on the list of products that matched the customers last selection.
     // ===============================================================
     function filterOutRefinements(refinementGroupId, availableProductRefinements) {
         $("[id^='" + buildGroupRefinementElementIdForm(refinementGroupId) + "']").each(function() {

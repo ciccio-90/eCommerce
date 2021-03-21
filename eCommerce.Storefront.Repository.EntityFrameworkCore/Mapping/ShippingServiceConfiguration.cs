@@ -23,6 +23,7 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Mapping
             builder.HasOne(s => s.Courier)
                    .WithMany(s => s.Services)
                    .IsRequired();
+            builder.HasData(new { Id = 1, Code = "UPS-STD", Description = "UPS Standard", CourierId = 1 });
         }
     }
 }

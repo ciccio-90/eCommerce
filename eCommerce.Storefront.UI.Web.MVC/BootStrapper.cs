@@ -19,6 +19,7 @@ using Infrastructure.Logging;
 using Infrastructure.Email;
 using Infrastructure.Services.Implementations;
 using Infrastructure.Services.Interfaces;
+using eCommerce.Storefront.Model.Shipping;
 
 namespace eCommerce.Storefront.UI.Web.MVC
 {
@@ -35,6 +36,7 @@ namespace eCommerce.Storefront.UI.Web.MVC
             serviceCollection.AddScoped<IProductRepository, ProductRepository>();
             serviceCollection.AddScoped<ICustomerRepository, CustomerRepository>();
             serviceCollection.AddScoped<IOrderRepository, OrderRepository>();
+            serviceCollection.AddScoped<IDeliveryOptionRepository, DeliveryOptionRepository>();
             // Product Catalogue
             serviceCollection.AddScoped(typeof(IDataService<,>), typeof(DataService<,>));
             serviceCollection.AddScoped<IProductCatalogService, ProductCatalogService>();

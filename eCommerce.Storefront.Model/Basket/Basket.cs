@@ -51,12 +51,12 @@ namespace eCommerce.Storefront.Model.Basket
 
         public BasketItem GetItemFor(Product product)
         {
-            return _items.FirstOrDefault(i => i.Contains(product));
+            return _items.FirstOrDefault(i => i.Product.Id == product.Id);
         }
 
         private bool BasketContainsAnItemFor(Product product)
         {
-            return _items.Any(i => i.Contains(product));
+            return _items.Any(i => i.Product.Id == product.Id);
         }
 
         public void Remove(Product product)

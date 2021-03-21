@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using Infrastructure.Domain;
 using Infrastructure.UnitOfWork;
 using eCommerce.Storefront.Model.Basket;
 using eCommerce.Storefront.Model.Products;
@@ -16,13 +15,13 @@ namespace eCommerce.Storefront.Services.Implementations
     {
         private readonly IBasketRepository _basketRepository;
         private readonly IProductRepository _productRepository;
-        private readonly IReadOnlyRepository<DeliveryOption, int> _deliveryOptionRepository;
+        private readonly IDeliveryOptionRepository _deliveryOptionRepository;
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
 
         public BasketService(IBasketRepository basketRepository,
                              IProductRepository productRepository,
-                             IReadOnlyRepository<DeliveryOption, int> deliveryOptionRepository,
+                             IDeliveryOptionRepository deliveryOptionRepository,
                              IUnitOfWork uow,
                              IMapper mapper)
         {
@@ -112,6 +111,7 @@ namespace eCommerce.Storefront.Services.Implementations
 
                 if (product != null)
                 {
+                    _basketRepository.RemoveBasketItems(basket.Items.Where(i => i.Product.Id == product.Id));
                     basket.Remove(product);
                 }
             }

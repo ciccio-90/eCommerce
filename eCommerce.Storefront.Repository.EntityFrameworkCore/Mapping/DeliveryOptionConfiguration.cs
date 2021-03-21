@@ -21,6 +21,7 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Mapping
                    .IsRequired()
                    .HasColumnType("decimal(18,2)");
             builder.HasOne(d => d.ShippingService);
+            builder.HasData(new { Id = 1, FreeDeliveryThreshold = 29.99M, Cost = 3.99M, ShippingServiceId = 1 });
         }
     }
 }
