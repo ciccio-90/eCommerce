@@ -50,17 +50,17 @@ namespace eCommerce.Storefront.Model.Basket
         {
             if (Qty < 0)
             {
-                base.AddBrokenRule(BasketItemBusinessRules.QtyInvalid);
+                AddBrokenRule(BasketItemBusinessRules.QtyInvalid);
             }
 
             if (Product == null)
             {
-                base.AddBrokenRule(BasketItemBusinessRules.ProductRequired);
+                AddBrokenRule(BasketItemBusinessRules.ProductRequired);
             }
 
             if (Basket == null)
             {
-                base.AddBrokenRule(BasketItemBusinessRules.BasketRequired);
+                AddBrokenRule(BasketItemBusinessRules.BasketRequired);
             }
         }
     }
