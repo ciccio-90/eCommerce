@@ -29,22 +29,22 @@ namespace eCommerce.Storefront.Model.Customers
         {
             if (string.IsNullOrEmpty(FirstName))
             {
-                base.AddBrokenRule(CustomerBusinessRules.FirstNameRequired);
+                AddBrokenRule(CustomerBusinessRules.FirstNameRequired);
             }
 
             if (string.IsNullOrEmpty(SecondName))
             {
-                base.AddBrokenRule(CustomerBusinessRules.SecondNameRequired);
+                AddBrokenRule(CustomerBusinessRules.SecondNameRequired);
             }
 
             if (!new EmailValidationSpecification().IsSatisfiedBy(Email))
             {
-                base.AddBrokenRule(CustomerBusinessRules.EmailRequired);
+                AddBrokenRule(CustomerBusinessRules.EmailRequired);
             }
 
             if (string.IsNullOrEmpty(IdentityToken))
             {
-                base.AddBrokenRule(CustomerBusinessRules.IdentityTokenRequired);
+                AddBrokenRule(CustomerBusinessRules.IdentityTokenRequired);
             }
         }
     }
