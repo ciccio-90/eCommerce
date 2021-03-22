@@ -16,32 +16,32 @@ namespace eCommerce.Storefront.Model.Customers
         {
             if (string.IsNullOrEmpty(AddressLine))
             {
-                base.AddBrokenRule(DeliveryAddressBusinessRules.AddressLineRequired);
+                AddBrokenRule(DeliveryAddressBusinessRules.AddressLineRequired);
             }
 
             if (string.IsNullOrEmpty(City))
             {
-                base.AddBrokenRule(DeliveryAddressBusinessRules.CityRequired);
+                AddBrokenRule(DeliveryAddressBusinessRules.CityRequired);
             }
 
             if (string.IsNullOrEmpty(Country))
             {
-                base.AddBrokenRule(DeliveryAddressBusinessRules.CountryRequired);
+                AddBrokenRule(DeliveryAddressBusinessRules.CountryRequired);
             }
 
             if (string.IsNullOrEmpty(ZipCode))
             {
-                base.AddBrokenRule(DeliveryAddressBusinessRules.ZipCodeRequired);
+                AddBrokenRule(DeliveryAddressBusinessRules.ZipCodeRequired);
             }
 
             if (string.IsNullOrEmpty(Name))
             {
-                base.AddBrokenRule(DeliveryAddressBusinessRules.NameRequired);
+                AddBrokenRule(DeliveryAddressBusinessRules.NameRequired);
             }
 
             if (Customer == null)
             {
-                base.AddBrokenRule(DeliveryAddressBusinessRules.CustomerRequired);
+                AddBrokenRule(DeliveryAddressBusinessRules.CustomerRequired);
             }
         }
     }
