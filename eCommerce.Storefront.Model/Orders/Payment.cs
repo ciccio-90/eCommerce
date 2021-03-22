@@ -44,17 +44,17 @@ namespace eCommerce.Storefront.Model.Orders
         {
             if (string.IsNullOrEmpty(_transactionId))
             {
-                base.AddBrokenRule(PaymentBusinessRules.TransactionIdRequired);
+                AddBrokenRule(PaymentBusinessRules.TransactionIdRequired);
             }
 
             if (string.IsNullOrEmpty(_merchant))
             {
-                base.AddBrokenRule(PaymentBusinessRules.MerchantRequired);
+                AddBrokenRule(PaymentBusinessRules.MerchantRequired);
             }
 
             if (_amount < 0)
             {
-                base.AddBrokenRule(PaymentBusinessRules.AmountValid);
+                AddBrokenRule(PaymentBusinessRules.AmountValid);
             }
         }
     }
