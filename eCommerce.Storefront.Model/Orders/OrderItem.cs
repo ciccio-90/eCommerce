@@ -51,28 +51,28 @@ namespace eCommerce.Storefront.Model.Orders
         {
             if (Order == null)
             {
-                base.AddBrokenRule(OrderItemBusinessRules.OrderRequired);
+                AddBrokenRule(OrderItemBusinessRules.OrderRequired);
             }
 
             if (Product == null)
             {
-                base.AddBrokenRule(OrderItemBusinessRules.ProductRequired);
+                AddBrokenRule(OrderItemBusinessRules.ProductRequired);
             }
 
             if (Price < 0)
             {
-                base.AddBrokenRule(OrderItemBusinessRules.PriceNonNegative);
+                AddBrokenRule(OrderItemBusinessRules.PriceNonNegative);
             }
 
             if (Qty < 0)
             {
-                base.AddBrokenRule(OrderItemBusinessRules.QtyNonNegative);
+                AddBrokenRule(OrderItemBusinessRules.QtyNonNegative);
             }
         }
 
         public bool Contains(Product product)
         {
-            return Product == product;
+            return Product.Id == product.Id;
         }
     }
 }
