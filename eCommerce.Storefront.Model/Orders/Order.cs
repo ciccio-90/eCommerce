@@ -173,22 +173,22 @@ namespace eCommerce.Storefront.Model.Orders
         {
             if (Created == DateTime.MinValue)
             {
-                base.AddBrokenRule(OrderBusinessRules.CreatedDateRequired);
+                AddBrokenRule(OrderBusinessRules.CreatedDateRequired);
             }
 
             if (Customer == null)
             {
-                base.AddBrokenRule(OrderBusinessRules.CustomerRequired);
+                AddBrokenRule(OrderBusinessRules.CustomerRequired);
             }
 
             if (DeliveryAddress == null)
             {
-                base.AddBrokenRule(OrderBusinessRules.DeliveryAddressRequired);
+                AddBrokenRule(OrderBusinessRules.DeliveryAddressRequired);
             }
 
             if (Items == null || !Items.Any())
             {
-                base.AddBrokenRule(OrderBusinessRules.ItemsRequired); 
+                AddBrokenRule(OrderBusinessRules.ItemsRequired); 
             }
             else
             {
@@ -198,7 +198,7 @@ namespace eCommerce.Storefront.Model.Orders
                     {
                         foreach (BusinessRule businessRule in item.GetBrokenRules())
                         {
-                            base.AddBrokenRule(businessRule);
+                            AddBrokenRule(businessRule);
                         }
                     }
                 }
@@ -206,7 +206,7 @@ namespace eCommerce.Storefront.Model.Orders
 
             if (ShippingService == null)
             {
-                base.AddBrokenRule(OrderBusinessRules.ShippingServiceRequired);
+                AddBrokenRule(OrderBusinessRules.ShippingServiceRequired);
             }
         }
 
