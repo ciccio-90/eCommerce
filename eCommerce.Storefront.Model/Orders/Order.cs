@@ -98,7 +98,11 @@ namespace eCommerce.Storefront.Model.Orders
                 emailBody.AppendLine(ToString());
                 emailBody.AppendLine();
                 emailBody.AppendLine("Thank you for your custom.");
-                _emailService.SendMail(_applicationSettings.MailSettingsSmtpNetworkUserName, emailAddress, emailSubject, emailBody.ToString());                
+
+                if (!string.IsNullOrWhiteSpace(_applicationSettings.MailSettingsSmtpNetworkPassword))
+                {
+                    _emailService.SendMail(_applicationSettings.MailSettingsSmtpNetworkUserName, emailAddress, emailSubject, emailBody.ToString());                
+                }
             }
             else
             {
@@ -113,7 +117,7 @@ namespace eCommerce.Storefront.Model.Orders
 
         private string GetDetailsOnIssueWith(Payment payment)
         {
-            return string.Format("Payment amount is invalid. Order total is {0} but payment for {1}. Payment token '{2}'", this.Total(), payment.Amount, payment.TransactionId);
+            return string.Format("Payment amount is invalid. Order total is {0} but payment for {1}. Payment token '{2}'", Total(), payment.Amount, payment.TransactionId);
         }
 
         public bool OrderHasBeenPaidFor()
@@ -219,8 +223,8 @@ namespace eCommerce.Storefront.Model.Orders
                 orderInfo.AppendLine(string.Format("{0} of {1} ", item.Qty, item.Product.Name));
             }
 
-            orderInfo.AppendLine(string.Format("Shipping: {0}", this.ShippingCharge));
-            orderInfo.AppendLine(string.Format("Total: {0}", this.Total()));
+            orderInfo.AppendLine(string.Format("Shipping: {0}", ShippingCharge));
+            orderInfo.AppendLine(string.Format("Total: {0}", Total()));
 
             return orderInfo.ToString();
         }

@@ -42,12 +42,12 @@ namespace eCommerce.Storefront.Model.Orders
 
         protected override void Validate()
         {
-            if (string.IsNullOrEmpty(_transactionId))
+            if (string.IsNullOrWhiteSpace(_transactionId))
             {
                 AddBrokenRule(PaymentBusinessRules.TransactionIdRequired);
             }
 
-            if (string.IsNullOrEmpty(_merchant))
+            if (string.IsNullOrWhiteSpace(_merchant))
             {
                 AddBrokenRule(PaymentBusinessRules.MerchantRequired);
             }

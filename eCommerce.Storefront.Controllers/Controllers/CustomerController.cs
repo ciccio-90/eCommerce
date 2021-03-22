@@ -35,7 +35,7 @@ namespace eCommerce.Storefront.Controllers.Controllers
             {
                 CustomerDetailView customerDetailView = new CustomerDetailView();
                 customerDetailView.Customer = response.Customer;
-                customerDetailView.BasketSummary = base.GetBasketSummaryView();
+                customerDetailView.BasketSummary = GetBasketSummaryView();
 
                 return View(customerDetailView);
             }
@@ -54,7 +54,7 @@ namespace eCommerce.Storefront.Controllers.Controllers
             request.FirstName = customerView.FirstName;
             request.SecondName = customerView.SecondName;
             CustomerDetailView customerDetailView = new CustomerDetailView();
-            customerDetailView.BasketSummary = base.GetBasketSummaryView();
+            customerDetailView.BasketSummary = GetBasketSummaryView();
 
             try
             {       
@@ -80,7 +80,7 @@ namespace eCommerce.Storefront.Controllers.Controllers
             {                
                 CustomerDetailView customerDetailView = new CustomerDetailView();
                 customerDetailView.Customer = response.Customer;
-                customerDetailView.BasketSummary = base.GetBasketSummaryView();
+                customerDetailView.BasketSummary = GetBasketSummaryView();
 
                 return View("DeliveryAddresses", customerDetailView);
             }
@@ -101,7 +101,7 @@ namespace eCommerce.Storefront.Controllers.Controllers
                 CustomerDeliveryAddressView deliveryAddressView = new CustomerDeliveryAddressView();
                 deliveryAddressView.CustomerView = response.Customer;
                 deliveryAddressView.Address = response.Customer.DeliveryAddressBook.FirstOrDefault(d => d.Id == deliveryAddressId);
-                deliveryAddressView.BasketSummary = base.GetBasketSummaryView();
+                deliveryAddressView.BasketSummary = GetBasketSummaryView();
 
                 return View(deliveryAddressView);
             }
@@ -127,7 +127,7 @@ namespace eCommerce.Storefront.Controllers.Controllers
         {
             CustomerDeliveryAddressView customerDeliveryAddressView = new CustomerDeliveryAddressView();
             customerDeliveryAddressView.Address = new DeliveryAddressView();
-            customerDeliveryAddressView.BasketSummary = base.GetBasketSummaryView();
+            customerDeliveryAddressView.BasketSummary = GetBasketSummaryView();
 
             return View(customerDeliveryAddressView);
         }

@@ -34,8 +34,8 @@ namespace eCommerce.Storefront.Controllers.Controllers
         private ProductSearchResultView GetProductSearchResultViewFrom(GetProductsByCategoryResponse response)
         {
             ProductSearchResultView productSearchResultView = new ProductSearchResultView();
-            productSearchResultView.BasketSummary = base.GetBasketSummaryView();
-            productSearchResultView.Categories = base.GetCategories();
+            productSearchResultView.BasketSummary = GetBasketSummaryView();
+            productSearchResultView.Categories = GetCategories();
             productSearchResultView.CurrentPage = response.CurrentPage;
             productSearchResultView.NumberOfTitlesFound = response.NumberOfTitlesFound;
             productSearchResultView.Products = response.Products;
@@ -114,8 +114,8 @@ namespace eCommerce.Storefront.Controllers.Controllers
             GetProductResponse response = _cachedProductCatalogService.GetProduct(request);
             ProductView productView = response.Product;
             productDetailView.Product = productView;
-            productDetailView.BasketSummary = base.GetBasketSummaryView();
-            productDetailView.Categories = base.GetCategories();
+            productDetailView.BasketSummary = GetBasketSummaryView();
+            productDetailView.Categories = GetCategories();
 
             return View(productDetailView);
         }

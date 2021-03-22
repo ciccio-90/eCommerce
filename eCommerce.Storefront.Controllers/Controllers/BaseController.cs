@@ -19,12 +19,12 @@ namespace eCommerce.Storefront.Controllers.Controllers
             string basketTotal = string.Empty;
             int numberOfItems = 0;
 
-            if (!string.IsNullOrEmpty(_cookieStorageService.Retrieve(CookieDataKeys.BasketTotal.ToString())))
+            if (!string.IsNullOrWhiteSpace(_cookieStorageService.Retrieve(CookieDataKeys.BasketTotal.ToString())))
             {
                 basketTotal = _cookieStorageService.Retrieve(CookieDataKeys.BasketTotal.ToString());
             }
 
-            if (!string.IsNullOrEmpty(_cookieStorageService.Retrieve(CookieDataKeys.BasketItems.ToString())))
+            if (!string.IsNullOrWhiteSpace(_cookieStorageService.Retrieve(CookieDataKeys.BasketItems.ToString())))
             {
                 numberOfItems = int.Parse(_cookieStorageService.Retrieve(CookieDataKeys.BasketItems.ToString()));
             }
@@ -41,7 +41,7 @@ namespace eCommerce.Storefront.Controllers.Controllers
             string sBasketId = _cookieStorageService.Retrieve(CookieDataKeys.BasketId.ToString());
             Guid basketId = Guid.Empty;
             
-            if (!string.IsNullOrEmpty(sBasketId))
+            if (!string.IsNullOrWhiteSpace(sBasketId))
             {
                 basketId = new Guid(sBasketId);
             }

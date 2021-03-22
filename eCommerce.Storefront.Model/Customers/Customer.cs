@@ -27,12 +27,12 @@ namespace eCommerce.Storefront.Model.Customers
 
         protected override void Validate()
         {
-            if (string.IsNullOrEmpty(FirstName))
+            if (string.IsNullOrWhiteSpace(FirstName))
             {
                 AddBrokenRule(CustomerBusinessRules.FirstNameRequired);
             }
 
-            if (string.IsNullOrEmpty(SecondName))
+            if (string.IsNullOrWhiteSpace(SecondName))
             {
                 AddBrokenRule(CustomerBusinessRules.SecondNameRequired);
             }
@@ -42,7 +42,7 @@ namespace eCommerce.Storefront.Model.Customers
                 AddBrokenRule(CustomerBusinessRules.EmailRequired);
             }
 
-            if (string.IsNullOrEmpty(IdentityToken))
+            if (string.IsNullOrWhiteSpace(IdentityToken))
             {
                 AddBrokenRule(CustomerBusinessRules.IdentityTokenRequired);
             }

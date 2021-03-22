@@ -15,6 +15,6 @@
   },
   "NumberOfResultsPerPage": 6,
   "CookieAuthenticationTimeout": 30,
-  "PayPalBusinessEmail": "sb-uol4791200231@business.example.com",
+  "PayPalBusinessEmail": "sb-irbfm5509308@business.example.com",
   "PayPalPaymentPostToUrl": "https://www.sandbox.paypal.com/cgi-bin/webscr"
 }

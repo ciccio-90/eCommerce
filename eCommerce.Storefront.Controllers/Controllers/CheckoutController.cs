@@ -53,7 +53,7 @@ namespace eCommerce.Storefront.Controllers.Controllers
                     OrderConfirmationView orderConfirmationView = new OrderConfirmationView();
                     GetBasketRequest getBasketRequest = new GetBasketRequest
                     {
-                        BasketId = base.GetBasketId()
+                        BasketId = GetBasketId()
                     };
                     GetBasketResponse basketResponse = _basketService.GetBasket(getBasketRequest);
                     orderConfirmationView.Basket = basketResponse.Basket;
@@ -92,7 +92,7 @@ namespace eCommerce.Storefront.Controllers.Controllers
         public IActionResult PlaceOrder(IFormCollection collection)
         {
             CreateOrderRequest request = new CreateOrderRequest();
-            request.BasketId = base.GetBasketId();
+            request.BasketId = GetBasketId();
             request.CustomerIdentityToken = _cookieAuthentication.GetAuthenticationToken();
             request.DeliveryId = int.Parse(collection[FormDataKeys.DeliveryAddress.ToString()]);
             CreateOrderResponse response = _orderService.CreateOrder(request);

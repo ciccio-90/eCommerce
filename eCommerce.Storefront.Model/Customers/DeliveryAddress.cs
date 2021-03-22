@@ -14,27 +14,27 @@ namespace eCommerce.Storefront.Model.Customers
 
         protected override void Validate()
         {
-            if (string.IsNullOrEmpty(AddressLine))
+            if (string.IsNullOrWhiteSpace(AddressLine))
             {
                 AddBrokenRule(DeliveryAddressBusinessRules.AddressLineRequired);
             }
 
-            if (string.IsNullOrEmpty(City))
+            if (string.IsNullOrWhiteSpace(City))
             {
                 AddBrokenRule(DeliveryAddressBusinessRules.CityRequired);
             }
 
-            if (string.IsNullOrEmpty(Country))
+            if (string.IsNullOrWhiteSpace(Country))
             {
                 AddBrokenRule(DeliveryAddressBusinessRules.CountryRequired);
             }
 
-            if (string.IsNullOrEmpty(ZipCode))
+            if (string.IsNullOrWhiteSpace(ZipCode))
             {
                 AddBrokenRule(DeliveryAddressBusinessRules.ZipCodeRequired);
             }
 
-            if (string.IsNullOrEmpty(Name))
+            if (string.IsNullOrWhiteSpace(Name))
             {
                 AddBrokenRule(DeliveryAddressBusinessRules.NameRequired);
             }

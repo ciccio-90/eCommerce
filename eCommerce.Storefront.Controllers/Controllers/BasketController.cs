@@ -27,13 +27,13 @@ namespace eCommerce.Storefront.Controllers.Controllers
         public IActionResult Detail()
         {
             BasketDetailView basketView = new BasketDetailView();
-            Guid basketId = base.GetBasketId();
+            Guid basketId = GetBasketId();
             GetBasketRequest basketRequest = new GetBasketRequest() { BasketId = basketId };
             GetBasketResponse basketResponse = _basketService.GetBasket(basketRequest);
             GetAllDispatchOptionsResponse dispatchOptionsResponse = _basketService.GetAllDispatchOptions();
             basketView.Basket = basketResponse.Basket;
-            basketView.Categories = base.GetCategories();
-            basketView.BasketSummary = base.GetBasketSummaryView();
+            basketView.Categories = GetCategories();
+            basketView.BasketSummary = GetBasketSummaryView();
             basketView.DeliveryOptions = dispatchOptionsResponse.DeliveryOptions;
             
             return View("View", basketView);
@@ -46,7 +46,7 @@ namespace eCommerce.Storefront.Controllers.Controllers
 
             request.ItemsToRemove.Add(productId);
 
-            request.BasketId = base.GetBasketId();
+            request.BasketId = GetBasketId();
             ModifyBasketResponse response = _basketService.ModifyBasket(request);
             
             SaveBasketSummaryToCookie(response.Basket.NumberOfItems, response.Basket.BasketTotal);
@@ -68,7 +68,7 @@ namespace eCommerce.Storefront.Controllers.Controllers
         {
             ModifyBasketRequest request = new ModifyBasketRequest();
             request.SetShippingServiceIdTo = shippingServiceId;
-            request.BasketId = base.GetBasketId();
+            request.BasketId = GetBasketId();
             BasketDetailView basketDetailView = new BasketDetailView();
             ModifyBasketResponse response = _basketService.ModifyBasket(request);
             
@@ -90,7 +90,7 @@ namespace eCommerce.Storefront.Controllers.Controllers
         public IActionResult UpdateItems([FromBody] BasketQtyUpdateRequest jsonBasketQtyUpdateRequest)
         {
             ModifyBasketRequest request = new ModifyBasketRequest();
-            request.BasketId = base.GetBasketId();
+            request.BasketId = GetBasketId();
             request.ItemsToUpdate = jsonBasketQtyUpdateRequest.ConvertToBasketItemUpdateRequests();
             BasketDetailView basketDetailView = new BasketDetailView();
             ModifyBasketResponse response = _basketService.ModifyBasket(request);
@@ -113,7 +113,7 @@ namespace eCommerce.Storefront.Controllers.Controllers
         public IActionResult AddToBasket(int productId)
         {
             BasketSummaryView basketSummaryView = new BasketSummaryView();
-            Guid basketId = base.GetBasketId();
+            Guid basketId = GetBasketId();
             bool createNewBasket = basketId == Guid.Empty;
 
             if (!createNewBasket)

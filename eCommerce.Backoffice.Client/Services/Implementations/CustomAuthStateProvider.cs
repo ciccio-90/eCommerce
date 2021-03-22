@@ -69,7 +69,7 @@ namespace eCommerce.Backoffice.Client.Services.Implementations
         {
             try
             {
-                if (string.IsNullOrEmpty(token))
+                if (string.IsNullOrWhiteSpace(token))
                 {
                     return false;
                 }
@@ -89,7 +89,7 @@ namespace eCommerce.Backoffice.Client.Services.Implementations
         {
             try
             {
-                if (string.IsNullOrEmpty(token))
+                if (string.IsNullOrWhiteSpace(token))
                 {
                     return null;
                 }

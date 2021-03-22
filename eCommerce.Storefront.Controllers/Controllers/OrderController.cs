@@ -39,7 +39,7 @@ namespace eCommerce.Storefront.Controllers.Controllers
             {    
                 CustomersOrderSummaryView customersOrderSummaryView = new CustomersOrderSummaryView();
                 customersOrderSummaryView.Orders = response.Orders;
-                customersOrderSummaryView.BasketSummary = base.GetBasketSummaryView();
+                customersOrderSummaryView.BasketSummary = GetBasketSummaryView();
 
                 return View(customersOrderSummaryView);
             }
@@ -54,7 +54,7 @@ namespace eCommerce.Storefront.Controllers.Controllers
             GetOrderRequest request = new GetOrderRequest() { OrderId = orderId };
             GetOrderResponse response = _orderService.GetOrder(request);
             CustomerOrderView orderView = new CustomerOrderView();
-            orderView.BasketSummary = base.GetBasketSummaryView();
+            orderView.BasketSummary = GetBasketSummaryView();
             orderView.Order = response.Order;
 
             return View(orderView);

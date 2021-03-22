@@ -37,7 +37,7 @@ namespace eCommerce.Storefront.Controllers.Controllers
 
         public ActionArgumentKey GetReturnActionFrom(string returnUrl)
         {
-            if (!string.IsNullOrEmpty(returnUrl) && returnUrl.ToLower().Contains("checkout"))
+            if (!string.IsNullOrWhiteSpace(returnUrl) && returnUrl.ToLower().Contains("checkout"))
             {
                 return ActionArgumentKey.GoToCheckout;
             }
