@@ -4,11 +4,11 @@ namespace eCommerce.Storefront.Model.Customers
 {
     public class EmailValidationSpecification
     {
-        private static Regex _emailregex = new Regex(@"\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*");
+        private Regex _emailRegex = new Regex(@"\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*");
 
         public bool IsSatisfiedBy(string email)
         {            
-            return _emailregex.IsMatch(email ?? string.Empty);
+            return _emailRegex.IsMatch(email ?? string.Empty);
         }
     }
 }
