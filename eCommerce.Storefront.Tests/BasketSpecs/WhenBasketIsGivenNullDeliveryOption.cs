@@ -18,9 +18,9 @@ namespace eCommerce.Storefront.Tests.BasketSpecs
         }
 
         [TestMethod]
-        public void ThenTheBasketShouldHaveOneBrokenRule()
+        public void ThenTheBasketShouldHaveTwoBrokenRules()
         {
-            Assert.AreEqual(1, _basket.GetBrokenRules().Count());
+            Assert.AreEqual(2, _basket.GetBrokenRules().Count());
         }
 
         [TestMethod]
