@@ -6,5 +6,6 @@ namespace eCommerce.Storefront.Services.Messaging.OrderService
         public decimal Amount { get; set; }
         public string PaymentMerchant { get; set; }
         public int OrderId { get; set; }
+        public string CustomerEmail { get; set; }
     }
 }

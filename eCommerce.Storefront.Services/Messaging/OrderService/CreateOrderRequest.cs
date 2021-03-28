@@ -6,6 +6,6 @@ namespace eCommerce.Storefront.Services.Messaging.OrderService
     {
         public int DeliveryId { get; set; }
         public Guid BasketId { get; set; }
-        public string CustomerIdentityToken { get; set; }
+        public string CustomerEmail { get; set; }
     }
 }

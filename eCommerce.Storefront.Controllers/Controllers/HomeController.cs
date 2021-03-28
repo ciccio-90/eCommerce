@@ -1,21 +1,22 @@
 using eCommerce.Storefront.Controllers.ViewModels.ProductCatalog;
-using Infrastructure.CookieStorage;
 using eCommerce.Storefront.Services.Messaging.ProductCatalogService;
 using Microsoft.AspNetCore.Mvc;
 using eCommerce.Storefront.Services.Cache;
 using eCommerce.Storefront.Controllers.ViewModels;
 using System.Diagnostics;
+using Infrastructure.Authentication;
+using eCommerce.Storefront.Services.Interfaces;
 
 namespace eCommerce.Storefront.Controllers.Controllers
 {
     public class HomeController : ProductCatalogBaseController
     {
-        private readonly ICachedProductCatalogService _cachedProductCatalogService;
-
-        public HomeController(ICachedProductCatalogService cachedProductCatalogService,
-                              ICookieStorageService cookieStorageService) : base(cookieStorageService, cachedProductCatalogService)
+        public HomeController(ICookieAuthentication cookieAuthentication,
+                              ICustomerService customerService,
+                              ICachedProductCatalogService cachedProductCatalogService) : base(cookieAuthentication,
+                                                                                               customerService,
+                                                                                               cachedProductCatalogService)
         {
-            _cachedProductCatalogService = cachedProductCatalogService;
         }
 
         public IActionResult Index()

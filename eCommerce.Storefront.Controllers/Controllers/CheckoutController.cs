@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using eCommerce.Storefront.Controllers.ViewModels.Checkout;
 using Infrastructure.Authentication;
@@ -11,36 +10,32 @@ using eCommerce.Storefront.Services.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace eCommerce.Storefront.Controllers.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Customer")]
     public class CheckoutController : BaseController
     {
-        private readonly ICookieStorageService _cookieStorageService;
         private readonly IBasketService _basketService;
-        private readonly ICustomerService _customerService;
         private readonly IOrderService _orderService;
-        private readonly ICookieAuthentication _cookieAuthentication;
 
         public CheckoutController(ICookieStorageService cookieStorageService,
                                   IBasketService basketService,
                                   ICustomerService customerService,
                                   IOrderService orderService,
-                                  ICookieAuthentication cookieAuthentication) : base(cookieStorageService)
+                                  ICookieAuthentication cookieAuthentication) : base(cookieAuthentication,
+                                                                                     customerService)
         {
-            _cookieStorageService = cookieStorageService;
             _basketService = basketService;
-            _customerService = customerService;
             _orderService = orderService;
-            _cookieAuthentication = cookieAuthentication;
         }
 
-        public IActionResult Checkout()
+        public async Task<IActionResult> Checkout()
         {
             GetCustomerRequest customerRequest = new GetCustomerRequest
             {
-                CustomerIdentityToken = _cookieAuthentication.GetAuthenticationToken()
+                CustomerEmail = _cookieAuthentication.GetAuthenticationToken()
             };
             GetCustomerResponse customerResponse = _customerService.GetCustomer(customerRequest);
 
@@ -66,7 +61,9 @@ namespace eCommerce.Storefront.Controllers.Controllers
             }
             else 
             {
-                return RedirectToAction("LogOn", "AccountLogOn");
+                await _cookieAuthentication.SignOut();
+
+                return RedirectToAction("Register", "AccountRegister");
             }
         }
 
@@ -78,27 +75,24 @@ namespace eCommerce.Storefront.Controllers.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddDeliveryAddress(DeliveryAddressView deliveryAddressView)
+        public async Task<IActionResult> AddDeliveryAddress(DeliveryAddressView deliveryAddressView)
         {
             DeliveryAddressAddRequest request = new DeliveryAddressAddRequest();
             request.Address = deliveryAddressView;
-            request.CustomerIdentityToken = _cookieAuthentication.GetAuthenticationToken();
+            request.CustomerEmail = _cookieAuthentication.GetAuthenticationToken();
 
             _customerService.AddDeliveryAddress(request);
 
-            return Checkout();
+            return await Checkout();
         }
 
         public IActionResult PlaceOrder(IFormCollection collection)
         {
             CreateOrderRequest request = new CreateOrderRequest();
             request.BasketId = GetBasketId();
-            request.CustomerIdentityToken = _cookieAuthentication.GetAuthenticationToken();
+            request.CustomerEmail = _cookieAuthentication.GetAuthenticationToken();
             request.DeliveryId = int.Parse(collection[FormDataKeys.DeliveryAddress.ToString()]);
             CreateOrderResponse response = _orderService.CreateOrder(request);
-
-            _cookieStorageService.Save(CookieDataKeys.BasketItems.ToString(), "0", DateTime.Now.AddDays(1));
-            _cookieStorageService.Save(CookieDataKeys.BasketTotal.ToString(), "0", DateTime.Now.AddDays(1));
 
             return RedirectToAction("CreatePaymentFor", "Payment", new { orderId = response.Order.Id });
         }

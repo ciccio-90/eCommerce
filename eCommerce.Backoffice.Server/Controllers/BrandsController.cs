@@ -16,9 +16,9 @@ namespace eCommerce.Backoffice.Server.Controllers
     [IgnoreAntiforgeryToken]
     public class BrandsController : ControllerBase
     {
-        private readonly IDataService<Brand, int> _dataService;
+        private readonly IDataService<Brand, long> _dataService;
 
-        public BrandsController(IDataService<Brand, int> dataService)
+        public BrandsController(IDataService<Brand, long> dataService)
         {
             _dataService = dataService;
         }

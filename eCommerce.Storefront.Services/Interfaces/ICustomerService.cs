@@ -9,6 +9,5 @@ namespace eCommerce.Storefront.Services.Interfaces
         ModifyCustomerResponse ModifyCustomer(ModifyCustomerRequest request);
         DeliveryAddressModifyResponse ModifyDeliveryAddress(DeliveryAddressModifyRequest request);
         DeliveryAddressAddResponse AddDeliveryAddress(DeliveryAddressAddRequest request);
-        void SetCustomerIdentityToken(SetCustomerIdentityTokenRequest request);
     }
 }

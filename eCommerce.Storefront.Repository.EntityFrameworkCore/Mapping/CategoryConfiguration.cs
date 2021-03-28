@@ -20,11 +20,11 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Mapping
             builder.HasIndex(c => c.Name).IsUnique();
             builder.HasData(new List<Category>()
             {
-                new Category { Id = 1, Name = "Trousers" },
-                new Category { Id = 2, Name = "Shirts" },
-                new Category { Id = 3, Name = "Socks" },
-                new Category { Id = 4, Name = "Jackets" },
-                new Category { Id = 5, Name = "T-Shirts" }
+                new Category { Id = (long)1, Name = "Trousers" },
+                new Category { Id = (long)2, Name = "Shirts" },
+                new Category { Id = (long)3, Name = "Socks" },
+                new Category { Id = (long)4, Name = "Jackets" },
+                new Category { Id = (long)5, Name = "T-Shirts" }
             });
         }
     }

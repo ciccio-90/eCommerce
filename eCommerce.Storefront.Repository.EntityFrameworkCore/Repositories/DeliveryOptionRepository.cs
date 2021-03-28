@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Repositories
 {
-    public class DeliveryOptionRepository : Repository<DeliveryOption, int>, IDeliveryOptionRepository
+    public class DeliveryOptionRepository : Repository<DeliveryOption, long>, IDeliveryOptionRepository
     {
         public DeliveryOptionRepository(IUnitOfWork uow, DataContext dataContext) : base(uow, dataContext)
         {

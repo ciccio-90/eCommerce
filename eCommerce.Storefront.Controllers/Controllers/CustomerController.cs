@@ -1,34 +1,30 @@
 using System.Linq;
 using eCommerce.Storefront.Controllers.ViewModels.CustomerAccount;
 using Infrastructure.Authentication;
-using Infrastructure.CookieStorage;
 using eCommerce.Storefront.Services.Interfaces;
 using eCommerce.Storefront.Services.Messaging.CustomerService;
 using eCommerce.Storefront.Services.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Infrastructure.Domain;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace eCommerce.Storefront.Controllers.Controllers
 {
-    [Authorize]    
+    [Authorize(Roles = "Customer")]    
     public class CustomerController : BaseController
     {
-        private readonly ICustomerService _customerService;
-        private readonly ICookieAuthentication _cookieAuthentication;
-
-        public CustomerController(ICookieStorageService cookieStorageService,
-                                  ICustomerService customerService,
-                                  ICookieAuthentication cookieAuthentication) : base(cookieStorageService)
+        public CustomerController(ICustomerService customerService,
+                                  ICookieAuthentication cookieAuthentication) : base(cookieAuthentication,
+                                                                                     customerService)
         {
-            _customerService = customerService;
-            _cookieAuthentication = cookieAuthentication;
         }
 
-        public IActionResult Detail()
+        public async Task<IActionResult> Detail()
         {
             GetCustomerRequest customerRequest = new GetCustomerRequest();
-            customerRequest.CustomerIdentityToken = _cookieAuthentication.GetAuthenticationToken();
+            customerRequest.CustomerEmail = _cookieAuthentication.GetAuthenticationToken();
             GetCustomerResponse response = _customerService.GetCustomer(customerRequest);
 
             if (response.CustomerFound)
@@ -41,18 +37,20 @@ namespace eCommerce.Storefront.Controllers.Controllers
             }
             else 
             {
-                return RedirectToAction("LogOn", "AccountLogOn");
+                await _cookieAuthentication.SignOut();
+
+                return RedirectToAction("Register", "AccountRegister");
             }
         }
 
         [HttpPost]
-        public IActionResult Detail(CustomerView customerView)
+        public async Task<IActionResult> Detail(CustomerView customerView)
         {          
             ModifyCustomerRequest request = new ModifyCustomerRequest();
-            request.CustomerIdentityToken = _cookieAuthentication.GetAuthenticationToken();
-            request.Email = customerView.Email;
+            request.NewEmail = customerView.Email;
             request.FirstName = customerView.FirstName;
             request.SecondName = customerView.SecondName;
+            request.CurrentEmail = _cookieAuthentication.GetAuthenticationToken();
             CustomerDetailView customerDetailView = new CustomerDetailView();
             customerDetailView.BasketSummary = GetBasketSummaryView();
 
@@ -60,6 +58,8 @@ namespace eCommerce.Storefront.Controllers.Controllers
             {       
                 ModifyCustomerResponse response = _customerService.ModifyCustomer(request);  
                 customerDetailView.Customer = response.Customer;
+
+                await _cookieAuthentication.SetAuthenticationToken(customerDetailView.Customer.Email, new List<string> { "Customer" });
             }
             catch (EntityBaseIsInvalidException ex)
             {
@@ -70,10 +70,10 @@ namespace eCommerce.Storefront.Controllers.Controllers
             return View(customerDetailView);
         }
 
-        public IActionResult DeliveryAddresses()
+        public async Task<IActionResult> DeliveryAddresses()
         {
             GetCustomerRequest customerRequest = new GetCustomerRequest();
-            customerRequest.CustomerIdentityToken = _cookieAuthentication.GetAuthenticationToken();
+            customerRequest.CustomerEmail = _cookieAuthentication.GetAuthenticationToken();
             GetCustomerResponse response = _customerService.GetCustomer(customerRequest);
 
             if (response.CustomerFound)
@@ -86,14 +86,16 @@ namespace eCommerce.Storefront.Controllers.Controllers
             }
             else 
             {
-                return RedirectToAction("LogOn", "AccountLogOn");
+                await _cookieAuthentication.SignOut();
+
+                return RedirectToAction("Register", "AccountRegister");
             }
         }
 
-        public IActionResult EditDeliveryAddress(int deliveryAddressId)
+        public async Task<IActionResult> EditDeliveryAddress(int deliveryAddressId)
         {
             GetCustomerRequest customerRequest = new GetCustomerRequest();
-            customerRequest.CustomerIdentityToken = _cookieAuthentication.GetAuthenticationToken();
+            customerRequest.CustomerEmail = _cookieAuthentication.GetAuthenticationToken();
             GetCustomerResponse response = _customerService.GetCustomer(customerRequest);
 
             if (response.CustomerFound)
@@ -107,20 +109,22 @@ namespace eCommerce.Storefront.Controllers.Controllers
             }
             else 
             {
-                return RedirectToAction("LogOn", "AccountLogOn");
+                await _cookieAuthentication.SignOut();
+                
+                return RedirectToAction("Register", "AccountRegister");
             }
         }
 
         [HttpPost]
-        public IActionResult EditDeliveryAddress(DeliveryAddressView deliveryAddressView)
+        public async Task<IActionResult> EditDeliveryAddress(DeliveryAddressView deliveryAddressView)
         {
             DeliveryAddressModifyRequest request = new DeliveryAddressModifyRequest();
             request.Address = deliveryAddressView;
-            request.CustomerIdentityToken = _cookieAuthentication.GetAuthenticationToken();
+            request.CustomerEmail = _cookieAuthentication.GetAuthenticationToken();
 
             _customerService.ModifyDeliveryAddress(request);
 
-            return DeliveryAddresses();
+            return await DeliveryAddresses();
         }
 
         public IActionResult AddDeliveryAddress()
@@ -133,15 +137,15 @@ namespace eCommerce.Storefront.Controllers.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddDeliveryAddress(DeliveryAddressView deliveryAddressView)
+        public async Task<IActionResult> AddDeliveryAddress(DeliveryAddressView deliveryAddressView)
         {
             DeliveryAddressAddRequest request = new DeliveryAddressAddRequest();
             request.Address = deliveryAddressView;
-            request.CustomerIdentityToken = _cookieAuthentication.GetAuthenticationToken();
+            request.CustomerEmail = _cookieAuthentication.GetAuthenticationToken();
             
             _customerService.AddDeliveryAddress(request);
 
-            return DeliveryAddresses();
+            return await DeliveryAddresses();
         }
     }
 }

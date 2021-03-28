@@ -8,6 +8,7 @@ using eCommerce.Storefront.Model.Shipping;
 using eCommerce.Storefront.Services.Interfaces;
 using eCommerce.Storefront.Services.Messaging.ProductCatalogService;
 using eCommerce.Storefront.Services.ViewModels;
+using eCommerce.Storefront.Model.Customers;
 
 namespace eCommerce.Storefront.Services.Implementations
 {
@@ -18,18 +19,21 @@ namespace eCommerce.Storefront.Services.Implementations
         private readonly IDeliveryOptionRepository _deliveryOptionRepository;
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
+        private readonly ICustomerRepository _customerRepository;
 
         public BasketService(IBasketRepository basketRepository,
                              IProductRepository productRepository,
                              IDeliveryOptionRepository deliveryOptionRepository,
                              IUnitOfWork uow,
-                             IMapper mapper)
+                             IMapper mapper,
+                             ICustomerRepository customerRepository)
         {
             _basketRepository = basketRepository;
             _productRepository = productRepository;
             _deliveryOptionRepository = deliveryOptionRepository;
             _uow = uow;
             _mapper = mapper;
+            _customerRepository = customerRepository;
         }
         
         public GetBasketResponse GetBasket(GetBasketRequest basketRequest)
@@ -56,11 +60,17 @@ namespace eCommerce.Storefront.Services.Implementations
         {
             CreateBasketResponse response = new CreateBasketResponse();
             Basket basket = new Basket();
+            Customer customer = _customerRepository.FindBy(basketRequest.CustomerEmail);
+            customer.Email = basketRequest.CustomerEmail;
 
             basket.SetDeliveryOption(GetCheapestDeliveryOption());
             AddProductsToBasket(basketRequest.ProductsToAdd, basket);
+            basket.SetCustomer(customer);
             basket.ThrowExceptionIfInvalid();
             _basketRepository.Save(basket);
+            customer.AddBasket(basket);
+            customer.ThrowExceptionIfInvalid();
+            _customerRepository.Save(customer);
             _uow.Commit();
             
             response.Basket = _mapper.Map<Basket, BasketView>(basket);
@@ -103,7 +113,7 @@ namespace eCommerce.Storefront.Services.Implementations
             return response;
         }
         
-        private void RemoveItemsFromBasket(IList<int> productsToRemove, Basket basket)
+        private void RemoveItemsFromBasket(IList<long> productsToRemove, Basket basket)
         {
             foreach (int productId in productsToRemove)
             {
@@ -111,7 +121,6 @@ namespace eCommerce.Storefront.Services.Implementations
 
                 if (product != null)
                 {
-                    _basketRepository.RemoveBasketItems(basket.Items.Where(i => i.Contains(product)));
                     basket.Remove(product);
                 }
             }
@@ -130,7 +139,7 @@ namespace eCommerce.Storefront.Services.Implementations
             }
         }
 
-        private void AddProductsToBasket(IList<int> productsToAdd, Basket basket)
+        private void AddProductsToBasket(IList<long> productsToAdd, Basket basket)
         {
             Product product = null;
 

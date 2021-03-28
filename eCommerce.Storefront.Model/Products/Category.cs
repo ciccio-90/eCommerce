@@ -2,7 +2,7 @@ using Infrastructure.Domain;
 
 namespace eCommerce.Storefront.Model.Products
 {
-    public class Category : EntityBase<int>, IAggregateRoot, IProductAttribute
+    public class Category : EntityBase<long>, IAggregateRoot, IProductAttribute
     {
         public string Name { get; set; }
         

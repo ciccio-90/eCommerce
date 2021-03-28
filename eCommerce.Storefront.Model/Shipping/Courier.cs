@@ -4,7 +4,7 @@ using Infrastructure.Domain;
 
 namespace eCommerce.Storefront.Model.Shipping
 {
-    public class Courier : EntityBase<int>
+    public class Courier : EntityBase<long>
     {
         private readonly string _name;
         private readonly IEnumerable<ShippingService> _services;

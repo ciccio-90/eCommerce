@@ -4,7 +4,7 @@ using Infrastructure.Domain;
 
 namespace eCommerce.Storefront.Model.Products
 {
-    public class ProductTitle : EntityBase<int>, IAggregateRoot
+    public class ProductTitle : EntityBase<long>, IAggregateRoot
     {
         public string Name { get; set; }
         public decimal Price { get; set; }

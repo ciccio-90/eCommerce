@@ -4,6 +4,7 @@ using System.Linq;
 using Infrastructure.Domain;
 using eCommerce.Storefront.Model.Products;
 using eCommerce.Storefront.Model.Shipping;
+using eCommerce.Storefront.Model.Customers;
 
 namespace eCommerce.Storefront.Model.Basket
 {
@@ -11,13 +12,12 @@ namespace eCommerce.Storefront.Model.Basket
     {
         private readonly IList<BasketItem> _items;
         private DeliveryOption _deliveryOption;
+        private Customer _customer;
         
         public Basket()
         {
             _items = new List<BasketItem>();
         }
-
-        public new Guid Id { get; set; }
 
         public int NumberOfItems
         {
@@ -100,11 +100,26 @@ namespace eCommerce.Storefront.Model.Basket
             _deliveryOption = deliveryOption;
         }
 
+        public Customer Customer
+        {
+            get { return _customer; }
+        }
+
+        public void SetCustomer(Customer customer)
+        {
+            _customer = customer;
+        }
+
         protected override void Validate()
         {
             if (DeliveryOption == null)
             {
                 AddBrokenRule(BasketBusinessRules.DeliveryOptionRequired);
+            }
+
+            if (Customer == null)
+            {
+                AddBrokenRule(BasketBusinessRules.CustomerRequired);
             }
 
             foreach (BasketItem item in Items)

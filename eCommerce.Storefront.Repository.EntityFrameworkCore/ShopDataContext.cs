@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using eCommerce.Storefront.Model.Basket;
 using eCommerce.Storefront.Model.Customers;
 using eCommerce.Storefront.Model.Orders;
@@ -35,12 +36,22 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.Entity<IdentityRole>().HasData(new IdentityRole
+            builder.Entity<IdentityRole>().HasData(new List<IdentityRole>
             {
-                Id = "f01eb6e7-a59f-4094-a38e-db1acb888a27",
-                Name = "Admin",
-                NormalizedName = "ADMIN",
-                ConcurrencyStamp = "c25e7311-4d62-4cd1-a42a-43fadecdac0a"
+                new IdentityRole
+                {
+                    Id = "f01eb6e7-a59f-4094-a38e-db1acb888a27",
+                    Name = "Admin",
+                    NormalizedName = "ADMIN",
+                    ConcurrencyStamp = "c25e7311-4d62-4cd1-a42a-43fadecdac0a"
+                },
+                new IdentityRole
+                {
+                    Id = "4c93af0c-9921-4abb-a5eb-26f8e01b2249",
+                    Name = "Customer",
+                    NormalizedName = "CUSTOMER",
+                    ConcurrencyStamp = "b497576b-9358-46eb-ab44-4b8aa5cd50f6"
+                }
             });
             builder.Entity<IdentityUser>().HasData(new IdentityUser
             {

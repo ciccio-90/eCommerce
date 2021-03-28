@@ -2,7 +2,7 @@ using Infrastructure.Domain;
 
 namespace eCommerce.Storefront.Model.Customers
 {
-    public class DeliveryAddress : EntityBase<int>
+    public class DeliveryAddress : EntityBase<long>
     {        
         public string AddressLine { get; set; }
         public string City { get; set; }

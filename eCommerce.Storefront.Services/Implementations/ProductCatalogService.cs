@@ -15,12 +15,12 @@ namespace eCommerce.Storefront.Services.Implementations
     {
         private readonly IProductTitleRepository _productTitleRepository;
         private readonly IProductRepository _productRepository;
-        private readonly IReadOnlyRepository<Category, int> _categoryRepository;
+        private readonly IReadOnlyRepository<Category, long> _categoryRepository;
         private readonly IMapper _mapper;
 
         public ProductCatalogService(IProductTitleRepository productTitleRepository,
                                      IProductRepository productRepository,
-                                     IReadOnlyRepository<Category, int> categoryRepository,
+                                     IReadOnlyRepository<Category, long> categoryRepository,
                                      IMapper mapper)
         {
             _productTitleRepository = productTitleRepository;

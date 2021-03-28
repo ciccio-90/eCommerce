@@ -6,31 +6,17 @@ using Infrastructure.Domain;
 using eCommerce.Storefront.Model.Customers;
 using eCommerce.Storefront.Model.Products;
 using eCommerce.Storefront.Model.Shipping;
-using Infrastructure.Configuration;
-using Infrastructure.Email;
 
 namespace eCommerce.Storefront.Model.Orders
 {
-    public class Order : EntityBase<int>, IAggregateRoot
+    public class Order : EntityBase<long>, IAggregateRoot
     {
-        private readonly IApplicationSettings _applicationSettings;
-        private readonly IEmailService _emailService;
         private readonly IList<OrderItem> _items;
         private readonly DateTime _created;
         private Payment _payment;
 
         public Order()
         {
-            _created = DateTime.Now;
-            _items = new List<OrderItem>();
-            Status = OrderStatus.Open;
-        }
-
-        public Order(IApplicationSettings applicationSettings,
-                     IEmailService emailService)
-        {
-            _applicationSettings = applicationSettings;
-            _emailService = emailService;
             _created = DateTime.Now;
             _items = new List<OrderItem>();
             Status = OrderStatus.Open;
@@ -74,39 +60,6 @@ namespace eCommerce.Storefront.Model.Orders
             else
             {
                 throw new PaymentAmountDoesNotEqualOrderTotalException(GetDetailsOnIssueWith(payment));
-            }
-
-            Submit();
-        }
-
-        private void Submit()
-        {
-            if (Status == OrderStatus.Open)
-            {
-                if (OrderHasBeenPaidFor())
-                {
-                    Status = OrderStatus.Submitted;
-                }
-
-                StringBuilder emailBody = new StringBuilder();
-                string emailAddress = Customer.Email;
-                string emailSubject = string.Format("Order #{0}", Id);
-
-                emailBody.AppendLine(string.Format("Hello {0},", Customer.FirstName));
-                emailBody.AppendLine();
-                emailBody.AppendLine("The following order will be packed and dispatched as soon as possible.");
-                emailBody.AppendLine(ToString());
-                emailBody.AppendLine();
-                emailBody.AppendLine("Thank you for your custom.");
-
-                if (!string.IsNullOrWhiteSpace(_applicationSettings.MailSettingsSmtpNetworkPassword))
-                {
-                    _emailService.SendMail(_applicationSettings.MailSettingsSmtpNetworkUserName, emailAddress, emailSubject, emailBody.ToString());                
-                }
-            }
-            else
-            {
-                throw new InvalidOperationException("You cannot submit this order as it has already been submitted.");
             }
         }
 

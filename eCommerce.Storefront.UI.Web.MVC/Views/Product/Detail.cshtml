@@ -18,6 +18,10 @@
         updateBasketSummary(basketSummaryView);
         hideOverlay("smoverlay");
     }
+
+    function navigateToLogOn() {
+        location.href = '/AccountLogOn/LogOn';
+    }
 </script>
 
 <h2>@Model.Product.BrandName @Model.Product.Name</h2>
@@ -35,7 +39,14 @@
                 <option value="@option.Id">@option.SizeName</option>
             }
             </select>
-            <input type="button" value="+ Add to cart" onclick="JavaScript:addProductToBasket();" />
+            @if (User.Identity.IsAuthenticated)
+            {
+                <input type="button" value="+ Add to cart" onclick="JavaScript:addProductToBasket();" />
+            }
+            else
+            {
+                <input type="button" value="+ Add to cart" onclick="JavaScript:navigateToLogOn();" />
+            }
         </p>
     </div>
 </div>

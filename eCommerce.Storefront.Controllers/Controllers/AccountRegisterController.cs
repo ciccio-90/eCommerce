@@ -8,6 +8,7 @@ using eCommerce.Storefront.Services.Messaging.CustomerService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Infrastructure.Domain;
+using System.Collections.Generic;
 
 namespace eCommerce.Storefront.Controllers.Controllers
 {
@@ -41,7 +42,7 @@ namespace eCommerce.Storefront.Controllers.Controllers
 
             try
             {
-                user = await _authenticationService.RegisterUser(email, password);
+                user = await _authenticationService.RegisterUser(email, password, true, new List<string> { "Customer" });
             }
             catch (InvalidOperationException ex)
             {
@@ -59,13 +60,13 @@ namespace eCommerce.Storefront.Controllers.Controllers
                 try
                 {
                     CreateCustomerRequest createCustomerRequest = new CreateCustomerRequest();
-                    createCustomerRequest.CustomerIdentityToken = user.AuthenticationToken;
+                    createCustomerRequest.UserId = user.Id;
                     createCustomerRequest.Email = email;
                     createCustomerRequest.FirstName = firstName;
                     createCustomerRequest.SecondName = secondName;
 
                     _customerService.CreateCustomer(createCustomerRequest);
-                    await _cookieAuthentication.SetAuthenticationToken(user.AuthenticationToken);
+                    await _cookieAuthentication.SetAuthenticationToken(user.Email, new List<string> { "Customer" });
 
                     return RedirectToAction("Detail", "Customer");
                 }

@@ -1,32 +1,43 @@
 using System;
 using eCommerce.Storefront.Controllers.ViewModels;
-using Infrastructure.CookieStorage;
+using eCommerce.Storefront.Services.Interfaces;
+using eCommerce.Storefront.Services.Messaging.CustomerService;
+using Infrastructure.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eCommerce.Storefront.Controllers.Controllers
 {
     public class BaseController : Controller
     {
-        private readonly ICookieStorageService _cookieStorageService;
+        protected readonly ICookieAuthentication _cookieAuthentication;
+        protected readonly ICustomerService _customerService;
         
-        public BaseController(ICookieStorageService cookieStorageService)
+        public BaseController(ICookieAuthentication cookieAuthentication,
+                              ICustomerService customerService)
         {
-            _cookieStorageService = cookieStorageService;
+            _cookieAuthentication = cookieAuthentication;
+            _customerService = customerService;
         }
         
-        public BasketSummaryView GetBasketSummaryView()
+        protected BasketSummaryView GetBasketSummaryView()
         {
             string basketTotal = string.Empty;
             int numberOfItems = 0;
+            var email = _cookieAuthentication.GetAuthenticationToken();
 
-            if (!string.IsNullOrWhiteSpace(_cookieStorageService.Retrieve(CookieDataKeys.BasketTotal.ToString())))
+            if (!string.IsNullOrWhiteSpace(email))
             {
-                basketTotal = _cookieStorageService.Retrieve(CookieDataKeys.BasketTotal.ToString());
-            }
+                var response = _customerService.GetCustomer(new GetCustomerRequest
+                {
+                    CustomerEmail = email,
+                    LoadBasketSummary = true
+                });
 
-            if (!string.IsNullOrWhiteSpace(_cookieStorageService.Retrieve(CookieDataKeys.BasketItems.ToString())))
-            {
-                numberOfItems = int.Parse(_cookieStorageService.Retrieve(CookieDataKeys.BasketItems.ToString()));
+                if (response.CustomerFound && response.Basket != null)
+                {
+                    basketTotal = response.Basket.BasketTotal;
+                    numberOfItems = response.Basket.NumberOfItems;
+                }
             }
 
             return new BasketSummaryView
@@ -36,14 +47,23 @@ namespace eCommerce.Storefront.Controllers.Controllers
             };
         }
         
-        public Guid GetBasketId()
+        protected Guid GetBasketId()
         {
-            string sBasketId = _cookieStorageService.Retrieve(CookieDataKeys.BasketId.ToString());
-            Guid basketId = Guid.Empty;
-            
-            if (!string.IsNullOrWhiteSpace(sBasketId))
+            Guid basketId = Guid.Empty;            
+            var email = _cookieAuthentication.GetAuthenticationToken();
+
+            if (!string.IsNullOrWhiteSpace(email))
             {
-                basketId = new Guid(sBasketId);
+                var response = _customerService.GetCustomer(new GetCustomerRequest
+                {
+                    CustomerEmail = email,
+                    LoadBasketSummary = true
+                });
+
+                if (response.CustomerFound && response.Basket != null)
+                {
+                    basketId = response.Basket.Id;
+                }
             }
             
             return basketId;

@@ -1,17 +1,20 @@
 using System.Collections.Generic;
-using Infrastructure.CookieStorage;
 using eCommerce.Storefront.Services.Messaging.ProductCatalogService;
 using eCommerce.Storefront.Services.ViewModels;
 using eCommerce.Storefront.Services.Cache;
+using Infrastructure.Authentication;
+using eCommerce.Storefront.Services.Interfaces;
 
 namespace eCommerce.Storefront.Controllers.Controllers
 {
     public class ProductCatalogBaseController : BaseController
     {
-        private readonly ICachedProductCatalogService _cachedProductCatalogService;
+        protected readonly ICachedProductCatalogService _cachedProductCatalogService;
 
-        public ProductCatalogBaseController(ICookieStorageService cookieStorageService,
-                                            ICachedProductCatalogService cachedProductCatalogService) : base(cookieStorageService)
+        public ProductCatalogBaseController(ICookieAuthentication cookieAuthentication,
+                                            ICustomerService customerService,
+                                            ICachedProductCatalogService cachedProductCatalogService) : base(cookieAuthentication,
+                                                                                                             customerService)
         {
             _cachedProductCatalogService = cachedProductCatalogService;
         }

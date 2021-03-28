@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Repositories
 {
-    public class OrderRepository : Repository<Order, int>, IOrderRepository
+    public class OrderRepository : Repository<Order, long>, IOrderRepository
     {
         public OrderRepository(IUnitOfWork uow, DataContext dataContext) : base(uow, dataContext)
         {

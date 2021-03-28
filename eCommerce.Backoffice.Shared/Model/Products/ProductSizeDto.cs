@@ -5,7 +5,7 @@ namespace eCommerce.Backoffice.Shared.Model.Products
     public class ProductSizeDto
     {
         [Display(ShortName = "Identifier")]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         [StringLength(50)]
         [Required]

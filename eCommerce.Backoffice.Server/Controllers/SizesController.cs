@@ -16,9 +16,9 @@ namespace eCommerce.Backoffice.Server.Controllers
     [IgnoreAntiforgeryToken]
     public class SizesController : ControllerBase
     {
-        private readonly IDataService<ProductSize, int> _dataService;
+        private readonly IDataService<ProductSize, long> _dataService;
 
-        public SizesController(IDataService<ProductSize, int> dataService)
+        public SizesController(IDataService<ProductSize, long> dataService)
         {
             _dataService = dataService;
         }

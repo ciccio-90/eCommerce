@@ -16,9 +16,9 @@ namespace eCommerce.Backoffice.Server.Controllers
     [IgnoreAntiforgeryToken]
     public class CategoriesController : ControllerBase
     {
-        private readonly IDataService<Category, int> _dataService;
+        private readonly IDataService<Category, long> _dataService;
 
-        public CategoriesController(IDataService<Category, int> dataService)
+        public CategoriesController(IDataService<Category, long> dataService)
         {
             _dataService = dataService;
         }

@@ -29,12 +29,12 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Mapping
                    .IsRequired();
             builder.HasData(new List<object>
             {
-                new { Id = 1, Name = "506 Stretch Diamond", Price = 27.99M, BrandId = 1, CategoryId = 1, ColorId = 2 },
-                new { Id = 2, Name = "506 Dark Stuff Straight", Price = 25.99M, BrandId = 1, CategoryId = 1, ColorId = 1 },
-                new { Id = 3, Name = "512 Bootcut Jeans", Price = 22.99M, BrandId = 1, CategoryId = 1, ColorId = 2 },
-                new { Id = 4, Name = "Lucian Straight Jeans", Price = 22.99M, BrandId = 2, CategoryId = 1, ColorId = 2 },
-                new { Id = 5, Name = "Lucian Straight Jeans", Price = 22.99M, BrandId = 2, CategoryId = 1, ColorId = 3 },
-                new { Id = 6, Name = "Lucian Straight Jeans", Price = 22.99M, BrandId = 2, CategoryId = 1, ColorId = 4 }
+                new { Id = (long)1, Name = "506 Stretch Diamond", Price = 27.99M, BrandId = (long)1, CategoryId = (long)1, ColorId = (long)2 },
+                new { Id = (long)2, Name = "506 Dark Stuff Straight", Price = 25.99M, BrandId = (long)1, CategoryId = (long)1, ColorId = (long)1 },
+                new { Id = (long)3, Name = "512 Bootcut Jeans", Price = 22.99M, BrandId = (long)1, CategoryId = (long)1, ColorId = (long)2 },
+                new { Id = (long)4, Name = "Lucian Straight Jeans", Price = 22.99M, BrandId = (long)2, CategoryId = (long)1, ColorId = (long)2 },
+                new { Id = (long)5, Name = "Lucian Straight Jeans", Price = 22.99M, BrandId = (long)2, CategoryId = (long)1, ColorId = (long)3 },
+                new { Id = (long)6, Name = "Lucian Straight Jeans", Price = 22.99M, BrandId = (long)2, CategoryId = (long)1, ColorId = (long)4 }
             });
         }
     }

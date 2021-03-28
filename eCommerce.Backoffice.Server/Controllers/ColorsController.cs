@@ -16,9 +16,9 @@ namespace eCommerce.Backoffice.Server.Controllers
     [IgnoreAntiforgeryToken]
     public class ColorsController : ControllerBase
     {
-        private readonly IDataService<ProductColor, int> _dataService;
+        private readonly IDataService<ProductColor, long> _dataService;
 
-        public ColorsController(IDataService<ProductColor, int> dataService)
+        public ColorsController(IDataService<ProductColor, long> dataService)
         {
             _dataService = dataService;
         }

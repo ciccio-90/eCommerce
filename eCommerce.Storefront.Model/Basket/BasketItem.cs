@@ -3,7 +3,7 @@ using eCommerce.Storefront.Model.Products;
 
 namespace eCommerce.Storefront.Model.Basket
 {
-    public class BasketItem : EntityBase<int>
+    public class BasketItem : EntityBase<long>
     {
         private int _qty;
         private readonly Product _product;

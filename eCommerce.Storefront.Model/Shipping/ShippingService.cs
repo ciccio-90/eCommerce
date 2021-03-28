@@ -3,7 +3,7 @@ using Infrastructure.Domain;
 
 namespace eCommerce.Storefront.Model.Shipping
 {
-    public class ShippingService : EntityBase<int>
+    public class ShippingService : EntityBase<long>
     {
         private readonly string _code;
         private readonly string _description;

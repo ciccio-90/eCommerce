@@ -6,19 +6,23 @@ using eCommerce.Storefront.Services.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using eCommerce.Storefront.Services.Cache;
 using Infrastructure.Configuration;
+using Infrastructure.Authentication;
+using eCommerce.Storefront.Services.Interfaces;
 
 namespace eCommerce.Storefront.Controllers.Controllers
 {
     public class ProductController : ProductCatalogBaseController
     {
-        private readonly ICachedProductCatalogService _cachedProductCatalogService;
         private readonly IApplicationSettings _applicationSettings;
 
-        public ProductController(ICachedProductCatalogService cachedProductCatalogService,
-                                 ICookieStorageService cookieStorageService,
-                                 IApplicationSettings applicationSettings) : base(cookieStorageService, cachedProductCatalogService)
+        public ProductController(ICookieStorageService cookieStorageService,
+                                 IApplicationSettings applicationSettings,
+                                 ICookieAuthentication cookieAuthentication,
+                                 ICustomerService customerService,
+                                 ICachedProductCatalogService cachedProductCatalogService) : base(cookieAuthentication,
+                                                                                                  customerService,
+                                                                                                  cachedProductCatalogService)
         {
-            _cachedProductCatalogService = cachedProductCatalogService;
             _applicationSettings = applicationSettings;
         }
 

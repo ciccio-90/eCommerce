@@ -7,6 +7,7 @@ using eCommerce.Storefront.Model.Orders;
 using eCommerce.Storefront.Services.Interfaces;
 using eCommerce.Storefront.Services.Messaging.CustomerService;
 using eCommerce.Storefront.Services.ViewModels;
+using eCommerce.Storefront.Model.Basket;
 
 namespace eCommerce.Storefront.Services.Implementations
 {
@@ -29,7 +30,7 @@ namespace eCommerce.Storefront.Services.Implementations
         {
             CreateCustomerResponse response = new CreateCustomerResponse();
             Customer customer = new Customer();
-            customer.IdentityToken = request.CustomerIdentityToken;
+            customer.UserId = request.UserId;
             customer.Email = request.Email;
             customer.FirstName = request.FirstName;
             customer.SecondName = request.SecondName;
@@ -46,16 +47,22 @@ namespace eCommerce.Storefront.Services.Implementations
         public GetCustomerResponse GetCustomer(GetCustomerRequest request)
         {
             GetCustomerResponse response = new GetCustomerResponse();
-            Customer customer = _customerRepository.FindBy(request.CustomerIdentityToken);
+            Customer customer = _customerRepository.FindBy(request.CustomerEmail);
 
             if (customer != null)
             {
                 response.CustomerFound = true;
                 response.Customer = _mapper.Map<Customer, CustomerView>(customer);
+                response.Customer.Email = request.CustomerEmail;
                 
                 if (request.LoadOrderSummary)
                 {
                     response.Orders = _mapper.Map<IEnumerable<Order>, IEnumerable<OrderSummaryView>>(customer.Orders.OrderByDescending(o => o.Created));
+                }
+
+                if (request.LoadBasketSummary)
+                {
+                    response.Basket = _mapper.Map<Basket, BasketView>(customer.Basket);
                 }
             }
             else
@@ -69,13 +76,14 @@ namespace eCommerce.Storefront.Services.Implementations
         public ModifyCustomerResponse ModifyCustomer(ModifyCustomerRequest request)
         {
             ModifyCustomerResponse response = new ModifyCustomerResponse();
-            Customer customer = _customerRepository.FindBy(request.CustomerIdentityToken);
+            Customer customer = _customerRepository.FindBy(request.CurrentEmail);
             customer.FirstName = request.FirstName;
             customer.SecondName = request.SecondName;
-            customer.Email = request.Email;
+            customer.Email = request.NewEmail;
 
             customer.ThrowExceptionIfInvalid();
             _customerRepository.Save(customer);
+            _customerRepository.SaveEmail(customer.UserId, customer.Email);
             _uow.Commit();
 
             response.Customer = _mapper.Map<Customer, CustomerView>(customer);
@@ -86,7 +94,7 @@ namespace eCommerce.Storefront.Services.Implementations
         public DeliveryAddressModifyResponse ModifyDeliveryAddress(DeliveryAddressModifyRequest request)
         {
             DeliveryAddressModifyResponse response = new DeliveryAddressModifyResponse();
-            Customer customer = _customerRepository.FindBy(request.CustomerIdentityToken);
+            Customer customer = _customerRepository.FindBy(request.CustomerEmail);
             DeliveryAddress deliveryAddress = customer.DeliveryAddressBook.FirstOrDefault(d => d.Id == request.Address.Id);
 
             if (deliveryAddress != null)
@@ -104,7 +112,7 @@ namespace eCommerce.Storefront.Services.Implementations
         public DeliveryAddressAddResponse AddDeliveryAddress(DeliveryAddressAddRequest request)
         {
             DeliveryAddressAddResponse response = new DeliveryAddressAddResponse();
-            Customer customer = _customerRepository.FindBy(request.CustomerIdentityToken);
+            Customer customer = _customerRepository.FindBy(request.CustomerEmail);
             DeliveryAddress deliveryAddress = new DeliveryAddress();
             deliveryAddress.Customer = customer;
 
@@ -116,16 +124,6 @@ namespace eCommerce.Storefront.Services.Implementations
             response.DeliveryAddress = _mapper.Map<DeliveryAddress, DeliveryAddressView>(deliveryAddress);
 
             return response;
-        }
-
-        public void SetCustomerIdentityToken(SetCustomerIdentityTokenRequest request)
-        {
-            Customer customer = _customerRepository.FindBy(c => c.Email.Equals(request.Email)).FirstOrDefault();
-            customer.IdentityToken = request.CustomerIdentityToken;
-
-            customer.ThrowExceptionIfInvalid();
-            _customerRepository.Save(customer);
-            _uow.Commit();
         }
 
         private void UpdateDeliveryAddressFrom(DeliveryAddressView deliveryAddressSource, DeliveryAddress deliveryAddressToUpdate)

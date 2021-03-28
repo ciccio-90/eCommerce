@@ -11,6 +11,7 @@ using Infrastructure.Logging;
 using Infrastructure.Configuration;
 using Infrastructure.Email;
 using System;
+using System.Text;
 
 namespace eCommerce.Storefront.Services.Implementations
 {
@@ -47,7 +48,7 @@ namespace eCommerce.Storefront.Services.Implementations
         public CreateOrderResponse CreateOrder(CreateOrderRequest request)
         {
             CreateOrderResponse response = new CreateOrderResponse();
-            Customer customer = _customerRepository.FindBy(request.CustomerIdentityToken);
+            Customer customer = _customerRepository.FindBy(request.CustomerEmail);
             Basket basket = _basketRepository.FindBy(request.BasketId);
             DeliveryAddress deliveryAddress = customer.DeliveryAddressBook.FirstOrDefault(d => d.Id == request.DeliveryId);
             Order order = ConvertToOrder(basket);
@@ -71,6 +72,7 @@ namespace eCommerce.Storefront.Services.Implementations
             try
             {
                 order.SetPayment(new Payment(DateTime.Now, paymentRequest.PaymentToken, paymentRequest.PaymentMerchant, paymentRequest.Amount));
+                Submit(order, paymentRequest.CustomerEmail);
                 _orderRepository.Save(order);
                 _uow.Commit();
             }
@@ -101,7 +103,7 @@ namespace eCommerce.Storefront.Services.Implementations
 
         private Order ConvertToOrder(Basket basket)
         {
-            Order order = new Order(_applicationSettings, _emailService);
+            Order order = new Order();
             order.ShippingCharge = basket.DeliveryCost();
             order.ShippingService = basket.DeliveryOption.ShippingService;
 
@@ -111,6 +113,37 @@ namespace eCommerce.Storefront.Services.Implementations
             }
 
             return order;
+        }
+
+        private void Submit(Order order, string customerEmail)
+        {
+            if (order.Status == OrderStatus.Open)
+            {
+                if (order.OrderHasBeenPaidFor())
+                {
+                    order.Status = OrderStatus.Submitted;
+                }
+
+                StringBuilder emailBody = new StringBuilder();
+                string emailAddress = customerEmail;
+                string emailSubject = string.Format("Order #{0}", order.Id);
+
+                emailBody.AppendLine(string.Format("Hello {0},", order.Customer.FirstName));
+                emailBody.AppendLine();
+                emailBody.AppendLine("The following order will be packed and dispatched as soon as possible.");
+                emailBody.AppendLine(ToString());
+                emailBody.AppendLine();
+                emailBody.AppendLine("Thank you for your custom.");
+
+                if (!string.IsNullOrWhiteSpace(_applicationSettings.MailSettingsSmtpNetworkPassword))
+                {
+                    _emailService.SendMail(_applicationSettings.MailSettingsSmtpNetworkUserName, emailAddress, emailSubject, emailBody.ToString());                
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("You cannot submit this order as it has already been submitted.");
+            }
         }
     }
 }

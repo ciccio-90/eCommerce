@@ -4,11 +4,12 @@ using eCommerce.Storefront.Model.Orders;
 
 namespace eCommerce.Storefront.Model.Customers
 {
-    public class Customer : EntityBase<int>, IAggregateRoot
+    public class Customer : EntityBase<long>, IAggregateRoot
     {
         private readonly IList<DeliveryAddress> _deliveryAddressBook = new List<DeliveryAddress>();
+        private Basket.Basket _basket;
       
-        public string IdentityToken { get; set; }
+        public string UserId { get; set; }
         public string FirstName { get; set; }
         public string SecondName { get; set; }
         public string Email { get; set; }
@@ -23,6 +24,17 @@ namespace eCommerce.Storefront.Model.Customers
         public IEnumerable<DeliveryAddress> DeliveryAddressBook
         {
             get { return _deliveryAddressBook; }
+        }
+
+        public void AddBasket(Basket.Basket basket)
+        {
+            basket.ThrowExceptionIfInvalid();
+            _basket = basket;
+        }
+
+        public Basket.Basket Basket
+        {
+            get { return _basket; }
         }
 
         protected override void Validate()
@@ -42,9 +54,9 @@ namespace eCommerce.Storefront.Model.Customers
                 AddBrokenRule(CustomerBusinessRules.EmailRequired);
             }
 
-            if (string.IsNullOrWhiteSpace(IdentityToken))
+            if (string.IsNullOrWhiteSpace(UserId))
             {
-                AddBrokenRule(CustomerBusinessRules.IdentityTokenRequired);
+                AddBrokenRule(CustomerBusinessRules.UserIdRequired);
             }
         }
     }

@@ -7,6 +7,7 @@ using eCommerce.Storefront.Services.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Infrastructure.Logging;
+using Infrastructure.Authentication;
 
 namespace eCommerce.Storefront.Controllers.Controllers
 {
@@ -16,16 +17,19 @@ namespace eCommerce.Storefront.Controllers.Controllers
         private readonly IOrderService _orderService;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
+        private readonly ICookieAuthentication _cookieAuthentication;
 
         public PaymentController(IPaymentService paymentService,
                                  IOrderService orderService,
                                  IMapper mapper,
-                                 ILogger logger)
+                                 ILogger logger,
+                                 ICookieAuthentication cookieAuthentication)
         {
             _paymentService = paymentService;
             _orderService = orderService;
             _mapper = mapper;
             _logger = logger;
+            _cookieAuthentication = cookieAuthentication;
         }
 
         [HttpPost]
@@ -48,6 +52,7 @@ namespace eCommerce.Storefront.Controllers.Controllers
                 paymentRequest.PaymentToken = transactionResult.PaymentToken;
                 paymentRequest.PaymentMerchant = transactionResult.PaymentMerchant;
                 paymentRequest.OrderId = orderId;
+                paymentRequest.CustomerEmail = _cookieAuthentication.GetAuthenticationToken();
 
                 _orderService.SetOrderPayment(paymentRequest);
             }

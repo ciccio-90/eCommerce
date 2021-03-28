@@ -15,7 +15,7 @@ namespace eCommerce.Storefront.Tests.CustomerSpecs
                 FirstName = "Francesco",
                 SecondName = "Guagnano",
                 Email = "francescoguagnano@alice.it",
-                IdentityToken = Guid.NewGuid().ToString()
+                UserId = Guid.NewGuid().ToString()
             };
 
             When();

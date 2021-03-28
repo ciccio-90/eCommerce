@@ -2,26 +2,29 @@ using System;
 using eCommerce.Storefront.Controllers.DTOs;
 using eCommerce.Storefront.Controllers.ViewModels;
 using eCommerce.Storefront.Controllers.ViewModels.ProductCatalog;
-using Infrastructure.CookieStorage;
 using eCommerce.Storefront.Services.Implementations;
 using eCommerce.Storefront.Services.Interfaces;
 using eCommerce.Storefront.Services.Messaging.ProductCatalogService;
 using Microsoft.AspNetCore.Mvc;
 using eCommerce.Storefront.Services.Cache;
+using Microsoft.AspNetCore.Authorization;
+using Infrastructure.Authentication;
 
 namespace eCommerce.Storefront.Controllers.Controllers
 {
+    [Authorize(Roles = "Customer")]
     public class BasketController : ProductCatalogBaseController
     {
         private readonly IBasketService _basketService;
-        private readonly ICookieStorageService _cookieStorageService;
 
         public BasketController(ICachedProductCatalogService cachedProductCatalogService,
                                 IBasketService basketService,
-                                ICookieStorageService cookieStorageService) : base(cookieStorageService, cachedProductCatalogService)
+                                ICookieAuthentication cookieAuthentication,
+                                ICustomerService customerService) : base(cookieAuthentication, 
+                                                                         customerService,
+                                                                         cachedProductCatalogService)
         {
             _basketService = basketService;
-            _cookieStorageService = cookieStorageService;
         }
 
         public IActionResult Detail()
@@ -47,10 +50,7 @@ namespace eCommerce.Storefront.Controllers.Controllers
             request.ItemsToRemove.Add(productId);
 
             request.BasketId = GetBasketId();
-            ModifyBasketResponse response = _basketService.ModifyBasket(request);
-            
-            SaveBasketSummaryToCookie(response.Basket.NumberOfItems, response.Basket.BasketTotal);
-            
+            ModifyBasketResponse response = _basketService.ModifyBasket(request);            
             BasketDetailView basketDetailView = new BasketDetailView();
             basketDetailView.BasketSummary = new BasketSummaryView
             {
@@ -70,16 +70,12 @@ namespace eCommerce.Storefront.Controllers.Controllers
             request.SetShippingServiceIdTo = shippingServiceId;
             request.BasketId = GetBasketId();
             BasketDetailView basketDetailView = new BasketDetailView();
-            ModifyBasketResponse response = _basketService.ModifyBasket(request);
-            
-            SaveBasketSummaryToCookie(response.Basket.NumberOfItems, response.Basket.BasketTotal);
-            
+            ModifyBasketResponse response = _basketService.ModifyBasket(request);            
             basketDetailView.BasketSummary = new BasketSummaryView
             {
                 BasketTotal = response.Basket.BasketTotal,
                 NumberOfItems = response.Basket.NumberOfItems
             };
-
             basketDetailView.Basket = response.Basket;
             basketDetailView.DeliveryOptions = _basketService.GetAllDispatchOptions().DeliveryOptions;
             
@@ -94,15 +90,11 @@ namespace eCommerce.Storefront.Controllers.Controllers
             request.ItemsToUpdate = jsonBasketQtyUpdateRequest.ConvertToBasketItemUpdateRequests();
             BasketDetailView basketDetailView = new BasketDetailView();
             ModifyBasketResponse response = _basketService.ModifyBasket(request);
-            
-            SaveBasketSummaryToCookie(response.Basket.NumberOfItems, response.Basket.BasketTotal);
-
             basketDetailView.BasketSummary = new BasketSummaryView
             {
                 BasketTotal = response.Basket.BasketTotal,
                 NumberOfItems = response.Basket.NumberOfItems
             };
-
             basketDetailView.Basket = response.Basket;
             basketDetailView.DeliveryOptions = _basketService.GetAllDispatchOptions().DeliveryOptions;
             
@@ -128,8 +120,6 @@ namespace eCommerce.Storefront.Controllers.Controllers
                 {
                     ModifyBasketResponse response = _basketService.ModifyBasket(modifyBasketRequest);
                     basketSummaryView = response.Basket.ConvertToSummary();
-                    
-                    SaveBasketSummaryToCookie(basketSummaryView.NumberOfItems, basketSummaryView.BasketTotal);
                 }
                 catch (BasketDoesNotExistException)
                 {
@@ -140,30 +130,15 @@ namespace eCommerce.Storefront.Controllers.Controllers
             if (createNewBasket)
             {
                 CreateBasketRequest createBasketRequest = new CreateBasketRequest();
+                createBasketRequest.CustomerEmail = _cookieAuthentication.GetAuthenticationToken();
 
                 createBasketRequest.ProductsToAdd.Add(productId);
 
                 CreateBasketResponse response = _basketService.CreateBasket(createBasketRequest);
-
-                SaveBasketIdToCookie(response.Basket.Id);
-
                 basketSummaryView = response.Basket.ConvertToSummary();
-
-                SaveBasketSummaryToCookie(basketSummaryView.NumberOfItems,basketSummaryView.BasketTotal);
             }
 
             return Ok(basketSummaryView);
-        }
-
-        private void SaveBasketIdToCookie(Guid basketId)
-        {
-            _cookieStorageService.Save(CookieDataKeys.BasketId.ToString(), basketId.ToString(), DateTime.Now.AddDays(1));
-        }
-
-        private void SaveBasketSummaryToCookie(int numberOfItems, string basketTotal)
-        {
-            _cookieStorageService.Save(CookieDataKeys.BasketItems.ToString(), numberOfItems.ToString(), DateTime.Now.AddDays(1));
-            _cookieStorageService.Save(CookieDataKeys.BasketTotal.ToString(), basketTotal.ToString(), DateTime.Now.AddDays(1));
         }
     }
 }

@@ -3,9 +3,10 @@ using eCommerce.Storefront.Controllers.ActionArguments;
 using eCommerce.Storefront.Controllers.ViewModels.Account;
 using Infrastructure.Authentication;
 using eCommerce.Storefront.Services.Interfaces;
-using eCommerce.Storefront.Services.Messaging.CustomerService;
 using Microsoft.AspNetCore.Mvc;
-using Infrastructure.Domain;
+using System.Collections.Generic;
+using System;
+using System.Linq;
 
 namespace eCommerce.Storefront.Controllers.Controllers
 {
@@ -23,7 +24,7 @@ namespace eCommerce.Storefront.Controllers.Controllers
 
         public IActionResult LogOn()
         {
-            AccountView accountView = InitializeAccountViewWithIssue(false, "");
+            AccountView accountView = InitializeAccountViewWithIssue(false, string.Empty);
 
             return View(accountView);
         }
@@ -31,38 +32,34 @@ namespace eCommerce.Storefront.Controllers.Controllers
         [HttpPost]
         public async Task<IActionResult> LogOn(string email, string password, string returnUrl)
         {
-            User user = await _authenticationService.Login(email, password);
-
-            if (user.IsAuthenticated)
+            try
             {
-                try
-                {
-                    SetCustomerIdentityTokenRequest setCustomerIdentityTokenRequest = new SetCustomerIdentityTokenRequest();
-                    setCustomerIdentityTokenRequest.CustomerIdentityToken = user.AuthenticationToken;
-                    setCustomerIdentityTokenRequest.Email = user.Email;
+                User user = await _authenticationService.Login(email, password);
 
-                    _customerService.SetCustomerIdentityToken(setCustomerIdentityTokenRequest);
-                    await _cookieAuthentication.SetAuthenticationToken(user.AuthenticationToken);
+                if (user.IsAuthenticated && user.Roles.Any(r => r.Equals("Customer")))
+                {
+                    await _cookieAuthentication.SetAuthenticationToken(user.Email, new List<string> { "Customer" });
 
                     return RedirectToAction("Index", "Home");
                 }
-                catch (EntityBaseIsInvalidException ex)
+                else
                 {
-                    AccountView accountView = InitializeAccountViewWithIssue(true, ex.Message);
+                    AccountView accountView = InitializeAccountViewWithIssue(true, "Sorry we could not log you in. Please try again.");
+                    accountView.CallBackSettings.ReturnUrl = GetReturnActionFrom(returnUrl).ToString();
                     ViewData["email"] = email;
                     ViewData["password"] = password;
-
+                    
                     return View(accountView);
                 }
             }
-            else
+            catch (InvalidOperationException ex)
             {
-                AccountView accountView = InitializeAccountViewWithIssue(true, "Sorry we could not log you in. Please try again.");
+                AccountView accountView = InitializeAccountViewWithIssue(true, ex.Message);
                 accountView.CallBackSettings.ReturnUrl = GetReturnActionFrom(returnUrl).ToString();
                 ViewData["email"] = email;
                 ViewData["password"] = password;
-                
-                return View("LogOn", accountView);
+
+                return View(accountView);
             }
         }
 

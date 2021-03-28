@@ -20,10 +20,10 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Mapping
             builder.HasIndex(c => c.Name).IsUnique();
             builder.HasData(new List<ProductColor>()
             {
-                new ProductColor { Id = 1, Name = "Black" },
-                new ProductColor { Id = 2, Name = "Blue" },
-                new ProductColor { Id = 3, Name = "Red" },
-                new ProductColor { Id = 4, Name = "Green" }
+                new ProductColor { Id = (long)1, Name = "Black" },
+                new ProductColor { Id = (long)2, Name = "Blue" },
+                new ProductColor { Id = (long)3, Name = "Red" },
+                new ProductColor { Id = (long)4, Name = "Green" }
             });
         }
     }

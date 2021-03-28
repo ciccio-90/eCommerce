@@ -3,7 +3,7 @@ using eCommerce.Storefront.Model.Products;
 
 namespace eCommerce.Storefront.Model.Orders
 {
-    public class OrderItem : EntityBase<int>
+    public class OrderItem : EntityBase<long>
     {
         private readonly Product _product;
         private readonly Order _order;

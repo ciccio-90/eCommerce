@@ -20,8 +20,8 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Mapping
             builder.HasIndex(b => b.Name).IsUnique();
             builder.HasData(new List<Brand>()
             {
-                new Brand { Id = 1, Name = "Levi" },
-                new Brand { Id = 2, Name = "Bench" }
+                new Brand { Id = (long)1, Name = "Levi" },
+                new Brand { Id = (long)2, Name = "Bench" }
             });
         }
     }

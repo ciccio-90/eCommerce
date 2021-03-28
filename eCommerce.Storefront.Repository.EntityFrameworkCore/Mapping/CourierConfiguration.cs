@@ -17,7 +17,7 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Mapping
                    .HasMaxLength(50)
                    .IsRequired();
             builder.HasIndex(c => c.Name).IsUnique();
-            builder.HasData(new { Id = 1, Name = "UPS" });
+            builder.HasData(new { Id = (long)1, Name = "UPS" });
         }
     }
 }

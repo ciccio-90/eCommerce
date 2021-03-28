@@ -1,36 +1,32 @@
 using eCommerce.Storefront.Controllers.ViewModels.CustomerAccount;
 using Infrastructure.Authentication;
-using Infrastructure.CookieStorage;
 using eCommerce.Storefront.Services.Interfaces;
 using eCommerce.Storefront.Services.Messaging.CustomerService;
 using eCommerce.Storefront.Services.Messaging.OrderService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace eCommerce.Storefront.Controllers.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Customer")]
     public class OrderController : BaseController
     {
-        private readonly ICustomerService _customerService;
         private readonly IOrderService _orderService;
-        private readonly ICookieAuthentication _cookieAuthentication;
 
         public OrderController(ICustomerService customerService,
                                IOrderService orderService,
-                               ICookieAuthentication cookieAuthentication,
-                               ICookieStorageService cookieStorageService) : base(cookieStorageService)
+                               ICookieAuthentication cookieAuthentication) : base(cookieAuthentication,
+                                                                                  customerService)
         {
-            _customerService = customerService;
             _orderService = orderService;
-            _cookieAuthentication = cookieAuthentication;
         }
 
-        public IActionResult List()
+        public async Task<IActionResult> List()
         {
             GetCustomerRequest request = new GetCustomerRequest
             {
-                CustomerIdentityToken = _cookieAuthentication.GetAuthenticationToken(),
+                CustomerEmail = _cookieAuthentication.GetAuthenticationToken(),
                 LoadOrderSummary = true
             };
             GetCustomerResponse response = _customerService.GetCustomer(request);
@@ -45,7 +41,9 @@ namespace eCommerce.Storefront.Controllers.Controllers
             }
             else 
             {
-                return RedirectToAction("LogOn", "AccountLogOn");
+                await _cookieAuthentication.SignOut();
+                
+                return RedirectToAction("Register", "AccountRegister");
             }
         }
         

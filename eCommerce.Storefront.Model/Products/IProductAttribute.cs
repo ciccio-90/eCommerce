@@ -2,7 +2,7 @@ namespace eCommerce.Storefront.Model.Products
 {
     public interface IProductAttribute
     {
-        int Id { get; set; }
+        long Id { get; set; }
         string Name { get; set; }
     }
 }
