@@ -7,19 +7,19 @@ using eCommerce.Storefront.Services.Interfaces;
 
 namespace eCommerce.Storefront.Controllers.Controllers
 {
-    public class ProductCatalogBaseController : BaseController
+    public abstract class ProductCatalogBaseController : BaseController
     {
         protected readonly ICachedProductCatalogService _cachedProductCatalogService;
 
-        public ProductCatalogBaseController(ICookieAuthentication cookieAuthentication,
-                                            ICustomerService customerService,
-                                            ICachedProductCatalogService cachedProductCatalogService) : base(cookieAuthentication,
-                                                                                                             customerService)
+        protected ProductCatalogBaseController(ICookieAuthentication cookieAuthentication,
+                                               ICustomerService customerService,
+                                               ICachedProductCatalogService cachedProductCatalogService) : base(cookieAuthentication,
+                                                                                                                customerService)
         {
             _cachedProductCatalogService = cachedProductCatalogService;
         }
 
-        public IEnumerable<CategoryView> GetCategories()
+        protected IEnumerable<CategoryView> GetCategories()
         {
             GetAllCategoriesResponse response = _cachedProductCatalogService.GetAllCategories();
 
