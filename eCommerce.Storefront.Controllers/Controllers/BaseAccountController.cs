@@ -23,7 +23,7 @@ namespace eCommerce.Storefront.Controllers.Controllers
             _actionArguments = actionArguments;
         }
 
-        public IActionResult RedirectBasedOn(string returnUrl)
+        protected IActionResult RedirectBasedOn(string returnUrl)
         {
             if (returnUrl == ActionArgumentKey.GoToCheckout.ToString())
             {
@@ -35,7 +35,7 @@ namespace eCommerce.Storefront.Controllers.Controllers
             }
         }
 
-        public ActionArgumentKey GetReturnActionFrom(string returnUrl)
+        protected ActionArgumentKey GetReturnActionFrom(string returnUrl)
         {
             if (!string.IsNullOrWhiteSpace(returnUrl) && returnUrl.ToLower().Contains("checkout"))
             {
