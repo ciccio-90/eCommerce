@@ -7,13 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace eCommerce.Storefront.Controllers.Controllers
 {
-    public class BaseController : Controller
+    public abstract class BaseController : Controller
     {
         protected readonly ICookieAuthentication _cookieAuthentication;
         protected readonly ICustomerService _customerService;
         
-        public BaseController(ICookieAuthentication cookieAuthentication,
-                              ICustomerService customerService)
+        protected BaseController(ICookieAuthentication cookieAuthentication,
+                                 ICustomerService customerService)
         {
             _cookieAuthentication = cookieAuthentication;
             _customerService = customerService;
