@@ -109,11 +109,11 @@ namespace eCommerce.Storefront.Services.Cache
             switch (request.SortBy)
             {
                 case ProductsSortBy.PriceLowToHigh:
-                    matchingProducts = matchingProducts.OrderBy(p => p.Price).ThenBy(p => p.Brand.Name).ThenBy(p => p.Name);;
+                    matchingProducts = matchingProducts.OrderBy(p => p.Price).ThenBy(p => p.Brand.Name).ThenBy(p => p.Name);
 
                     break;
                 case ProductsSortBy.PriceHighToLow:
-                    matchingProducts = matchingProducts.OrderByDescending(p => p.Price).ThenBy(p => p.Brand.Name).ThenBy(p => p.Name);;
+                    matchingProducts = matchingProducts.OrderByDescending(p => p.Price).ThenBy(p => p.Brand.Name).ThenBy(p => p.Name);
 
                     break;
             }
