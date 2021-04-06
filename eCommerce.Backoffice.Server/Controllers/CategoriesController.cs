@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using eCommerce.Backoffice.Shared.Model.Products;
 using eCommerce.Storefront.Model.Products;
+using eCommerce.Storefront.Services.Cache;
+using Infrastructure.CacheStorage;
 using Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -17,10 +19,13 @@ namespace eCommerce.Backoffice.Server.Controllers
     public class CategoriesController : ControllerBase
     {
         private readonly IDataService<Category, long> _dataService;
+        private readonly ICacheStorage _cacheStorage;
 
-        public CategoriesController(IDataService<Category, long> dataService)
+        public CategoriesController(IDataService<Category, long> dataService,
+                                    ICacheStorage cacheStorage)
         {
             _dataService = dataService;
+            _cacheStorage = cacheStorage;
         }
 
         [HttpGet]
@@ -55,6 +60,8 @@ namespace eCommerce.Backoffice.Server.Controllers
             {
                 var c = _dataService.Create(new Category { Id = category.Id, Name = category.Name });
                 category.Id = c.Id;
+
+                _cacheStorage.Remove(CacheKeys.AllCategories.ToString());
             }
             catch (DbUpdateException ex)
             {
@@ -82,6 +89,7 @@ namespace eCommerce.Backoffice.Server.Controllers
             try
             {
                 _dataService.Modify(new Category { Id = category.Id, Name = category.Name });
+                _cacheStorage.Remove(CacheKeys.AllCategories.ToString());
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -108,6 +116,7 @@ namespace eCommerce.Backoffice.Server.Controllers
             try
             {
                 _dataService.Delete(id);
+                _cacheStorage.Remove(CacheKeys.AllCategories.ToString());
             }
             catch (DbUpdateException ex)
             {
