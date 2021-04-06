@@ -29,6 +29,7 @@ namespace eCommerce.Storefront.Model.Customers
         public void AddBasket(Basket.Basket basket)
         {
             basket.ThrowExceptionIfInvalid();
+            
             _basket = basket;
         }
 
