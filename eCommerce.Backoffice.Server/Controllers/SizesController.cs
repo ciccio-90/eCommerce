@@ -16,18 +16,18 @@ namespace eCommerce.Backoffice.Server.Controllers
     [IgnoreAntiforgeryToken]
     public class SizesController : ControllerBase
     {
-        private readonly IDataService<ProductSize, long> _dataService;
+        private readonly IDataService<ProductSize, long> _sizeService;
 
-        public SizesController(IDataService<ProductSize, long> dataService)
+        public SizesController(IDataService<ProductSize, long> sizeService)
         {
-            _dataService = dataService;
+            _sizeService = sizeService;
         }
 
         [HttpGet]
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         public IEnumerable<ProductSizeDto> GetSizes()
         {
-            return _dataService.Get().Select(p => new ProductSizeDto
+            return _sizeService.Get().Select(p => new ProductSizeDto
             {
                 Id = p.Id,
                 Name = p.Name
@@ -38,7 +38,7 @@ namespace eCommerce.Backoffice.Server.Controllers
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         public ActionResult<ProductSizeDto> GetSize(int id)
         {
-            var productSize = _dataService.Get(id);
+            var productSize = _sizeService.Get(id);
 
             if (productSize == null)
             { 
@@ -53,7 +53,7 @@ namespace eCommerce.Backoffice.Server.Controllers
         {
             try
             {
-                var productSize = _dataService.Create(new ProductSize { Id = size.Id, Name = size.Name });
+                var productSize = _sizeService.Create(new ProductSize { Id = size.Id, Name = size.Name });
                 size.Id = productSize.Id;
             }
             catch (DbUpdateException ex)
@@ -81,7 +81,7 @@ namespace eCommerce.Backoffice.Server.Controllers
 
             try
             {
-                _dataService.Modify(new ProductSize { Id = size.Id, Name = size.Name });
+                _sizeService.Modify(new ProductSize { Id = size.Id, Name = size.Name });
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -107,7 +107,7 @@ namespace eCommerce.Backoffice.Server.Controllers
         {
             try
             {
-                _dataService.Delete(id);
+                _sizeService.Delete(id);
             }
             catch (DbUpdateException ex)
             {

@@ -18,13 +18,13 @@ namespace eCommerce.Backoffice.Server.Controllers
     [IgnoreAntiforgeryToken]
     public class CategoriesController : ControllerBase
     {
-        private readonly IDataService<Category, long> _dataService;
+        private readonly IDataService<Category, long> _categoryService;
         private readonly ICacheStorage _cacheStorage;
 
-        public CategoriesController(IDataService<Category, long> dataService,
+        public CategoriesController(IDataService<Category, long> categoryService,
                                     ICacheStorage cacheStorage)
         {
-            _dataService = dataService;
+            _categoryService = categoryService;
             _cacheStorage = cacheStorage;
         }
 
@@ -32,7 +32,7 @@ namespace eCommerce.Backoffice.Server.Controllers
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         public IEnumerable<CategoryDto> GetCategories()
         {
-            return _dataService.Get().Select(c => new CategoryDto
+            return _categoryService.Get().Select(c => new CategoryDto
             {
                 Id = c.Id,
                 Name = c.Name
@@ -43,7 +43,7 @@ namespace eCommerce.Backoffice.Server.Controllers
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         public ActionResult<CategoryDto> GetCategory(int id)
         {
-            var category = _dataService.Get(id);
+            var category = _categoryService.Get(id);
 
             if (category == null)
             { 
@@ -58,7 +58,7 @@ namespace eCommerce.Backoffice.Server.Controllers
         {
             try
             {
-                var c = _dataService.Create(new Category { Id = category.Id, Name = category.Name });
+                var c = _categoryService.Create(new Category { Id = category.Id, Name = category.Name });
                 category.Id = c.Id;
 
                 _cacheStorage.Remove(CacheKeys.AllCategories.ToString());
@@ -88,7 +88,7 @@ namespace eCommerce.Backoffice.Server.Controllers
 
             try
             {
-                _dataService.Modify(new Category { Id = category.Id, Name = category.Name });
+                _categoryService.Modify(new Category { Id = category.Id, Name = category.Name });
                 _cacheStorage.Remove(CacheKeys.AllCategories.ToString());
             }
             catch (DbUpdateConcurrencyException)
@@ -115,7 +115,7 @@ namespace eCommerce.Backoffice.Server.Controllers
         {
             try
             {
-                _dataService.Delete(id);
+                _categoryService.Delete(id);
                 _cacheStorage.Remove(CacheKeys.AllCategories.ToString());
             }
             catch (DbUpdateException ex)

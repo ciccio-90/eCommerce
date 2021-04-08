@@ -16,6 +16,9 @@ using Microsoft.EntityFrameworkCore;
 using Infrastructure.Email;
 using Infrastructure.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Transactions;
+using Infrastructure.Services.Interfaces;
+using eCommerce.Storefront.Model.Customers;
 
 namespace eCommerce.Backoffice.Server.Controllers
 {
@@ -29,18 +32,21 @@ namespace eCommerce.Backoffice.Server.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IConfiguration _configuration;
         private readonly IApplicationSettings _applicationSettings;
+        private readonly IDataService<Customer, long> _customerService;
 
         public AccountsController(UserManager<IdentityUser> userManager,
                                   IEmailService emailService,
                                   SignInManager<IdentityUser> signInManager,
                                   IConfiguration configuration,
-                                  IApplicationSettings applicationSettings)
+                                  IApplicationSettings applicationSettings,
+                                  IDataService<Customer, long> customerService)
         {
             _userManager = userManager;
             _emailService = emailService;
             _signInManager = signInManager;
             _configuration = configuration;
             _applicationSettings = applicationSettings;
+            _customerService = customerService;
         }
 
         [HttpGet]
@@ -226,16 +232,31 @@ namespace eCommerce.Backoffice.Server.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<IActionResult> DeleteAccount(string id)
         {
-            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == id);
-
-            if (user == null)
+            using (TransactionScope transactionScope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
             {
-                return NotFound();
-            }
+                var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == id);
 
-            await _userManager.DeleteAsync(user);
+                if (user == null)
+                {
+                    return NotFound();
+                }
 
-            return NoContent();
+                await _userManager.DeleteAsync(user);
+                
+                var customers = _customerService.Get(c => c.UserId.Equals(id));
+
+                if (customers?.Count() > 0) 
+                {
+                    foreach (var customer in customers)
+                    {
+                        _customerService.Delete(customer.Id);
+                    }
+                }
+
+                transactionScope.Complete();
+
+                return NoContent();
+            } 
         }
     }
 }

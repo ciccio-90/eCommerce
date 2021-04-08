@@ -16,18 +16,18 @@ namespace eCommerce.Backoffice.Server.Controllers
     [IgnoreAntiforgeryToken]
     public class ColorsController : ControllerBase
     {
-        private readonly IDataService<ProductColor, long> _dataService;
+        private readonly IDataService<ProductColor, long> _colorService;
 
-        public ColorsController(IDataService<ProductColor, long> dataService)
+        public ColorsController(IDataService<ProductColor, long> colorService)
         {
-            _dataService = dataService;
+            _colorService = colorService;
         }
 
         [HttpGet]
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         public IEnumerable<ProductColorDto> GetColors()
         {
-            return _dataService.Get().Select(p => new ProductColorDto
+            return _colorService.Get().Select(p => new ProductColorDto
             {
                 Id = p.Id,
                 Name = p.Name
@@ -38,7 +38,7 @@ namespace eCommerce.Backoffice.Server.Controllers
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         public ActionResult<ProductColorDto> GetColor(int id)
         {
-            var productColor = _dataService.Get(id);
+            var productColor = _colorService.Get(id);
 
             if (productColor == null)
             { 
@@ -53,7 +53,7 @@ namespace eCommerce.Backoffice.Server.Controllers
         {
             try
             {
-                var productColor = _dataService.Create(new ProductColor { Id = color.Id, Name = color.Name });
+                var productColor = _colorService.Create(new ProductColor { Id = color.Id, Name = color.Name });
                 color.Id = productColor.Id;
             }
             catch (DbUpdateException ex)
@@ -81,7 +81,7 @@ namespace eCommerce.Backoffice.Server.Controllers
 
             try
             {
-                _dataService.Modify(new ProductColor { Id = color.Id, Name = color.Name });
+                _colorService.Modify(new ProductColor { Id = color.Id, Name = color.Name });
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -107,7 +107,7 @@ namespace eCommerce.Backoffice.Server.Controllers
         {
             try
             {
-                _dataService.Delete(id);
+                _colorService.Delete(id);
             }
             catch (DbUpdateException ex)
             {

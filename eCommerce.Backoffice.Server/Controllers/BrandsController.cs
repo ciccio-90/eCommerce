@@ -16,18 +16,18 @@ namespace eCommerce.Backoffice.Server.Controllers
     [IgnoreAntiforgeryToken]
     public class BrandsController : ControllerBase
     {
-        private readonly IDataService<Brand, long> _dataService;
+        private readonly IDataService<Brand, long> _brandService;
 
-        public BrandsController(IDataService<Brand, long> dataService)
+        public BrandsController(IDataService<Brand, long> brandService)
         {
-            _dataService = dataService;
+            _brandService = brandService;
         }
 
         [HttpGet]
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         public IEnumerable<BrandDto> GetBrands()
         {
-            return _dataService.Get().Select(b => new BrandDto
+            return _brandService.Get().Select(b => new BrandDto
             {
                 Id = b.Id,
                 Name = b.Name
@@ -38,7 +38,7 @@ namespace eCommerce.Backoffice.Server.Controllers
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         public ActionResult<BrandDto> GetBrand(int id)
         {
-            var brand = _dataService.Get(id);
+            var brand = _brandService.Get(id);
 
             if (brand == null)
             { 
@@ -53,7 +53,7 @@ namespace eCommerce.Backoffice.Server.Controllers
         {
             try
             {
-                var b = _dataService.Create(new Brand { Id = brand.Id, Name = brand.Name });
+                var b = _brandService.Create(new Brand { Id = brand.Id, Name = brand.Name });
                 brand.Id = b.Id;
             }
             catch (DbUpdateException ex)
@@ -81,7 +81,7 @@ namespace eCommerce.Backoffice.Server.Controllers
 
             try
             {
-                _dataService.Modify(new Brand { Id = brand.Id, Name = brand.Name });
+                _brandService.Modify(new Brand { Id = brand.Id, Name = brand.Name });
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -107,7 +107,7 @@ namespace eCommerce.Backoffice.Server.Controllers
         {            
             try
             {
-                _dataService.Delete(id);
+                _brandService.Delete(id);
             }
             catch (DbUpdateException ex)
             {
