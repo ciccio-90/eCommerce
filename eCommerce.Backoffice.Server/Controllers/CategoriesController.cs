@@ -4,11 +4,11 @@ using eCommerce.Backoffice.Shared.Model.Products;
 using eCommerce.Storefront.Model.Products;
 using eCommerce.Storefront.Services.Cache;
 using Infrastructure.CacheStorage;
-using Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Infrastructure.Domain;
 
 namespace eCommerce.Backoffice.Server.Controllers
 {
@@ -18,10 +18,10 @@ namespace eCommerce.Backoffice.Server.Controllers
     [IgnoreAntiforgeryToken]
     public class CategoriesController : ControllerBase
     {
-        private readonly IDataService<Category, long> _categoryService;
+        private readonly IEntityService<Category, long> _categoryService;
         private readonly ICacheStorage _cacheStorage;
 
-        public CategoriesController(IDataService<Category, long> categoryService,
+        public CategoriesController(IEntityService<Category, long> categoryService,
                                     ICacheStorage cacheStorage)
         {
             _categoryService = categoryService;

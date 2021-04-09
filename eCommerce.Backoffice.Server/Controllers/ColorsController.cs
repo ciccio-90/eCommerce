@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using System.Linq;
 using eCommerce.Backoffice.Shared.Model.Products;
 using eCommerce.Storefront.Model.Products;
-using Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Infrastructure.Domain;
 
 namespace eCommerce.Backoffice.Server.Controllers
 {
@@ -16,9 +16,9 @@ namespace eCommerce.Backoffice.Server.Controllers
     [IgnoreAntiforgeryToken]
     public class ColorsController : ControllerBase
     {
-        private readonly IDataService<ProductColor, long> _colorService;
+        private readonly IEntityService<ProductColor, long> _colorService;
 
-        public ColorsController(IDataService<ProductColor, long> colorService)
+        public ColorsController(IEntityService<ProductColor, long> colorService)
         {
             _colorService = colorService;
         }

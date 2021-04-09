@@ -17,8 +17,8 @@ using Infrastructure.Email;
 using Infrastructure.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Transactions;
-using Infrastructure.Services.Interfaces;
 using eCommerce.Storefront.Model.Customers;
+using Infrastructure.Domain;
 
 namespace eCommerce.Backoffice.Server.Controllers
 {
@@ -32,14 +32,14 @@ namespace eCommerce.Backoffice.Server.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IConfiguration _configuration;
         private readonly IApplicationSettings _applicationSettings;
-        private readonly IDataService<Customer, long> _customerService;
+        private readonly IEntityService<Customer, long> _customerService;
 
         public AccountsController(UserManager<IdentityUser> userManager,
                                   IEmailService emailService,
                                   SignInManager<IdentityUser> signInManager,
                                   IConfiguration configuration,
                                   IApplicationSettings applicationSettings,
-                                  IDataService<Customer, long> customerService)
+                                  IEntityService<Customer, long> customerService)
         {
             _userManager = userManager;
             _emailService = emailService;

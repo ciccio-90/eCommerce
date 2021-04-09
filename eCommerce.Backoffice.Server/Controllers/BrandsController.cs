@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Infrastructure.Services.Interfaces;
 using eCommerce.Storefront.Model.Products;
+using Infrastructure.Domain;
 
 namespace eCommerce.Backoffice.Server.Controllers
 {
@@ -16,9 +16,9 @@ namespace eCommerce.Backoffice.Server.Controllers
     [IgnoreAntiforgeryToken]
     public class BrandsController : ControllerBase
     {
-        private readonly IDataService<Brand, long> _brandService;
+        private readonly IEntityService<Brand, long> _brandService;
 
-        public BrandsController(IDataService<Brand, long> brandService)
+        public BrandsController(IEntityService<Brand, long> brandService)
         {
             _brandService = brandService;
         }

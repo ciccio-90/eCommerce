@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using System.Linq;
 using eCommerce.Backoffice.Shared.Model.Products;
 using eCommerce.Storefront.Model.Products;
-using Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Infrastructure.Domain;
 
 namespace eCommerce.Backoffice.Server.Controllers
 {
@@ -16,9 +16,9 @@ namespace eCommerce.Backoffice.Server.Controllers
     [IgnoreAntiforgeryToken]
     public class SizesController : ControllerBase
     {
-        private readonly IDataService<ProductSize, long> _sizeService;
+        private readonly IEntityService<ProductSize, long> _sizeService;
 
-        public SizesController(IDataService<ProductSize, long> sizeService)
+        public SizesController(IEntityService<ProductSize, long> sizeService)
         {
             _sizeService = sizeService;
         }
