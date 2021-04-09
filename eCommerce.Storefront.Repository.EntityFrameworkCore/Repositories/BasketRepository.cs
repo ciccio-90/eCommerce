@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using Infrastructure.EntityFrameworkCore;
-using Infrastructure.UnitOfWork;
+using Infrastructure.Domain;
 using eCommerce.Storefront.Model.Basket;
 using Microsoft.EntityFrameworkCore;
 

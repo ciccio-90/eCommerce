@@ -26,8 +26,7 @@ namespace eCommerce.Storefront.Tests.BasketSpecs
         [TestMethod]
         public void ThenTheBasketShouldHaveBrokenRuleHighlightingTheInvalidDeliveryOption()
         {
-            Assert.AreEqual(BasketBusinessRules.DeliveryOptionRequired.Rule, _basket.GetBrokenRules().First(x => true).Rule);
-            Assert.AreEqual(BasketBusinessRules.DeliveryOptionRequired.Property, _basket.GetBrokenRules().First(x => true).Property);
+            Assert.AreEqual("DeliveryOption", _basket.GetBrokenRules().First(x => true).Property);
         }
     }
 }

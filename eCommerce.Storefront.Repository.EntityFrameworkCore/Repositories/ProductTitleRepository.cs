@@ -1,6 +1,6 @@
 using System.Linq;
 using Infrastructure.EntityFrameworkCore;
-using Infrastructure.UnitOfWork;
+using Infrastructure.Domain;
 using eCommerce.Storefront.Model.Products;
 using Microsoft.EntityFrameworkCore;
 

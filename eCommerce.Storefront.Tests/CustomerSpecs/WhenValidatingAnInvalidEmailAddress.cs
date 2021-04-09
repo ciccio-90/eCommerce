@@ -1,26 +1,23 @@
-using eCommerce.Storefront.Model.Customers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Text.RegularExpressions;
 
 namespace eCommerce.Storefront.Tests.CustomerSpecs
 {
     [TestClass]
     public class WhenValidatingAnInvalidEmailAddress
     {
-        private string _blankEmailAddress;
-        private EmailValidationSpecification _emailValidationSpecification;
+        private string _invalidEmailAddress;
 
         [TestInitialize]
         public void Given()
         {
-            _blankEmailAddress = "gg@kkkkk";
-
-            _emailValidationSpecification = new EmailValidationSpecification();
+            _invalidEmailAddress = "gg@kkkkk";
         }
 
         [TestMethod]
         public void ThenTheEmailAddressWillNotSatisfiyTheEmailValidationSpecification()
         {
-            Assert.IsFalse(_emailValidationSpecification.IsSatisfiedBy(_blankEmailAddress));
+            Assert.IsFalse(Regex.IsMatch(_invalidEmailAddress, @"\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*"));
         }
     }
 }

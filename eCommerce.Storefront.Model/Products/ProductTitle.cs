@@ -4,7 +4,7 @@ using Infrastructure.Domain;
 
 namespace eCommerce.Storefront.Model.Products
 {
-    public class ProductTitle : EntityBase<long>, IAggregateRoot
+    public class ProductTitle : EntityBase<long>
     {
         public string Name { get; set; }
         public decimal Price { get; set; }
@@ -15,7 +15,6 @@ namespace eCommerce.Storefront.Model.Products
         
         protected override void Validate()
         {
-            throw new NotImplementedException();
         }
     }
 }

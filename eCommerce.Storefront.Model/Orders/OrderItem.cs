@@ -48,25 +48,25 @@ namespace eCommerce.Storefront.Model.Orders
         }
 
         protected override void Validate()
-        {
+        {  
             if (Order == null)
             {
-                AddBrokenRule(OrderItemBusinessRules.OrderRequired);
+                AddBrokenRule(new BusinessRule() { Property = nameof(Order), Rule = "An order item must be associated with an order." });
             }
 
             if (Product == null)
             {
-                AddBrokenRule(OrderItemBusinessRules.ProductRequired);
+                AddBrokenRule(new BusinessRule() { Property = nameof(Product), Rule = "An order item must be associated with a valid product." });
             }
 
             if (Price < 0)
             {
-                AddBrokenRule(OrderItemBusinessRules.PriceNonNegative);
+                AddBrokenRule(new BusinessRule() { Property = nameof(Price), Rule = "An order item must have a non negative price value." });
             }
 
             if (Qty < 0)
             {
-                AddBrokenRule(OrderItemBusinessRules.QtyNonNegative);
+                AddBrokenRule(new BusinessRule() { Property = nameof(Qty), Rule = "An order item must have a positive qty value." });
             }
         }
 

@@ -1,5 +1,5 @@
-using eCommerce.Storefront.Model.Customers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Text.RegularExpressions;
 
 namespace eCommerce.Storefront.Tests.CustomerSpecs
 {
@@ -7,20 +7,17 @@ namespace eCommerce.Storefront.Tests.CustomerSpecs
     public class WhenValidatingValidEmailAddress
     {
         private string _validEmailAddress;
-        private EmailValidationSpecification _emailValidationSpecification;
 
         [TestInitialize]
         public void Given()
         {
             _validEmailAddress = "scott@elbandit.co.uk";
-
-            _emailValidationSpecification = new EmailValidationSpecification();
         }
 
         [TestMethod]
         public void ValidEmailAddressWillSatisfiyTheEmailValidationSpecification()
         {
-            Assert.IsTrue(_emailValidationSpecification.IsSatisfiedBy(_validEmailAddress));
+            Assert.IsTrue(Regex.IsMatch(_validEmailAddress, @"\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*"));
         }
     }
 }

@@ -8,7 +8,7 @@ using eCommerce.Storefront.Model.Customers;
 
 namespace eCommerce.Storefront.Model.Basket
 {
-    public class Basket : EntityBase<Guid>, IAggregateRoot
+    public class Basket : EntityBase<Guid>
     {
         private readonly IList<BasketItem> _items;
         private DeliveryOption _deliveryOption;
@@ -114,19 +114,19 @@ namespace eCommerce.Storefront.Model.Basket
         {
             if (DeliveryOption == null)
             {
-                AddBrokenRule(BasketBusinessRules.DeliveryOptionRequired);
+                AddBrokenRule(new BusinessRule() { Property = nameof(DeliveryOption), Rule = "A basket must have a valid delivery option." });
             }
 
             if (Customer == null)
             {
-                AddBrokenRule(BasketBusinessRules.CustomerRequired);
+                AddBrokenRule(new BusinessRule() { Property = nameof(Customer), Rule = "A basket must have a valid customer." });
             }
 
             foreach (BasketItem item in Items)
             {
                 if (item.GetBrokenRules().Any())
                 {
-                    AddBrokenRule(BasketBusinessRules.ItemInvalid);
+                    AddBrokenRule(new BusinessRule() { Property = nameof(Items), Rule = "A basket cannot have any invalid items." });
                 }
             }
         }

@@ -37,7 +37,6 @@ namespace eCommerce.Storefront.Model.Shipping
         
         protected override void Validate()
         {
-            throw new NotImplementedException();
         }
     }
 }

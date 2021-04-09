@@ -25,8 +25,7 @@ namespace eCommerce.Storefront.Tests.BasketItemSpecs
         [TestMethod]
         public void ThenItShouldHaveBrokenRuleHighlightingTheRequirementForBasket()
         {            
-            Assert.AreEqual(BasketItemBusinessRules.BasketRequired.Rule, _basketItem.GetBrokenRules().First(x => true).Rule);
-            Assert.AreEqual(BasketItemBusinessRules.BasketRequired.Property, _basketItem.GetBrokenRules().First(x => true).Property);
+            Assert.AreEqual("Basket", _basketItem.GetBrokenRules().First(x => true).Property);
         }
     }
 }

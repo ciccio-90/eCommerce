@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using Infrastructure.Domain;
 using eCommerce.Storefront.Model.Orders;
+using System.Text.RegularExpressions;
 
 namespace eCommerce.Storefront.Model.Customers
 {
-    public class Customer : EntityBase<long>, IAggregateRoot
+    public class Customer : EntityBase<long>
     {
         private readonly IList<DeliveryAddress> _deliveryAddressBook = new List<DeliveryAddress>();
         private Basket.Basket _basket;
@@ -39,25 +40,25 @@ namespace eCommerce.Storefront.Model.Customers
         }
 
         protected override void Validate()
-        {
+        {    
             if (string.IsNullOrWhiteSpace(FirstName))
             {
-                AddBrokenRule(CustomerBusinessRules.FirstNameRequired);
+                AddBrokenRule(new BusinessRule() { Property = nameof(FirstName), Rule = "A customer must have a first name." });
             }
 
             if (string.IsNullOrWhiteSpace(SecondName))
             {
-                AddBrokenRule(CustomerBusinessRules.SecondNameRequired);
+                AddBrokenRule(new BusinessRule() { Property = nameof(SecondName), Rule = "A customer must have a second name." });
             }
 
-            if (!new EmailValidationSpecification().IsSatisfiedBy(Email))
+            if (!Regex.IsMatch(Email, @"\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*"))
             {
-                AddBrokenRule(CustomerBusinessRules.EmailRequired);
+                AddBrokenRule(new BusinessRule() { Property = nameof(Email), Rule = "A customer must have a valid email address." });
             }
 
             if (string.IsNullOrWhiteSpace(UserId))
             {
-                AddBrokenRule(CustomerBusinessRules.UserIdRequired);
+                AddBrokenRule(new BusinessRule() { Property = nameof(UserId), Rule = "A customer must have an identity user." });
             }
         }
     }

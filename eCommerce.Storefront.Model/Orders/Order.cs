@@ -9,7 +9,7 @@ using eCommerce.Storefront.Model.Shipping;
 
 namespace eCommerce.Storefront.Model.Orders
 {
-    public class Order : EntityBase<long>, IAggregateRoot
+    public class Order : EntityBase<long>
     {
         private readonly IList<OrderItem> _items;
         private readonly DateTime _created;
@@ -130,22 +130,22 @@ namespace eCommerce.Storefront.Model.Orders
         {
             if (Created == DateTime.MinValue)
             {
-                AddBrokenRule(OrderBusinessRules.CreatedDateRequired);
+                AddBrokenRule(new BusinessRule() { Property = nameof(Created), Rule = "An order must have a created date." });
             }
 
             if (Customer == null)
             {
-                AddBrokenRule(OrderBusinessRules.CustomerRequired);
+                AddBrokenRule(new BusinessRule() { Property = nameof(Customer), Rule = "An order must be associated with a customer." });
             }
 
             if (DeliveryAddress == null)
             {
-                AddBrokenRule(OrderBusinessRules.DeliveryAddressRequired);
+                AddBrokenRule(new BusinessRule() { Property = nameof(DeliveryAddress), Rule = "An order must have a valid delilvery address." });
             }
 
             if (Items == null || !Items.Any())
             {
-                AddBrokenRule(OrderBusinessRules.ItemsRequired); 
+                AddBrokenRule(new BusinessRule() { Property = nameof(Items), Rule = "An order must contain at least one order item." }); 
             }
             else
             {
@@ -163,7 +163,7 @@ namespace eCommerce.Storefront.Model.Orders
 
             if (ShippingService == null)
             {
-                AddBrokenRule(OrderBusinessRules.ShippingServiceRequired);
+                AddBrokenRule(new BusinessRule() { Property = nameof(ShippingService), Rule = "An order must have a shipping service set." });
             }
         }
 

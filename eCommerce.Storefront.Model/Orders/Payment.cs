@@ -44,17 +44,17 @@ namespace eCommerce.Storefront.Model.Orders
         {
             if (string.IsNullOrWhiteSpace(_transactionId))
             {
-                AddBrokenRule(PaymentBusinessRules.TransactionIdRequired);
+                AddBrokenRule(new BusinessRule() { Property = nameof(TransactionId), Rule = "A payment must have a transaction id." });
             }
 
             if (string.IsNullOrWhiteSpace(_merchant))
             {
-                AddBrokenRule(PaymentBusinessRules.MerchantRequired);
+                AddBrokenRule(new BusinessRule() { Property = nameof(Merchant), Rule = "A payment must have a Merchant." });
             }
 
             if (_amount < 0)
             {
-                AddBrokenRule(PaymentBusinessRules.AmountValid);
+                AddBrokenRule(new BusinessRule() { Property = nameof(Amount), Rule = "A payment must be for a non negative amount." });
             }
         }
     }

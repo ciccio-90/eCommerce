@@ -1,7 +1,7 @@
 using System.Linq;
 using eCommerce.Storefront.Model.Shipping;
 using Infrastructure.EntityFrameworkCore;
-using Infrastructure.UnitOfWork;
+using Infrastructure.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Repositories

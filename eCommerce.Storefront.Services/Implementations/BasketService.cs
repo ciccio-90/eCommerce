@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using Infrastructure.UnitOfWork;
+using Infrastructure.Domain;
 using eCommerce.Storefront.Model.Basket;
 using eCommerce.Storefront.Model.Products;
 using eCommerce.Storefront.Model.Shipping;

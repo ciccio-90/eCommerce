@@ -47,20 +47,20 @@ namespace eCommerce.Storefront.Model.Basket
         }
         
         protected override void Validate()
-        {
+        {    
             if (Qty < 0)
             {
-                AddBrokenRule(BasketItemBusinessRules.QtyInvalid);
+                AddBrokenRule(new BusinessRule() { Property = nameof(Qty), Rule = "The quantity of a basket item cannot be negative." });
             }
 
             if (Product == null)
             {
-                AddBrokenRule(BasketItemBusinessRules.ProductRequired);
+                AddBrokenRule(new BusinessRule() { Property = nameof(Product), Rule = "A basket item must be related to a product." });
             }
 
             if (Basket == null)
             {
-                AddBrokenRule(BasketItemBusinessRules.BasketRequired);
+                AddBrokenRule(new BusinessRule() { Property = nameof(Basket), Rule = "A basket item must be related to a basket." });
             }
         }
     }

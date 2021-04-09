@@ -3,7 +3,7 @@ using Infrastructure.Domain;
 
 namespace eCommerce.Storefront.Model.Products
 {
-    public class Product : EntityBase<long>, IAggregateRoot
+    public class Product : EntityBase<long>
     {
         public ProductSize Size { get; set; }
 
@@ -36,7 +36,6 @@ namespace eCommerce.Storefront.Model.Products
         
         protected override void Validate()
         {
-            throw new NotImplementedException();
         }
     }
 }

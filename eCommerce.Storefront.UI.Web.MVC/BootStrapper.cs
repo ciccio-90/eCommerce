@@ -3,7 +3,6 @@ using Infrastructure.Authentication;
 using Infrastructure.CookieStorage;
 using Infrastructure.EntityFrameworkCore;
 using Infrastructure.Payments;
-using Infrastructure.UnitOfWork;
 using eCommerce.Storefront.Model.Basket;
 using eCommerce.Storefront.Model.Customers;
 using eCommerce.Storefront.Model.Orders;

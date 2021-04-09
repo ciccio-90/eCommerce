@@ -3,7 +3,7 @@ using Infrastructure.Domain;
 
 namespace eCommerce.Storefront.Model.Shipping
 {
-    public class DeliveryOption : EntityBase<long>, IAggregateRoot
+    public class DeliveryOption : EntityBase<long>
     {
         private readonly decimal _freeDeliveryThreshold;
         private readonly decimal _cost;
@@ -49,7 +49,6 @@ namespace eCommerce.Storefront.Model.Shipping
         
         protected override void Validate()
         {
-            throw new NotImplementedException();
         }
     }
 }
