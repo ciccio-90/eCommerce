@@ -51,7 +51,7 @@ namespace eCommerce.Storefront.Model.Customers
                 AddBrokenRule(new BusinessRule() { Property = nameof(SecondName), Rule = "A customer must have a second name." });
             }
 
-            if (!Regex.IsMatch(Email, @"\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*"))
+            if (!Regex.IsMatch(Email ?? string.Empty, @"\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*"))
             {
                 AddBrokenRule(new BusinessRule() { Property = nameof(Email), Rule = "A customer must have a valid email address." });
             }
