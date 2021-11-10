@@ -6,6 +6,7 @@ using eCommerce.Storefront.Model.Products;
 using eCommerce.Storefront.Model.Shipping;
 using eCommerce.Storefront.Repository.EntityFrameworkCore.Mapping;
 using Infrastructure.EntityFrameworkCore;
+using Infrastructure.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,10 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore
 {
     public class ShopDataContext : DataContext
     {
+        public ShopDataContext() : base()
+        {
+        }
+
         public ShopDataContext(DbContextOptions options) : base(options)
         {
         }
@@ -32,6 +37,14 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore
         public DbSet<DeliveryAddress> CustomerDeliveryAddresses { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
+            if (!options.IsConfigured)
+            {
+                options.UseSqlServer($"Server=.;Database=Shop;User Id=sa;Password=Ciccio_110590", b => b.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

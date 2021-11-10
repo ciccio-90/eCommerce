@@ -166,9 +166,6 @@ namespace eCommerce.Storefront.UI.Web.MVC
                 endpoints.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
             });
             
-            var autoMigration = new AutoMigration(dataContext, logger);
-            
-            AsyncHelper.RunSync(() => autoMigration.Migrate());
             logger.Log("Application Started");
         }
     }
