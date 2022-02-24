@@ -4,33 +4,26 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Infrastructure.Configuration;
 using Microsoft.EntityFrameworkCore;
 using eCommerce.Storefront.Services;
 using Microsoft.AspNetCore.Identity;
 using System;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Infrastructure.EntityFrameworkCore;
-using System.IO;
-using System.Reflection;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using System.Text;
-using Infrastructure.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eCommerce.Storefront.UI.Web.MVC
 {
     public class Startup
     {
-        private readonly IApplicationSettings _applicationSettings;
         private readonly IConfiguration _configuration;
 
         public Startup(IConfiguration configuration)
         {
-            _applicationSettings = new AppConfigSettings();
             _configuration = configuration;
         }
 
@@ -39,11 +32,11 @@ namespace eCommerce.Storefront.UI.Web.MVC
         {
             services.AddAutoMapper(typeof(AutoMapperBootStrapper));
             services.AddHttpContextAccessor();
-            services.AddDbContext<DataContext, ShopDataContext>(options => 
+            services.AddDbContext<ShopDataContext>(options => 
             {
-                options.UseSqlServer(_applicationSettings?.ConnectionString, b => b.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
+                options.UseSqlServer(_configuration?.GetConnectionString("DefaultConnection"), b => b.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
             });
-            services.AddDefaultIdentity<IdentityUser>().AddRoles<IdentityRole>().AddEntityFrameworkStores<DataContext>();
+            services.AddDefaultIdentity<IdentityUser>().AddRoles<IdentityRole>().AddEntityFrameworkStores<ShopDataContext>();
             services.Configure<IdentityOptions>(options =>
             {
                 // Password settings.
@@ -66,7 +59,7 @@ namespace eCommerce.Storefront.UI.Web.MVC
                     {
                         // Cookie settings
                         options.Cookie.HttpOnly = true;
-                        options.ExpireTimeSpan = TimeSpan.FromMinutes(_applicationSettings?.CookieAuthenticationTimeout ?? 30);
+                        options.ExpireTimeSpan = TimeSpan.FromMinutes(double.Parse(_configuration["CookieAuthenticationTimeout"]));
                         options.LoginPath = "/AccountLogOn/LogOn";
                         options.AccessDeniedPath = "/AccountRegister/Register";
                         options.SlidingExpiration = true;
@@ -88,23 +81,23 @@ namespace eCommerce.Storefront.UI.Web.MVC
                 options.ModelBinderProviders.RemoveType<DateTimeModelBinderProvider>();
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             }).AddNewtonsoftJson();
-            services.AddSingleton(_applicationSettings);
             services.ConfigureDependencies();
             services.AddAntiforgery(options =>
             {
                 options.HeaderName = "RequestVerificationToken";
             });
+            services.AddLogging(configure => 
+            {
+                configure.AddConfiguration(_configuration.GetSection("Logging"));
+                configure.AddConsole();
+                configure.AddDebug();
+                configure.AddEventSourceLogger();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, 
-                              IWebHostEnvironment env, 
-                              ILoggerFactory loggerFactory,
-                              Infrastructure.Logging.ILogger logger,
-                              DataContext dataContext)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
-            loggerFactory.AddLog4Net(Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Logging", "log4net.config"));
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -166,7 +159,7 @@ namespace eCommerce.Storefront.UI.Web.MVC
                 endpoints.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
             });
             
-            logger.Log("Application Started");
+            logger.LogInformation("Application Started");
         }
     }
 }

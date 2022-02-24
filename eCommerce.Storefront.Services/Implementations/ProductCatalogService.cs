@@ -4,10 +4,10 @@ using System.Linq;
 using System.Linq.Expressions;
 using AutoMapper;
 using eCommerce.Storefront.Model.Products;
+using eCommerce.Storefront.Repository.EntityFrameworkCore.Repositories.Interfaces;
 using eCommerce.Storefront.Services.Interfaces;
 using eCommerce.Storefront.Services.Messaging.ProductCatalogService;
 using eCommerce.Storefront.Services.ViewModels;
-using Infrastructure.Domain;
 
 namespace eCommerce.Storefront.Services.Implementations
 {

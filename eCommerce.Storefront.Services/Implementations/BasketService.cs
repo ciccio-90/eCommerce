@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using Infrastructure.Domain;
 using eCommerce.Storefront.Model.Basket;
 using eCommerce.Storefront.Model.Products;
 using eCommerce.Storefront.Model.Shipping;
@@ -9,6 +8,8 @@ using eCommerce.Storefront.Services.Interfaces;
 using eCommerce.Storefront.Services.Messaging.ProductCatalogService;
 using eCommerce.Storefront.Services.ViewModels;
 using eCommerce.Storefront.Model.Customers;
+using eCommerce.Storefront.Repository.EntityFrameworkCore.Repositories.Interfaces;
+using eCommerce.Storefront.Repository.EntityFrameworkCore;
 
 namespace eCommerce.Storefront.Services.Implementations
 {

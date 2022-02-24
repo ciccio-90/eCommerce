@@ -1,9 +1,9 @@
 using AutoMapper;
-using Infrastructure.Helpers;
-using Infrastructure.Payments;
+using eCommerce.Storefront.Model;
 using eCommerce.Storefront.Model.Basket;
 using eCommerce.Storefront.Model.Customers;
 using eCommerce.Storefront.Model.Orders;
+using eCommerce.Storefront.Model.Payments;
 using eCommerce.Storefront.Model.Products;
 using eCommerce.Storefront.Model.Shipping;
 using eCommerce.Storefront.Services.ViewModels;

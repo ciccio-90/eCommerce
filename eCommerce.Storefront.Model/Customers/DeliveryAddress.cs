@@ -1,5 +1,3 @@
-using Infrastructure.Domain;
-
 namespace eCommerce.Storefront.Model.Customers
 {
     public class DeliveryAddress : EntityBase<long>

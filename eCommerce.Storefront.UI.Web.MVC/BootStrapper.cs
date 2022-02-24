@@ -1,22 +1,15 @@
 using eCommerce.Storefront.Controllers.ActionArguments;
-using Infrastructure.Authentication;
-using Infrastructure.CookieStorage;
-using Infrastructure.EntityFrameworkCore;
-using Infrastructure.Payments;
-using eCommerce.Storefront.Model.Basket;
-using eCommerce.Storefront.Model.Customers;
-using eCommerce.Storefront.Model.Orders;
-using eCommerce.Storefront.Model.Products;
-using eCommerce.Storefront.Repository.EntityFrameworkCore.Repositories;
 using eCommerce.Storefront.Services.Implementations;
 using eCommerce.Storefront.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
-using Infrastructure.CacheStorage;
 using eCommerce.Storefront.Services.Cache;
-using Infrastructure.Domain;
-using Infrastructure.Logging;
-using Infrastructure.Email;
-using eCommerce.Storefront.Model.Shipping;
+using eCommerce.Storefront.Repository.EntityFrameworkCore;
+using eCommerce.Storefront.Repository.EntityFrameworkCore.Repositories.Interfaces;
+using eCommerce.Storefront.Repository.EntityFrameworkCore.Repositories.Implementations;
+using eCommerce.Backoffice.Shared.Services.Interfaces;
+using eCommerce.Backoffice.Shared.Services.Implementations;
+using eCommerce.Storefront.Controllers.Services.Interfaces;
+using eCommerce.Storefront.Controllers.Services.Implementations;
 
 namespace eCommerce.Storefront.UI.Web.MVC
 {
@@ -52,8 +45,6 @@ namespace eCommerce.Storefront.UI.Web.MVC
             // Caching Strategies
             serviceCollection.AddScoped<ICacheStorage, MemoryCacheAdapter>();
             serviceCollection.AddScoped<ICachedProductCatalogService, CachedProductCatalogService>();
-            // Logging
-            serviceCollection.AddScoped<ILogger, Log4NetAdapter>();
             // Email
             serviceCollection.AddScoped<IEmailService, SmtpService>();
 

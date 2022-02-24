@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using eCommerce.Storefront.Services.Messaging.ProductCatalogService;
 using eCommerce.Storefront.Services.ViewModels;
 using eCommerce.Storefront.Services.Cache;
-using Infrastructure.Authentication;
 using eCommerce.Storefront.Services.Interfaces;
+using eCommerce.Storefront.Controllers.Services.Interfaces;
 
 namespace eCommerce.Storefront.Controllers.Controllers
 {

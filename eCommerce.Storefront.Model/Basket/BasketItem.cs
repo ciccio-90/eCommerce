@@ -1,4 +1,3 @@
-using Infrastructure.Domain;
 using eCommerce.Storefront.Model.Products;
 
 namespace eCommerce.Storefront.Model.Basket

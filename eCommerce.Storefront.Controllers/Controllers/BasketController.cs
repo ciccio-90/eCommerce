@@ -8,7 +8,7 @@ using eCommerce.Storefront.Services.Messaging.ProductCatalogService;
 using Microsoft.AspNetCore.Mvc;
 using eCommerce.Storefront.Services.Cache;
 using Microsoft.AspNetCore.Authorization;
-using Infrastructure.Authentication;
+using eCommerce.Storefront.Controllers.Services.Interfaces;
 
 namespace eCommerce.Storefront.Controllers.Controllers
 {

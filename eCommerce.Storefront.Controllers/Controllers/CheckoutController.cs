@@ -1,7 +1,5 @@
 using System.Linq;
 using eCommerce.Storefront.Controllers.ViewModels.Checkout;
-using Infrastructure.Authentication;
-using Infrastructure.CookieStorage;
 using eCommerce.Storefront.Services.Interfaces;
 using eCommerce.Storefront.Services.Messaging.CustomerService;
 using eCommerce.Storefront.Services.Messaging.OrderService;
@@ -11,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using eCommerce.Storefront.Controllers.Services.Interfaces;
 
 namespace eCommerce.Storefront.Controllers.Controllers
 {

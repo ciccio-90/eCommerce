@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using eCommerce.Storefront.Services.Cache;
 using eCommerce.Storefront.Controllers.ViewModels;
 using System.Diagnostics;
-using Infrastructure.Authentication;
 using eCommerce.Storefront.Services.Interfaces;
+using eCommerce.Storefront.Controllers.Services.Interfaces;
 
 namespace eCommerce.Storefront.Controllers.Controllers
 {

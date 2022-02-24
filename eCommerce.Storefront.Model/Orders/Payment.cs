@@ -1,5 +1,4 @@
 using System;
-using Infrastructure.Domain;
 
 namespace eCommerce.Storefront.Model.Orders
 {

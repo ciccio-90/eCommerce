@@ -7,10 +7,10 @@
   <ItemGroup>
     <SupportedPlatform Include="browser" />
   </ItemGroup> 
-
+  
   <ItemGroup>
-    <Reference Include="Infrastructure">
-      <HintPath>..\Lib\Infrastructure\Infrastructure.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\eCommerce.Storefront.Model\eCommerce.Storefront.Model.csproj" />
+    <ProjectReference Include="..\eCommerce.Storefront.Repository.EntityFrameworkCore\eCommerce.Storefront.Repository.EntityFrameworkCore.csproj" />
   </ItemGroup>
+
 </Project>

@@ -1,14 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using eCommerce.Backoffice.Shared.Model.Products;
+using eCommerce.Backoffice.Shared.Services.Interfaces;
 using eCommerce.Storefront.Model.Products;
 using eCommerce.Storefront.Services.Cache;
-using Infrastructure.CacheStorage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Infrastructure.Domain;
 
 namespace eCommerce.Backoffice.Server.Controllers
 {

@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Infrastructure.Domain;
 
 namespace eCommerce.Storefront.Model.Products
 {

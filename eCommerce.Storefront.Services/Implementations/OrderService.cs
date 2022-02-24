@@ -1,17 +1,17 @@
 using System.Linq;
 using AutoMapper;
-using Infrastructure.Domain;
 using eCommerce.Storefront.Model.Basket;
 using eCommerce.Storefront.Model.Customers;
 using eCommerce.Storefront.Model.Orders;
 using eCommerce.Storefront.Services.Interfaces;
 using eCommerce.Storefront.Services.Messaging.OrderService;
 using eCommerce.Storefront.Services.ViewModels;
-using Infrastructure.Logging;
-using Infrastructure.Configuration;
-using Infrastructure.Email;
 using System;
 using System.Text;
+using eCommerce.Storefront.Repository.EntityFrameworkCore.Repositories.Interfaces;
+using eCommerce.Storefront.Repository.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace eCommerce.Storefront.Services.Implementations
 {
@@ -22,8 +22,8 @@ namespace eCommerce.Storefront.Services.Implementations
         private readonly IBasketRepository _basketRepository;
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
-        private readonly ILogger _logger;
-        private readonly IApplicationSettings _applicationSettings;
+        private readonly ILogger<OrderService> _logger;
+        private readonly IConfiguration _configuration;
         private readonly IEmailService _emailService;
 
         public OrderService(IOrderRepository orderRepository,
@@ -31,8 +31,8 @@ namespace eCommerce.Storefront.Services.Implementations
                             ICustomerRepository customerRepository,
                             IUnitOfWork uow,
                             IMapper mapper,
-                            ILogger logger,
-                            IApplicationSettings applicationSettings,
+                            ILogger<OrderService> logger,
+                            IConfiguration configuration,
                             IEmailService emailService)
         {
             _customerRepository = customerRepository;
@@ -41,7 +41,7 @@ namespace eCommerce.Storefront.Services.Implementations
             _uow = uow;
             _mapper = mapper;
             _logger = logger;
-            _applicationSettings = applicationSettings;
+            _configuration = configuration;
             _emailService = emailService;
         }
 
@@ -79,12 +79,12 @@ namespace eCommerce.Storefront.Services.Implementations
             catch (OrderAlreadyPaidForException ex)
             {
                 // Refund the payment using the payment service.
-                _logger.Log(ex.Message);
+                _logger.LogError(ex.Message);
             }
             catch (PaymentAmountDoesNotEqualOrderTotalException ex)
             {
                 // Refund the payment using the payment service.
-                _logger.Log(ex.Message);
+                _logger.LogError(ex.Message);
             }
 
             paymentResponse.Order = _mapper.Map<Order, OrderView>(order);
@@ -135,9 +135,9 @@ namespace eCommerce.Storefront.Services.Implementations
                 emailBody.AppendLine();
                 emailBody.AppendLine("Thank you for your custom.");
 
-                if (!string.IsNullOrWhiteSpace(_applicationSettings.MailSettingsSmtpNetworkPassword))
+                if (!string.IsNullOrWhiteSpace(_configuration["MailSettingsSmtpNetworkPassword"]))
                 {
-                    _emailService.SendMail(_applicationSettings.MailSettingsSmtpNetworkUserName, emailAddress, emailSubject, emailBody.ToString());                
+                    _emailService.SendMail(_configuration["MailSettingsSmtpNetworkUserName"], emailAddress, emailSubject, emailBody.ToString());                
                 }
             }
             else

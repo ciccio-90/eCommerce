@@ -13,12 +13,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Infrastructure.Email;
-using Infrastructure.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Transactions;
 using eCommerce.Storefront.Model.Customers;
-using Infrastructure.Domain;
+using eCommerce.Storefront.Services.Interfaces;
+using eCommerce.Backoffice.Shared.Services.Interfaces;
 
 namespace eCommerce.Backoffice.Server.Controllers
 {
@@ -31,21 +30,18 @@ namespace eCommerce.Backoffice.Server.Controllers
         private readonly IEmailService _emailService;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IConfiguration _configuration;
-        private readonly IApplicationSettings _applicationSettings;
         private readonly IEntityService<Customer, long> _customerService;
 
         public AccountsController(UserManager<IdentityUser> userManager,
                                   IEmailService emailService,
                                   SignInManager<IdentityUser> signInManager,
                                   IConfiguration configuration,
-                                  IApplicationSettings applicationSettings,
                                   IEntityService<Customer, long> customerService)
         {
             _userManager = userManager;
             _emailService = emailService;
             _signInManager = signInManager;
             _configuration = configuration;
-            _applicationSettings = applicationSettings;
             _customerService = customerService;
         }
 
@@ -82,11 +78,11 @@ namespace eCommerce.Backoffice.Server.Controllers
 
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-            if (!string.IsNullOrWhiteSpace(_applicationSettings.MailSettingsSmtpNetworkPassword))
+            if (!string.IsNullOrWhiteSpace(_configuration["MailSettingsSmtpNetworkPassword"]))
             {
                 var urlConfirmation = $"{Request.Scheme}://{Request.Host}/account/emailconfirmation/?userid={HttpUtility.UrlEncode(user.Id)}&code={HttpUtility.UrlEncode(code)}";
 
-                _emailService.SendMail(_applicationSettings.MailSettingsSmtpNetworkUserName, user.Email, "Email confirmation", $"Please confirm your account by <a href='{urlConfirmation}'>clicking here</a>");
+                _emailService.SendMail(_configuration["MailSettingsSmtpNetworkUserName"], user.Email, "Email confirmation", $"Please confirm your account by <a href='{urlConfirmation}'>clicking here</a>");
             }
             else 
             {
@@ -150,7 +146,7 @@ namespace eCommerce.Backoffice.Server.Controllers
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var urlConfirmation = $"{Request.Scheme}://{Request.Host}/account/changepassword/?code={HttpUtility.UrlEncode(code)}";
 
-                _emailService.SendMail(_applicationSettings.MailSettingsSmtpNetworkUserName, user.Email, "Reset password", $"Please reset your password by <a href='{urlConfirmation}'>clicking here</a>");
+                _emailService.SendMail(_configuration["MailSettingsSmtpNetworkUserName"], user.Email, "Reset password", $"Please reset your password by <a href='{urlConfirmation}'>clicking here</a>");
 
                 response.IsSuccess = true;
             }

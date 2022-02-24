@@ -2,14 +2,14 @@ using System;
 using System.Threading.Tasks;
 using eCommerce.Storefront.Controllers.ActionArguments;
 using eCommerce.Storefront.Controllers.ViewModels.Account;
-using Infrastructure.Authentication;
 using eCommerce.Storefront.Services.Interfaces;
 using eCommerce.Storefront.Services.Messaging.CustomerService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Infrastructure.Domain;
 using System.Collections.Generic;
 using System.Transactions;
+using eCommerce.Storefront.Controllers.Services.Interfaces;
+using eCommerce.Storefront.Model;
 
 namespace eCommerce.Storefront.Controllers.Controllers
 {

@@ -5,22 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="log4net" Version="2.0.14" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="6.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.2" />  
-    <PackageReference Include="Microsoft.Extensions.Primitives" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Infrastructure">
-      <HintPath>..\Lib\Infrastructure\Infrastructure.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>
@@ -33,14 +22,5 @@
     <ProjectReference Include="..\eCommerce.Backoffice.Shared\eCommerce.Backoffice.Shared.csproj" />
     <ProjectReference Include="..\eCommerce.Backoffice.Server\eCommerce.Backoffice.Server.csproj" />
   </ItemGroup>
-
-  <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
-    <Copy SourceFiles="..\Lib\Infrastructure\Configuration\appconfig.json" DestinationFolder="$(OutDir)\Configuration" />
-    <Copy SourceFiles="..\Lib\Infrastructure\Logging\log4net.config" DestinationFolder="$(OutDir)\Logging" />
-  </Target>
-  <Target Name="CopyCustomContentOnPublish" AfterTargets="Publish">
-    <Copy SourceFiles="..\Lib\Infrastructure\Configuration\appconfig.json" DestinationFolder="$(PublishDir)\Configuration" />
-    <Copy SourceFiles="..\Lib\Infrastructure\Logging\log4net.config" DestinationFolder="$(PublishDir)\Logging" />
-  </Target>
 
 </Project>

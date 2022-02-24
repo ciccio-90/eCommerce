@@ -6,20 +6,13 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-    <PackageReference Include="LinqKit" Version="1.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Primitives" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Infrastructure">
-      <HintPath>..\Lib\Infrastructure\Infrastructure.dll</HintPath>
-    </Reference>
+    <PackageReference Include="LinqKit" Version="1.2.0" />    
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\eCommerce.Storefront.Model\eCommerce.Storefront.Model.csproj" />
+    <ProjectReference Include="..\eCommerce.Storefront.Repository.EntityFrameworkCore\eCommerce.Storefront.Repository.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
 </Project>

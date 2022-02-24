@@ -1,14 +1,13 @@
 using System.Linq;
-using Infrastructure.EntityFrameworkCore;
-using Infrastructure.Domain;
 using eCommerce.Storefront.Model.Customers;
+using eCommerce.Storefront.Repository.EntityFrameworkCore.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Repositories
+namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Repositories.Implementations
 {
     public class CustomerRepository : Repository<Customer, long>, ICustomerRepository
     {
-        public CustomerRepository(IUnitOfWork uow, DataContext dataContext) : base(uow, dataContext)
+        public CustomerRepository(IUnitOfWork uow, ShopDataContext dataContext) : base(uow, dataContext)
         {
         }
 

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using eCommerce.Storefront.Model.Products;
-using Infrastructure.Domain;
+using eCommerce.Backoffice.Shared.Services.Interfaces;
 
 namespace eCommerce.Backoffice.Server.Controllers
 {

@@ -1,5 +1,3 @@
-using Infrastructure.Domain;
-
 namespace eCommerce.Storefront.Model.Products
 {
     public class Category : EntityBase<long>, IProductAttribute

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Infrastructure.Domain;
 using eCommerce.Storefront.Model.Products;
 using eCommerce.Storefront.Model.Shipping;
 using eCommerce.Storefront.Model.Customers;

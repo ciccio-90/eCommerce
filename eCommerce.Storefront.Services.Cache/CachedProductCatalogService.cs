@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using eCommerce.Storefront.Model.Products;
+using eCommerce.Storefront.Repository.EntityFrameworkCore.Repositories.Interfaces;
 using eCommerce.Storefront.Services.Cache.Specifications;
 using eCommerce.Storefront.Services.Interfaces;
 using eCommerce.Storefront.Services.Messaging.ProductCatalogService;
 using eCommerce.Storefront.Services.ViewModels;
-using Infrastructure.CacheStorage;
 
 namespace eCommerce.Storefront.Services.Cache
 {

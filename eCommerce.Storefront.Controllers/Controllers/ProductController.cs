@@ -1,29 +1,28 @@
 using eCommerce.Storefront.Controllers.DTOs;
 using eCommerce.Storefront.Controllers.ViewModels.ProductCatalog;
-using Infrastructure.CookieStorage;
 using eCommerce.Storefront.Services.Messaging.ProductCatalogService;
 using eCommerce.Storefront.Services.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using eCommerce.Storefront.Services.Cache;
-using Infrastructure.Configuration;
-using Infrastructure.Authentication;
 using eCommerce.Storefront.Services.Interfaces;
+using eCommerce.Storefront.Controllers.Services.Interfaces;
+using Microsoft.Extensions.Configuration;
 
 namespace eCommerce.Storefront.Controllers.Controllers
 {
     public class ProductController : ProductCatalogBaseController
     {
-        private readonly IApplicationSettings _applicationSettings;
+        private readonly IConfiguration _configuration;
 
         public ProductController(ICookieStorageService cookieStorageService,
-                                 IApplicationSettings applicationSettings,
+                                 IConfiguration configuration,
                                  ICookieAuthentication cookieAuthentication,
                                  ICustomerService customerService,
                                  ICachedProductCatalogService cachedProductCatalogService) : base(cookieAuthentication,
                                                                                                   customerService,
                                                                                                   cachedProductCatalogService)
         {
-            _applicationSettings = applicationSettings;
+            _configuration = configuration;
         }
 
         public IActionResult GetProductsByCategory(int categoryId)
@@ -54,7 +53,7 @@ namespace eCommerce.Storefront.Controllers.Controllers
         private GetProductsByCategoryRequest GenerateInitialProductSearchRequestFrom(int categoryId)
         {
             GetProductsByCategoryRequest productSearchRequest = new GetProductsByCategoryRequest();
-            productSearchRequest.NumberOfResultsPerPage = _applicationSettings.NumberOfResultsPerPage;
+            productSearchRequest.NumberOfResultsPerPage = int.Parse(_configuration["NumberOfResultsPerPage"]);
             productSearchRequest.CategoryId = categoryId;
             productSearchRequest.Index = 1;
             productSearchRequest.SortBy = ProductsSortBy.PriceHighToLow;
@@ -75,7 +74,7 @@ namespace eCommerce.Storefront.Controllers.Controllers
         private GetProductsByCategoryRequest GenerateProductSearchRequestFrom(ProductSearchRequest jsonProductSearchRequest)
         {
             GetProductsByCategoryRequest productSearchRequest = new GetProductsByCategoryRequest();
-            productSearchRequest.NumberOfResultsPerPage = _applicationSettings.NumberOfResultsPerPage;
+            productSearchRequest.NumberOfResultsPerPage = int.Parse(_configuration["NumberOfResultsPerPage"]);
 
             if (jsonProductSearchRequest != null)
             {

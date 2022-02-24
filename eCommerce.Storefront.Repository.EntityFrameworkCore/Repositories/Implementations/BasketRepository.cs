@@ -1,15 +1,14 @@
 using System;
 using System.Linq;
-using Infrastructure.EntityFrameworkCore;
-using Infrastructure.Domain;
 using eCommerce.Storefront.Model.Basket;
+using eCommerce.Storefront.Repository.EntityFrameworkCore.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Repositories
+namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Repositories.Implementations
 {
     public class BasketRepository : Repository<Basket, Guid>, IBasketRepository
     {
-        public BasketRepository(IUnitOfWork uow, DataContext dataContext) : base(uow, dataContext)
+        public BasketRepository(IUnitOfWork uow, ShopDataContext dataContext) : base(uow, dataContext)
         {
         }
 

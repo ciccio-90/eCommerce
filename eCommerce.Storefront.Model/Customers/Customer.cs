@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Infrastructure.Domain;
 using eCommerce.Storefront.Model.Orders;
 using System.Text.RegularExpressions;
 

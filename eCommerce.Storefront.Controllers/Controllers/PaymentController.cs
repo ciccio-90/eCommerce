@@ -1,13 +1,13 @@
 using System.Threading.Tasks;
 using AutoMapper;
-using Infrastructure.Payments;
 using eCommerce.Storefront.Services.Interfaces;
 using eCommerce.Storefront.Services.Messaging.OrderService;
 using eCommerce.Storefront.Services.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Infrastructure.Logging;
-using Infrastructure.Authentication;
+using eCommerce.Storefront.Controllers.Services.Interfaces;
+using Microsoft.Extensions.Logging;
+using eCommerce.Storefront.Model.Payments;
 
 namespace eCommerce.Storefront.Controllers.Controllers
 {
@@ -16,13 +16,13 @@ namespace eCommerce.Storefront.Controllers.Controllers
         private readonly IPaymentService _paymentService;
         private readonly IOrderService _orderService;
         private readonly IMapper _mapper;
-        private readonly ILogger _logger;
+        private readonly ILogger<PaymentController> _logger;
         private readonly ICookieAuthentication _cookieAuthentication;
 
         public PaymentController(IPaymentService paymentService,
                                  IOrderService orderService,
                                  IMapper mapper,
-                                 ILogger logger,
+                                 ILogger<PaymentController> logger,
                                  ICookieAuthentication cookieAuthentication)
         {
             _paymentService = paymentService;
@@ -58,7 +58,7 @@ namespace eCommerce.Storefront.Controllers.Controllers
             }
             else
             {
-                _logger.Log(string.Format("Payment not ok for order id {0}, payment token {1}", orderId, transactionResult.PaymentToken));
+                _logger.LogWarning(string.Format("Payment not ok for order id {0}, payment token {1}", orderId, transactionResult.PaymentToken));
             }
         }
 

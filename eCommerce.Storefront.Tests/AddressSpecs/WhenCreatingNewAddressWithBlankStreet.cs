@@ -1,6 +1,6 @@
-using Infrastructure.Domain;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using eCommerce.Storefront.Model.Customers;
+using eCommerce.Storefront.Model;
 
 namespace eCommerce.Storefront.Tests.AddressSpecs
 {

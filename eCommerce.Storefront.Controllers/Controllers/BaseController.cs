@@ -1,8 +1,8 @@
 using System;
+using eCommerce.Storefront.Controllers.Services.Interfaces;
 using eCommerce.Storefront.Controllers.ViewModels;
 using eCommerce.Storefront.Services.Interfaces;
 using eCommerce.Storefront.Services.Messaging.CustomerService;
-using Infrastructure.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eCommerce.Storefront.Controllers.Controllers

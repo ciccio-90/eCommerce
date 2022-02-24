@@ -1,5 +1,3 @@
-using Infrastructure.Domain;
-
 namespace eCommerce.Storefront.Model.Products
 {
     public class Brand : EntityBase<long>, IProductAttribute

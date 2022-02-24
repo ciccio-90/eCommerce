@@ -5,23 +5,18 @@ using eCommerce.Storefront.Model.Orders;
 using eCommerce.Storefront.Model.Products;
 using eCommerce.Storefront.Model.Shipping;
 using eCommerce.Storefront.Repository.EntityFrameworkCore.Mapping;
-using Infrastructure.EntityFrameworkCore;
-using Infrastructure.Helpers;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace eCommerce.Storefront.Repository.EntityFrameworkCore
 {
-    public class ShopDataContext : DataContext
+    public class ShopDataContext : IdentityDbContext
     {
-        public ShopDataContext() : base()
-        {
-        }
-
         public ShopDataContext(DbContextOptions options) : base(options)
         {
         }
-
+        
         public DbSet<Category> Categories { get; set; }
         public DbSet<Brand> Brands { get; set; }
         public DbSet<ProductColor> Colors { get; set; }
@@ -37,14 +32,6 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore
         public DbSet<DeliveryAddress> CustomerDeliveryAddresses { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-        {
-            if (!options.IsConfigured)
-            {
-                options.UseSqlServer($"Server=.;Database=Shop;User Id=sa;Password=Ciccio_110590", b => b.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

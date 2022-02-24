@@ -1,5 +1,5 @@
+using eCommerce.Storefront.Model;
 using eCommerce.Storefront.Model.Customers;
-using Infrastructure.Domain;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace eCommerce.Storefront.Tests.CustomerSpecs

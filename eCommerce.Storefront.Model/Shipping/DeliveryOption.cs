@@ -1,6 +1,3 @@
-using System;
-using Infrastructure.Domain;
-
 namespace eCommerce.Storefront.Model.Shipping
 {
     public class DeliveryOption : EntityBase<long>

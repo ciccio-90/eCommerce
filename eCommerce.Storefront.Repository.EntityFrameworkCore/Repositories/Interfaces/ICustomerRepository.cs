@@ -1,6 +1,6 @@
-using Infrastructure.Domain;
+using eCommerce.Storefront.Model.Customers;
 
-namespace eCommerce.Storefront.Model.Customers
+namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Repositories.Interfaces
 {
     public interface ICustomerRepository : IRepository<Customer, long>
     {
