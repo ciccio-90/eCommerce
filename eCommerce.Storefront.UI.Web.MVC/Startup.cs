@@ -21,10 +21,12 @@ namespace eCommerce.Storefront.UI.Web.MVC
     public class Startup
     {
         private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _env;
 
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             _configuration = configuration;
+            _env = env;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -34,7 +36,22 @@ namespace eCommerce.Storefront.UI.Web.MVC
             services.AddHttpContextAccessor();
             services.AddDbContext<ShopDataContext>(options => 
             {
-                options.UseSqlServer(_configuration?.GetConnectionString("DefaultConnection"), b => b.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
+                if (_env.IsDevelopment())
+                {
+                    options.UseSqlite(_configuration?.GetConnectionString("DefaultConnection"), b => 
+                    {
+                        b.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                        b.MigrationsAssembly("eCommerce.Storefront.Repository.EntityFrameworkCore");
+                    });
+                }
+                else
+                {
+                    options.UseSqlServer(_configuration?.GetConnectionString("DefaultConnection"), b => 
+                    {
+                        b.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                        b.MigrationsAssembly("eCommerce.Storefront.Repository.EntityFrameworkCore");
+                    });
+                }
             });
             services.AddDefaultIdentity<IdentityUser>().AddRoles<IdentityRole>().AddEntityFrameworkStores<ShopDataContext>();
             services.Configure<IdentityOptions>(options =>

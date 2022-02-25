@@ -13,6 +13,10 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore
 {
     public class ShopDataContext : IdentityDbContext
     {
+        public ShopDataContext() : base()
+        {
+        }
+
         public ShopDataContext(DbContextOptions options) : base(options)
         {
         }

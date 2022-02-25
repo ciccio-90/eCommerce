@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
 {
-    public partial class F1198D841A58469882176843F8D256C5 : Migration
+    public partial class _876B87633291471480F2FE7E6A7EF2EB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,10 +13,10 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -27,21 +27,21 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
+                    PasswordHash = table.Column<string>(type: "TEXT", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "TEXT", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "TEXT", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "TEXT", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "TEXT", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -52,9 +52,9 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
                 name: "Brands",
                 columns: table => new
                 {
-                    BrandId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    BrandId = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -65,9 +65,9 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
                 name: "Categories",
                 columns: table => new
                 {
-                    CategoryId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    CategoryId = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -78,9 +78,9 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
                 name: "Colors",
                 columns: table => new
                 {
-                    ColorId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    ColorId = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -91,9 +91,9 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
                 name: "Couriers",
                 columns: table => new
                 {
-                    CourierId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    CourierId = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -104,9 +104,9 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
                 name: "Sizes",
                 columns: table => new
                 {
-                    SizeId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    SizeId = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -117,11 +117,11 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    RoleId = table.Column<string>(type: "TEXT", nullable: false),
+                    ClaimType = table.Column<string>(type: "TEXT", nullable: true),
+                    ClaimValue = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -138,11 +138,11 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    UserId = table.Column<string>(type: "TEXT", nullable: false),
+                    ClaimType = table.Column<string>(type: "TEXT", nullable: true),
+                    ClaimValue = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -159,10 +159,10 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    LoginProvider = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
+                    ProviderKey = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "TEXT", nullable: true),
+                    UserId = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -179,8 +179,8 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<string>(type: "TEXT", nullable: false),
+                    RoleId = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -203,10 +203,10 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    UserId = table.Column<string>(type: "TEXT", nullable: false),
+                    LoginProvider = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 128, nullable: false),
+                    Value = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -223,13 +223,13 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
                 name: "ProductTitles",
                 columns: table => new
                 {
-                    ProductTitleId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ProductTitleId = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ProductName = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    BrandId = table.Column<long>(type: "bigint", nullable: true),
-                    CategoryId = table.Column<long>(type: "bigint", nullable: true),
-                    ColorId = table.Column<long>(type: "bigint", nullable: true)
+                    BrandId = table.Column<long>(type: "INTEGER", nullable: true),
+                    CategoryId = table.Column<long>(type: "INTEGER", nullable: true),
+                    ColorId = table.Column<long>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -255,11 +255,11 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
                 name: "CourierServices",
                 columns: table => new
                 {
-                    CourierServiceId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ServiceCode = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    ServiceDescription = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    CourierId = table.Column<long>(type: "bigint", nullable: false)
+                    CourierServiceId = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ServiceCode = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    ServiceDescription = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    CourierId = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -276,10 +276,10 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
                 name: "Products",
                 columns: table => new
                 {
-                    ProductId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SizeId = table.Column<long>(type: "bigint", nullable: true),
-                    TitleId = table.Column<long>(type: "bigint", nullable: false)
+                    ProductId = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    SizeId = table.Column<long>(type: "INTEGER", nullable: true),
+                    TitleId = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -301,11 +301,11 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
                 name: "DeliveryOptions",
                 columns: table => new
                 {
-                    DeliveryOptionId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DeliveryOptionId = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     FreeDeliveryThreshold = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Cost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ShippingServiceId = table.Column<long>(type: "bigint", nullable: true)
+                    ShippingServiceId = table.Column<long>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -321,11 +321,11 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
                 name: "BasketItems",
                 columns: table => new
                 {
-                    BasketItemId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Qty = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<long>(type: "bigint", nullable: true),
-                    BasketId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    BasketItemId = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Qty = table.Column<int>(type: "INTEGER", nullable: false),
+                    ProductId = table.Column<long>(type: "INTEGER", nullable: true),
+                    BasketId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -341,9 +341,9 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
                 name: "Baskets",
                 columns: table => new
                 {
-                    BasketId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DeliveryOptionId = table.Column<long>(type: "bigint", nullable: true),
-                    CustomerId = table.Column<long>(type: "bigint", nullable: true)
+                    BasketId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    DeliveryOptionId = table.Column<long>(type: "INTEGER", nullable: true),
+                    CustomerId = table.Column<long>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -359,12 +359,12 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
                 name: "Customers",
                 columns: table => new
                 {
-                    CustomerId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    SecondName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    BasketId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    CustomerId = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    UserId = table.Column<string>(type: "TEXT", maxLength: 450, nullable: false),
+                    FirstName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    SecondName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    BasketId = table.Column<Guid>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -380,15 +380,15 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
                 name: "CustomerDeliveryAddresses",
                 columns: table => new
                 {
-                    DeliveryId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    AddressLine = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    City = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    State = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Country = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    ZipCode = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    CustomerId = table.Column<long>(type: "bigint", nullable: false)
+                    DeliveryId = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    AddressLine = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    City = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    State = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true),
+                    Country = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    ZipCode = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    CustomerId = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -405,18 +405,18 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
                 name: "Orders",
                 columns: table => new
                 {
-                    OrderId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    OrderId = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    OrderDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     ShippingCharge = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ShippingServiceId = table.Column<long>(type: "bigint", nullable: true),
-                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    PaymentTransactionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PaymentMerchant = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ShippingServiceId = table.Column<long>(type: "INTEGER", nullable: true),
+                    PaymentDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    PaymentTransactionId = table.Column<string>(type: "TEXT", nullable: true),
+                    PaymentMerchant = table.Column<string>(type: "TEXT", nullable: true),
                     PaymentAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    CustomerId = table.Column<long>(type: "bigint", nullable: false),
-                    DeliveryAddressId = table.Column<long>(type: "bigint", nullable: true),
-                    State = table.Column<int>(type: "int", nullable: false)
+                    CustomerId = table.Column<long>(type: "INTEGER", nullable: false),
+                    DeliveryAddressId = table.Column<long>(type: "INTEGER", nullable: true),
+                    State = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -443,12 +443,12 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
                 name: "OrderItems",
                 columns: table => new
                 {
-                    OrderItemId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductId = table.Column<long>(type: "bigint", nullable: true),
-                    Qty = table.Column<int>(type: "int", nullable: false),
+                    OrderItemId = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ProductId = table.Column<long>(type: "INTEGER", nullable: true),
+                    Qty = table.Column<int>(type: "INTEGER", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    OrderId = table.Column<long>(type: "bigint", nullable: false)
+                    OrderId = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -469,11 +469,12 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[,]
-                {
-                    { "4c93af0c-9921-4abb-a5eb-26f8e01b2249", "b497576b-9358-46eb-ab44-4b8aa5cd50f6", "Customer", "CUSTOMER" },
-                    { "f01eb6e7-a59f-4094-a38e-db1acb888a27", "c25e7311-4d62-4cd1-a42a-43fadecdac0a", "Admin", "ADMIN" }
-                });
+                values: new object[] { "4c93af0c-9921-4abb-a5eb-26f8e01b2249", "b497576b-9358-46eb-ab44-4b8aa5cd50f6", "Customer", "CUSTOMER" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { "f01eb6e7-a59f-4094-a38e-db1acb888a27", "c25e7311-4d62-4cd1-a42a-43fadecdac0a", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
@@ -483,34 +484,57 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
             migrationBuilder.InsertData(
                 table: "Brands",
                 columns: new[] { "BrandId", "Name" },
-                values: new object[,]
-                {
-                    { 1L, "Levi" },
-                    { 2L, "Bench" }
-                });
+                values: new object[] { 1L, "Levi" });
+
+            migrationBuilder.InsertData(
+                table: "Brands",
+                columns: new[] { "BrandId", "Name" },
+                values: new object[] { 2L, "Bench" });
 
             migrationBuilder.InsertData(
                 table: "Categories",
                 columns: new[] { "CategoryId", "Name" },
-                values: new object[,]
-                {
-                    { 1L, "Trousers" },
-                    { 2L, "Shirts" },
-                    { 3L, "Socks" },
-                    { 4L, "Jackets" },
-                    { 5L, "T-Shirts" }
-                });
+                values: new object[] { 1L, "Trousers" });
+
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "CategoryId", "Name" },
+                values: new object[] { 2L, "Shirts" });
+
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "CategoryId", "Name" },
+                values: new object[] { 3L, "Socks" });
+
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "CategoryId", "Name" },
+                values: new object[] { 4L, "Jackets" });
+
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "CategoryId", "Name" },
+                values: new object[] { 5L, "T-Shirts" });
 
             migrationBuilder.InsertData(
                 table: "Colors",
                 columns: new[] { "ColorId", "Name" },
-                values: new object[,]
-                {
-                    { 1L, "Black" },
-                    { 2L, "Blue" },
-                    { 3L, "Red" },
-                    { 4L, "Green" }
-                });
+                values: new object[] { 1L, "Black" });
+
+            migrationBuilder.InsertData(
+                table: "Colors",
+                columns: new[] { "ColorId", "Name" },
+                values: new object[] { 2L, "Blue" });
+
+            migrationBuilder.InsertData(
+                table: "Colors",
+                columns: new[] { "ColorId", "Name" },
+                values: new object[] { 3L, "Red" });
+
+            migrationBuilder.InsertData(
+                table: "Colors",
+                columns: new[] { "ColorId", "Name" },
+                values: new object[] { 4L, "Green" });
 
             migrationBuilder.InsertData(
                 table: "Couriers",
@@ -520,13 +544,22 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
             migrationBuilder.InsertData(
                 table: "Sizes",
                 columns: new[] { "SizeId", "Name" },
-                values: new object[,]
-                {
-                    { 1L, "L" },
-                    { 2L, "XL" },
-                    { 3L, "M" },
-                    { 4L, "S" }
-                });
+                values: new object[] { 1L, "L" });
+
+            migrationBuilder.InsertData(
+                table: "Sizes",
+                columns: new[] { "SizeId", "Name" },
+                values: new object[] { 2L, "XL" });
+
+            migrationBuilder.InsertData(
+                table: "Sizes",
+                columns: new[] { "SizeId", "Name" },
+                values: new object[] { 3L, "M" });
+
+            migrationBuilder.InsertData(
+                table: "Sizes",
+                columns: new[] { "SizeId", "Name" },
+                values: new object[] { 4L, "S" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
@@ -541,15 +574,32 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
             migrationBuilder.InsertData(
                 table: "ProductTitles",
                 columns: new[] { "ProductTitleId", "BrandId", "CategoryId", "ColorId", "ProductName", "Price" },
-                values: new object[,]
-                {
-                    { 1L, 1L, 1L, 2L, "506 Stretch Diamond", 27.99m },
-                    { 2L, 1L, 1L, 1L, "506 Dark Stuff Straight", 25.99m },
-                    { 3L, 1L, 1L, 2L, "512 Bootcut Jeans", 22.99m },
-                    { 4L, 2L, 1L, 2L, "Lucian Straight Jeans", 22.99m },
-                    { 5L, 2L, 1L, 3L, "Lucian Straight Jeans", 22.99m },
-                    { 6L, 2L, 1L, 4L, "Lucian Straight Jeans", 22.99m }
-                });
+                values: new object[] { 1L, 1L, 1L, 2L, "506 Stretch Diamond", 27.99m });
+
+            migrationBuilder.InsertData(
+                table: "ProductTitles",
+                columns: new[] { "ProductTitleId", "BrandId", "CategoryId", "ColorId", "ProductName", "Price" },
+                values: new object[] { 2L, 1L, 1L, 1L, "506 Dark Stuff Straight", 25.99m });
+
+            migrationBuilder.InsertData(
+                table: "ProductTitles",
+                columns: new[] { "ProductTitleId", "BrandId", "CategoryId", "ColorId", "ProductName", "Price" },
+                values: new object[] { 3L, 1L, 1L, 2L, "512 Bootcut Jeans", 22.99m });
+
+            migrationBuilder.InsertData(
+                table: "ProductTitles",
+                columns: new[] { "ProductTitleId", "BrandId", "CategoryId", "ColorId", "ProductName", "Price" },
+                values: new object[] { 4L, 2L, 1L, 2L, "Lucian Straight Jeans", 22.99m });
+
+            migrationBuilder.InsertData(
+                table: "ProductTitles",
+                columns: new[] { "ProductTitleId", "BrandId", "CategoryId", "ColorId", "ProductName", "Price" },
+                values: new object[] { 5L, 2L, 1L, 3L, "Lucian Straight Jeans", 22.99m });
+
+            migrationBuilder.InsertData(
+                table: "ProductTitles",
+                columns: new[] { "ProductTitleId", "BrandId", "CategoryId", "ColorId", "ProductName", "Price" },
+                values: new object[] { 6L, 2L, 1L, 4L, "Lucian Straight Jeans", 22.99m });
 
             migrationBuilder.InsertData(
                 table: "DeliveryOptions",
@@ -559,33 +609,122 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
             migrationBuilder.InsertData(
                 table: "Products",
                 columns: new[] { "ProductId", "SizeId", "TitleId" },
-                values: new object[,]
-                {
-                    { 1L, 1L, 1L },
-                    { 2L, 2L, 1L },
-                    { 3L, 3L, 1L },
-                    { 4L, 4L, 1L },
-                    { 5L, 1L, 2L },
-                    { 6L, 2L, 2L },
-                    { 7L, 3L, 2L },
-                    { 8L, 4L, 2L },
-                    { 9L, 1L, 3L },
-                    { 10L, 2L, 3L },
-                    { 11L, 3L, 3L },
-                    { 12L, 4L, 3L },
-                    { 13L, 1L, 4L },
-                    { 14L, 2L, 4L },
-                    { 15L, 3L, 4L },
-                    { 16L, 4L, 4L },
-                    { 17L, 1L, 5L },
-                    { 18L, 2L, 5L },
-                    { 19L, 3L, 5L },
-                    { 20L, 4L, 5L },
-                    { 21L, 1L, 6L },
-                    { 22L, 2L, 6L },
-                    { 23L, 3L, 6L },
-                    { 24L, 4L, 6L }
-                });
+                values: new object[] { 1L, 1L, 1L });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "SizeId", "TitleId" },
+                values: new object[] { 2L, 2L, 1L });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "SizeId", "TitleId" },
+                values: new object[] { 3L, 3L, 1L });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "SizeId", "TitleId" },
+                values: new object[] { 4L, 4L, 1L });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "SizeId", "TitleId" },
+                values: new object[] { 5L, 1L, 2L });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "SizeId", "TitleId" },
+                values: new object[] { 6L, 2L, 2L });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "SizeId", "TitleId" },
+                values: new object[] { 7L, 3L, 2L });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "SizeId", "TitleId" },
+                values: new object[] { 8L, 4L, 2L });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "SizeId", "TitleId" },
+                values: new object[] { 9L, 1L, 3L });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "SizeId", "TitleId" },
+                values: new object[] { 10L, 2L, 3L });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "SizeId", "TitleId" },
+                values: new object[] { 11L, 3L, 3L });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "SizeId", "TitleId" },
+                values: new object[] { 12L, 4L, 3L });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "SizeId", "TitleId" },
+                values: new object[] { 13L, 1L, 4L });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "SizeId", "TitleId" },
+                values: new object[] { 14L, 2L, 4L });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "SizeId", "TitleId" },
+                values: new object[] { 15L, 3L, 4L });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "SizeId", "TitleId" },
+                values: new object[] { 16L, 4L, 4L });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "SizeId", "TitleId" },
+                values: new object[] { 17L, 1L, 5L });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "SizeId", "TitleId" },
+                values: new object[] { 18L, 2L, 5L });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "SizeId", "TitleId" },
+                values: new object[] { 19L, 3L, 5L });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "SizeId", "TitleId" },
+                values: new object[] { 20L, 4L, 5L });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "SizeId", "TitleId" },
+                values: new object[] { 21L, 1L, 6L });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "SizeId", "TitleId" },
+                values: new object[] { 22L, 2L, 6L });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "SizeId", "TitleId" },
+                values: new object[] { 23L, 3L, 6L });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductId", "SizeId", "TitleId" },
+                values: new object[] { 24L, 4L, 6L });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -596,8 +735,7 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
-                unique: true,
-                filter: "[NormalizedName] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -623,8 +761,7 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
-                unique: true,
-                filter: "[NormalizedUserName] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_BasketItems_BasketId",
