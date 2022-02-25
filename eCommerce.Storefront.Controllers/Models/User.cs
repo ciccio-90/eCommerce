@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace eCommerce.Storefront.Controllers
+namespace eCommerce.Storefront.Controllers.Models
 {
     public class User
     {

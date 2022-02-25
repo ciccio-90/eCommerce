@@ -4,8 +4,9 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using eCommerce.Storefront.Controllers.Models;
 using eCommerce.Storefront.Controllers.Services.Interfaces;
-using eCommerce.Storefront.Model.Payments;
+using eCommerce.Storefront.Model.Orders;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 

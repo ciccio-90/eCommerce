@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using eCommerce.Storefront.Controllers.Models;
 using eCommerce.Storefront.Controllers.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 

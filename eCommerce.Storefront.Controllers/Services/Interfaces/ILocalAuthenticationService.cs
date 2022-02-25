@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using eCommerce.Storefront.Controllers.Models;
 
 namespace eCommerce.Storefront.Controllers.Services.Interfaces
 {

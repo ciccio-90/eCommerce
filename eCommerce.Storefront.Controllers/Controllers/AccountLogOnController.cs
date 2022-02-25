@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using eCommerce.Storefront.Controllers.Services.Interfaces;
+using eCommerce.Storefront.Controllers.Models;
 
 namespace eCommerce.Storefront.Controllers.Controllers
 {

@@ -1,4 +1,4 @@
-namespace eCommerce.Storefront.Model.Payments
+namespace eCommerce.Storefront.Model.Orders
 {
     public class OrderItemPaymentRequest
     {

@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using eCommerce.Storefront.Controllers.Services.Interfaces;
 using Microsoft.Extensions.Logging;
-using eCommerce.Storefront.Model.Payments;
+using eCommerce.Storefront.Model.Orders;
+using eCommerce.Storefront.Controllers.Models;
 
 namespace eCommerce.Storefront.Controllers.Controllers
 {
