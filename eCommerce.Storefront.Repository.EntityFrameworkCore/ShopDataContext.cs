@@ -1,9 +1,4 @@
 using System.Collections.Generic;
-using eCommerce.Storefront.Model.Basket;
-using eCommerce.Storefront.Model.Customers;
-using eCommerce.Storefront.Model.Orders;
-using eCommerce.Storefront.Model.Products;
-using eCommerce.Storefront.Model.Shipping;
 using eCommerce.Storefront.Repository.EntityFrameworkCore.Mapping;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -20,22 +15,6 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore
         public ShopDataContext(DbContextOptions options) : base(options)
         {
         }
-        
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<Brand> Brands { get; set; }
-        public DbSet<ProductColor> Colors { get; set; }
-        public DbSet<ProductSize> Sizes { get; set; }
-        public DbSet<ProductTitle> ProductTitles { get; set; }
-        public DbSet<Product> Products { get; set; }
-        public DbSet<Basket> Baskets { get; set; }
-        public DbSet<BasketItem> BasketItems { get; set; }
-        public DbSet<Courier> Couriers { get; set; }
-        public DbSet<DeliveryOption> DeliveryOptions { get; set; }
-        public DbSet<ShippingService> CourierServices { get; set; }
-        public DbSet<Customer> Customers { get; set; }
-        public DbSet<DeliveryAddress> CustomerDeliveryAddresses { get; set; }
-        public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderItem> OrderItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
