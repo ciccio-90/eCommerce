@@ -7,8 +7,14 @@
 
 <Details Title="Category" TItem="CategoryDto" Item="category" CanDelete="@(category?.Id > 0)" OnSave="@((item) => SaveCategory(item as CategoryDto))" OnDelete="@((item) => DeleteCategory(item as CategoryDto))" OnCancel="@((item) => NavigationManager.NavigateTo("/admin/category/list"))">       
     <FormFields Context="category">
-        <label>Name</label>
-        <RadzenTextBox @bind-Value="category.Name"></RadzenTextBox>
+        <div class="row">
+            <div class="col-md-12">
+                <label>Name</label>
+            </div>
+            <div class="col-md-12">
+                <RadzenTextBox @bind-Value="category.Name" class="col-md-12"></RadzenTextBox>
+            </div>
+        </div>
     </FormFields>
 </Details>
 

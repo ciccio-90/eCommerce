@@ -7,8 +7,14 @@
 
 <Details Title="Brand" TItem="BrandDto" Item="brand" CanDelete="@(brand?.Id > 0)" OnSave="@((item) => SaveBrand(item as BrandDto))" OnDelete="@((item) => DeleteBrand(item as BrandDto))" OnCancel="@((item) => NavigationManager.NavigateTo("/admin/brand/list"))">       
     <FormFields Context="brand">
-        <label>Name</label>
-        <RadzenTextBox @bind-Value="brand.Name"></RadzenTextBox>
+        <div class="row">
+            <div class="col-md-12">
+                <label>Name</label>
+            </div>
+            <div class="col-md-12">
+                <RadzenTextBox @bind-Value="brand.Name" class="col-md-12"></RadzenTextBox>
+            </div>
+        </div>
     </FormFields>
 </Details>
 

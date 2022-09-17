@@ -9,16 +9,29 @@
         <h2>Login</h2>
         <EditForm Model="model" OnValidSubmit="UserLogin">
             <RadzenCard>
-                <label>Email</label>
-                <RadzenTextBox @bind-Value="model.Email"></RadzenTextBox>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label>Email</label>
+                    </div>
+                    <div class="col-md-12">
+                        <RadzenTextBox @bind-Value="model.Email" class="col-md-12"></RadzenTextBox>
+                    </div>
+                </div>
 
-                <label>Password</label>
-                <RadzenPassword @bind-Value="model.Password" AutoComplete="false"></RadzenPassword>
+                <br />
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <label>Password</label>
+                    </div>
+                    <div class="col-md-12">
+                        <RadzenPassword @bind-Value="model.Password" AutoComplete="false" class="col-md-12"></RadzenPassword>
+                    </div>
+                </div>
 
                 <hr />
                 <DataAnnotationsValidator />
                 <ValidationSummary />
-
 
                 <Alert Title="Attention" ErrorList="loginResponse?.Errors" />
 

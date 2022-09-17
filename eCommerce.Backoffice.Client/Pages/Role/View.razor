@@ -23,8 +23,14 @@
         <div class="col-4">
             <EditForm Model="model" OnValidSubmit="SaveRole">
                 <RadzenCard>
-                    <label>Name</label>
-                    <RadzenTextBox @bind-Value="model.Name"></RadzenTextBox>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label>Name</label>
+                        </div>
+                        <div class="col-md-12">
+                            <RadzenTextBox @bind-Value="model.Name" class="col-md-12"></RadzenTextBox>
+                        </div>
+                    </div>
                     <hr />
                     <DataAnnotationsValidator />
                     <ValidationSummary />
@@ -56,8 +62,14 @@
         <div class="col-4">
             <EditForm Model="model" OnValidSubmit="SaveRoleUser">
                 <RadzenCard>
-                    <label>Add User</label>
-                    <RadzenDropDown @bind-Value="userId" AllowClear="true" TValue="string" Data="@roleUserResponse" TextProperty="Name" ValueProperty="Id" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterOperator="StringFilterOperator.Contains" AllowFiltering="true" />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label>Add User</label>
+                        </div>
+                        <div class="col-md-12">
+                            <RadzenDropDown @bind-Value="userId" AllowClear="true" TValue="string" Data="@roleUserResponse" TextProperty="Name" ValueProperty="Id" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterOperator="StringFilterOperator.Contains" AllowFiltering="true" class="col-md-12" />
+                        </div>
+                    </div>
                     <hr />
                     <RadzenButton ButtonType="Radzen.ButtonType.Submit" Text="Save" Icon="save" ButtonStyle="Radzen.ButtonStyle.Info" class="btn-block mr-2"></RadzenButton>
                 </RadzenCard>

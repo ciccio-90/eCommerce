@@ -7,8 +7,14 @@
 
 <Details Title="Size" TItem="ProductSizeDto" Item="size" CanDelete="@(size?.Id > 0)" OnSave="@((item) => SaveSize(item as ProductSizeDto))" OnDelete="@((item) => DeleteSize(item as ProductSizeDto))" OnCancel="@((item) => NavigationManager.NavigateTo("/admin/size/list"))">       
     <FormFields Context="size">
-        <label>Name</label>
-        <RadzenTextBox @bind-Value="size.Name"></RadzenTextBox>
+        <div class="row">
+            <div class="col-md-12">
+                <label>Name</label>
+            </div>
+            <div class="col-md-12">
+                <RadzenTextBox @bind-Value="size.Name" class="col-md-12"></RadzenTextBox>
+            </div>
+        </div>
     </FormFields>
 </Details>
 
