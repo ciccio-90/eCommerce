@@ -8,7 +8,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.3" PrivateAssets="all" />
     <PackageReference Include="System.Net.Http.Json" Version="7.0.0" />
-    <PackageReference Include="Radzen.Blazor" Version="4.7.2" />    
+    <PackageReference Include="Radzen.Blazor" Version="4.7.6" />    
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />        
     <PackageReference Include="Blazored.LocalStorage" Version="4.3.0" />    
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="7.0.3" />    
