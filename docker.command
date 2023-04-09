@@ -1,3 +1,5 @@
+#!/bin/bash
+
 dotnet restore
 dotnet publish -c Release
 docker stop ecommerce
