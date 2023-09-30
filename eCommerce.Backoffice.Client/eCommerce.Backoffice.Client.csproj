@@ -8,11 +8,11 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.11" PrivateAssets="all" />
     <PackageReference Include="System.Net.Http.Json" Version="7.0.1" />
-    <PackageReference Include="Radzen.Blazor" Version="4.15.14" />    
+    <PackageReference Include="Radzen.Blazor" Version="4.16.3" />    
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />        
     <PackageReference Include="Blazored.LocalStorage" Version="4.4.0" />    
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="7.0.11" />    
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.0" />   
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.2" />   
     <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="7.0.0" />
   </ItemGroup>
 
