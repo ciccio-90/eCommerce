@@ -17,9 +17,5 @@ namespace eCommerce.Storefront.Model.Orders
         public PaymentAmountDoesNotEqualOrderTotalException(string message, Exception innerException) : base(message, innerException)
         {
         }
-
-        protected PaymentAmountDoesNotEqualOrderTotalException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
     }
 }

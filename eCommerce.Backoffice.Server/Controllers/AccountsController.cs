@@ -126,7 +126,7 @@ namespace eCommerce.Backoffice.Server.Controllers
             }
         }
 
-        [HttpPost("[action]")]
+        [HttpPost("forgotpassword")]
         public async Task<ActionResult<ForgotPasswordResponse>> ForgotPassword(ForgotPasswordRequest forgotPasswordRequest)
         {
             var response = new ForgotPasswordResponse();
@@ -137,7 +137,7 @@ namespace eCommerce.Backoffice.Server.Controllers
                 return NotFound();
             }
 
-            if (!(await _userManager.IsEmailConfirmedAsync(user)))
+            if (!await _userManager.IsEmailConfirmedAsync(user))
             {
                 response.Errors = new List<string> { "Not confirmed email" };
             }
@@ -154,7 +154,7 @@ namespace eCommerce.Backoffice.Server.Controllers
             return Ok(response);
         }
 
-        [HttpPost("[action]")]
+        [HttpPost("login")]
         public async Task<ActionResult<LoginResponse>> Login(LoginRequest loginRequest)
         {
             var response = new LoginResponse();

@@ -17,9 +17,5 @@ namespace eCommerce.Storefront.Model.Orders
         public OrderAlreadyPaidForException(string message, Exception innerException) : base(message, innerException)
         {
         }
-
-        protected OrderAlreadyPaidForException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
     }
 }

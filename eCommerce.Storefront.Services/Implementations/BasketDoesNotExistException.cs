@@ -17,9 +17,5 @@ namespace eCommerce.Storefront.Services.Implementations
         public BasketDoesNotExistException(string message, Exception innerException) : base(message, innerException)
         {
         }
-
-        protected BasketDoesNotExistException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
     }
 }

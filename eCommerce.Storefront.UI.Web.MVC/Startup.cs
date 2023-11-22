@@ -15,6 +15,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using Microsoft.AspNetCore.Http;
 
 namespace eCommerce.Storefront.UI.Web.MVC
 {
@@ -144,22 +146,22 @@ namespace eCommerce.Storefront.UI.Web.MVC
             {
                 if (!context.Response.Headers.ContainsKey("X-content-type-options"))
                 {
-                    context.Response.Headers.Add("X-content-type-options", "nosniff");
+                    context.Response.Headers.Append("X-content-type-options", "nosniff");
                 }
 
                 if (!context.Response.Headers.ContainsKey("Cache-control"))
                 {
-                    context.Response.Headers.Add("Cache-control", "no-cache, no-store");
+                    context.Response.Headers.Append("Cache-control", "no-cache, no-store");
                 }
 
                 if (!context.Response.Headers.ContainsKey("Pragma"))
                 {
-                    context.Response.Headers.Add("Pragma", "no-cache");
+                    context.Response.Headers.Append("Pragma", "no-cache");
                 }
 
                 if (!context.Response.Headers.ContainsKey("X-XSS-Protection"))
                 {
-                    context.Response.Headers.Add("X-XSS-Protection", "1; mode=block");
+                    context.Response.Headers.Append("X-XSS-Protection", "1; mode=block");
                 }
 
                 if (context.Request.Path.Value.Contains("/admin"))

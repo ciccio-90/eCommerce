@@ -17,9 +17,5 @@ namespace eCommerce.Storefront.Model
         public EntityBaseIsInvalidException(string message, Exception innerException) : base(message, innerException)
         {
         }
-
-        protected EntityBaseIsInvalidException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
     }
 }

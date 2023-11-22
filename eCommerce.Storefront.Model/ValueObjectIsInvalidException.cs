@@ -17,9 +17,5 @@ namespace eCommerce.Storefront.Model
         public ValueObjectIsInvalidException(string message, Exception innerException) : base(message, innerException)
         {
         }
-
-        protected ValueObjectIsInvalidException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
     }
 }
