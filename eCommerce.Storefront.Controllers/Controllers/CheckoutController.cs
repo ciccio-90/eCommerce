@@ -76,9 +76,11 @@ namespace eCommerce.Storefront.Controllers.Controllers
         [HttpPost]
         public async Task<IActionResult> AddDeliveryAddress(DeliveryAddressView deliveryAddressView)
         {
-            DeliveryAddressAddRequest request = new DeliveryAddressAddRequest();
-            request.Address = deliveryAddressView;
-            request.CustomerEmail = _cookieAuthentication.GetAuthenticationToken();
+            DeliveryAddressAddRequest request = new DeliveryAddressAddRequest
+            {
+                Address = deliveryAddressView,
+                CustomerEmail = _cookieAuthentication.GetAuthenticationToken()
+            };
 
             _customerService.AddDeliveryAddress(request);
 
@@ -87,10 +89,12 @@ namespace eCommerce.Storefront.Controllers.Controllers
 
         public IActionResult PlaceOrder(IFormCollection collection)
         {
-            CreateOrderRequest request = new CreateOrderRequest();
-            request.BasketId = GetBasketId();
-            request.CustomerEmail = _cookieAuthentication.GetAuthenticationToken();
-            request.DeliveryId = int.Parse(collection[FormDataKeys.DeliveryAddress.ToString()]);
+            CreateOrderRequest request = new CreateOrderRequest
+            {
+                BasketId = GetBasketId(),
+                CustomerEmail = _cookieAuthentication.GetAuthenticationToken(),
+                DeliveryId = int.Parse(collection[FormDataKeys.DeliveryAddress.ToString()])
+            };
             CreateOrderResponse response = _orderService.CreateOrder(request);
 
             return RedirectToAction("CreatePaymentFor", "Payment", new { orderId = response.Order.Id });

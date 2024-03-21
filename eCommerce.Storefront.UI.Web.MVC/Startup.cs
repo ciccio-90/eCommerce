@@ -17,6 +17,7 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace eCommerce.Storefront.UI.Web.MVC
 {
@@ -54,6 +55,11 @@ namespace eCommerce.Storefront.UI.Web.MVC
                         b.MigrationsAssembly("eCommerce.Storefront.Repository.EntityFrameworkCore");
                     });
                 }
+
+                options.ConfigureWarnings(warningsConfigurationBuilderAction => 
+                {
+                    warningsConfigurationBuilderAction.Ignore(RelationalEventId.AmbientTransactionWarning);
+                });
             });
             services.AddDefaultIdentity<IdentityUser>().AddRoles<IdentityRole>().AddEntityFrameworkStores<ShopDataContext>();
             services.Configure<IdentityOptions>(options =>

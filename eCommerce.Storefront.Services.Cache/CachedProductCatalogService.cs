@@ -126,8 +126,10 @@ namespace eCommerce.Storefront.Services.Cache
         
         public GetProductResponse GetProduct(GetProductRequest request)
         {
-            GetProductResponse response = new GetProductResponse();
-            response.Product = _mapper.Map<ProductTitle, ProductView>(FindAllProductTitles().FirstOrDefault(p => p.Id == request.ProductId));
+            GetProductResponse response = new GetProductResponse
+            {
+                Product = _mapper.Map<ProductTitle, ProductView>(FindAllProductTitles().FirstOrDefault(p => p.Id == request.ProductId))
+            };
 
             return response;
         }

@@ -38,15 +38,15 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore
             });
             builder.Entity<IdentityUser>().HasData(new IdentityUser
             {
-                Id = "c8dd25ca-5d15-4a39-8023-7199a7f84286",
-                UserName = "francescoguagnano@alice.it",
-                NormalizedUserName = "FRANCESCOGUAGNANO@ALICE.IT",
-                Email = "francescoguagnano@alice.it",
-                NormalizedEmail = "FRANCESCOGUAGNANO@ALICE.IT",
+                Id = "3d5bc7f9-e445-46fe-b284-894c3f0a1873",
+                UserName = "admin@ecommerce.com",
+                NormalizedUserName = "ADMIN@ECOMMERCE.COM",
+                Email = "admin@ecommerce.com",
+                NormalizedEmail = "ADMIN@ECOMMERCE.COM",
                 EmailConfirmed = true,
-                PasswordHash = "AQAAAAEAACcQAAAAEMlv8lrB6gzwN+Icpe4qmD0BQqw72MxJM9VwCUwzrdBcuBJtF8tiIGaim10UtNy51g==",
-                SecurityStamp = "SMKW4WM6MF266XGGFASDTP7H4Y2TK3QO",
-                ConcurrencyStamp = "b2205356-7b1b-4955-9142-d02c78c94651",
+                PasswordHash = "AQAAAAIAAYagAAAAEIV3gNJplD9fTYjDhH/lOnFcVVF16+jxwjD6hHx3OPFjOsbJOZsZE9smVDPFxDbZbw==", // -> Admin-1234
+                SecurityStamp = "4LMSVL7MBG3LGFPYFJ3QJTEMSPVVIWRD",
+                ConcurrencyStamp = "d092d71e-b8fe-44fb-85b6-06c27fab1fc1",
                 PhoneNumber = null,
                 PhoneNumberConfirmed = false,
                 TwoFactorEnabled = false,
@@ -57,7 +57,7 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore
             builder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
             {
                 RoleId = "f01eb6e7-a59f-4094-a38e-db1acb888a27",
-                UserId = "c8dd25ca-5d15-4a39-8023-7199a7f84286"
+                UserId = "3d5bc7f9-e445-46fe-b284-894c3f0a1873"
             });
             builder.ApplyConfiguration(new BrandConfiguration());
             builder.ApplyConfiguration(new CategoryConfiguration());

@@ -32,10 +32,12 @@ namespace eCommerce.Storefront.Controllers.Controllers
             GetCustomerResponse response = _customerService.GetCustomer(request);
 
             if (response.CustomerFound)
-            {    
-                CustomersOrderSummaryView customersOrderSummaryView = new CustomersOrderSummaryView();
-                customersOrderSummaryView.Orders = response.Orders;
-                customersOrderSummaryView.BasketSummary = GetBasketSummaryView();
+            {
+                CustomersOrderSummaryView customersOrderSummaryView = new CustomersOrderSummaryView
+                {
+                    Orders = response.Orders,
+                    BasketSummary = GetBasketSummaryView()
+                };
 
                 return View(customersOrderSummaryView);
             }
@@ -51,9 +53,11 @@ namespace eCommerce.Storefront.Controllers.Controllers
         {
             GetOrderRequest request = new GetOrderRequest() { OrderId = orderId };
             GetOrderResponse response = _orderService.GetOrder(request);
-            CustomerOrderView orderView = new CustomerOrderView();
-            orderView.BasketSummary = GetBasketSummaryView();
-            orderView.Order = response.Order;
+            CustomerOrderView orderView = new CustomerOrderView
+            {
+                BasketSummary = GetBasketSummaryView(),
+                Order = response.Order
+            };
 
             return View(orderView);
         }

@@ -63,11 +63,13 @@ namespace eCommerce.Storefront.Controllers.Controllers
                 {
                     try
                     {
-                        CreateCustomerRequest createCustomerRequest = new CreateCustomerRequest();
-                        createCustomerRequest.UserId = user.Id;
-                        createCustomerRequest.Email = email;
-                        createCustomerRequest.FirstName = firstName;
-                        createCustomerRequest.SecondName = secondName;
+                        CreateCustomerRequest createCustomerRequest = new CreateCustomerRequest
+                        {
+                            UserId = user.Id,
+                            Email = email,
+                            FirstName = firstName,
+                            SecondName = secondName
+                        };
 
                         _customerService.CreateCustomer(createCustomerRequest);
                         await _cookieAuthentication.SetAuthenticationToken(user.Email, new List<string> { "Customer" });

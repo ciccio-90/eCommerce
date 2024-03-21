@@ -30,11 +30,13 @@ namespace eCommerce.Storefront.Services.Implementations
         public CreateCustomerResponse CreateCustomer(CreateCustomerRequest request)
         {
             CreateCustomerResponse response = new CreateCustomerResponse();
-            Customer customer = new Customer();
-            customer.UserId = request.UserId;
-            customer.Email = request.Email;
-            customer.FirstName = request.FirstName;
-            customer.SecondName = request.SecondName;
+            Customer customer = new Customer
+            {
+                UserId = request.UserId,
+                Email = request.Email,
+                FirstName = request.FirstName,
+                SecondName = request.SecondName
+            };
 
             customer.ThrowExceptionIfInvalid();
             _customerRepository.Add(customer);
@@ -114,8 +116,10 @@ namespace eCommerce.Storefront.Services.Implementations
         {
             DeliveryAddressAddResponse response = new DeliveryAddressAddResponse();
             Customer customer = _customerRepository.FindBy(request.CustomerEmail);
-            DeliveryAddress deliveryAddress = new DeliveryAddress();
-            deliveryAddress.Customer = customer;
+            DeliveryAddress deliveryAddress = new DeliveryAddress
+            {
+                Customer = customer
+            };
 
             UpdateDeliveryAddressFrom(request.Address, deliveryAddress);
             customer.AddAddress(deliveryAddress);

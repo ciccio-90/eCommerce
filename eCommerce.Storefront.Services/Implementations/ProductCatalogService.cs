@@ -31,16 +31,20 @@ namespace eCommerce.Storefront.Services.Implementations
 
         public GetAllCategoriesResponse GetAllCategories()
         {
-            GetAllCategoriesResponse response = new GetAllCategoriesResponse();            
-            response.Categories = _categoryRepository.FindAll().Select(c => _mapper.Map<Category, CategoryView>(c));
-            
+            GetAllCategoriesResponse response = new GetAllCategoriesResponse
+            {
+                Categories = _categoryRepository.FindAll().Select(c => _mapper.Map<Category, CategoryView>(c))
+            };
+
             return response;
         }
 
         public GetFeaturedProductsResponse GetFeaturedProducts()
         {
-            GetFeaturedProductsResponse response = new GetFeaturedProductsResponse();
-            response.Products = _productTitleRepository.FindAll().OrderByDescending(p => p.Price).ThenBy(p => p.Brand.Name).ThenBy(p => p.Name).Take(6).Select(p => _mapper.Map<ProductTitle, ProductSummaryView>(p));
+            GetFeaturedProductsResponse response = new GetFeaturedProductsResponse
+            {
+                Products = _productTitleRepository.FindAll().OrderByDescending(p => p.Price).ThenBy(p => p.Brand.Name).ThenBy(p => p.Name).Take(6).Select(p => _mapper.Map<ProductTitle, ProductSummaryView>(p))
+            };
 
             return response;
         }
@@ -141,10 +145,9 @@ namespace eCommerce.Storefront.Services.Implementations
             RefinementGroup refinementGroup = new RefinementGroup
             {
                 Name = refinementGroupType.ToString(),
-                GroupId = (int)refinementGroupType
+                GroupId = (int)refinementGroupType,
+                Refinements = _mapper.Map<IEnumerable<IProductAttribute>, IEnumerable<Refinement>>(productAttributes)
             };
-            
-            refinementGroup.Refinements = _mapper.Map<IEnumerable<IProductAttribute>, IEnumerable<Refinement>>(productAttributes);
 
             return refinementGroup;
         }

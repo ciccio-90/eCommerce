@@ -21,9 +21,11 @@ namespace eCommerce.Storefront.Controllers.Controllers
 
         public IActionResult Index()
         {
-            HomePageView homePageView = new HomePageView();
-            homePageView.Categories = GetCategories();
-            homePageView.BasketSummary = GetBasketSummaryView();            
+            HomePageView homePageView = new HomePageView
+            {
+                Categories = GetCategories(),
+                BasketSummary = GetBasketSummaryView()
+            };
             GetFeaturedProductsResponse response = _cachedProductCatalogService.GetFeaturedProducts();
             homePageView.Products = response.Products;
             

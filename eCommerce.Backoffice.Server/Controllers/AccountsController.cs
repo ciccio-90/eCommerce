@@ -175,25 +175,32 @@ namespace eCommerce.Backoffice.Server.Controllers
             }
 
             var roles = await _signInManager.UserManager.GetRolesAsync(user);
-            var claims = new List<Claim>();
-            
-            claims.Add(new Claim(ClaimTypes.Name, loginRequest.Email));
 
-            if (roles != null)
+            if (!roles.Contains("Admin"))
             {
-                foreach (var role in roles)
-                {
-                    claims.Add(new Claim(ClaimTypes.Role, role));
-                }
+                response.Errors = new List<string> { $"{loginRequest.Email} is not an Admin user." };
+
+                return Ok(response);
+            }
+                        
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, loginRequest.Email)
+            };
+
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
             }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecurityKey"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var expiry = DateTime.Now.AddDays(Convert.ToInt32(_configuration["Jwt:ExpiryInDays"]));
             var token = new JwtSecurityToken(_configuration["Jwt:Issuer"], _configuration["Jwt:Audience"], claims, expires: expiry, signingCredentials: creds);
+            
             response.Token = new JwtSecurityTokenHandler().WriteToken(token);
             response.IsSuccess = true;
-
+            
             return Ok(response);
         }
 

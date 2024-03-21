@@ -479,7 +479,7 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "c8dd25ca-5d15-4a39-8023-7199a7f84286", 0, "b2205356-7b1b-4955-9142-d02c78c94651", "francescoguagnano@alice.it", true, true, null, "FRANCESCOGUAGNANO@ALICE.IT", "FRANCESCOGUAGNANO@ALICE.IT", "AQAAAAEAACcQAAAAEMlv8lrB6gzwN+Icpe4qmD0BQqw72MxJM9VwCUwzrdBcuBJtF8tiIGaim10UtNy51g==", null, false, "SMKW4WM6MF266XGGFASDTP7H4Y2TK3QO", false, "francescoguagnano@alice.it" });
+                values: new object[] { "3d5bc7f9-e445-46fe-b284-894c3f0a1873", 0, "d092d71e-b8fe-44fb-85b6-06c27fab1fc1", "admin@ecommerce.com", true, true, null, "ADMIN@ECOMMERCE.COM", "ADMIN@ECOMMERCE.COM", "AQAAAAIAAYagAAAAEIV3gNJplD9fTYjDhH/lOnFcVVF16+jxwjD6hHx3OPFjOsbJOZsZE9smVDPFxDbZbw==", null, false, "4LMSVL7MBG3LGFPYFJ3QJTEMSPVVIWRD", false, "admin@ecommerce.com" });
 
             migrationBuilder.InsertData(
                 table: "Brands",

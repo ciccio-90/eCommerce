@@ -880,19 +880,19 @@ namespace eCommerce.Storefront.Repository.EntityFrameworkCore.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "c8dd25ca-5d15-4a39-8023-7199a7f84286",
+                            Id = "3d5bc7f9-e445-46fe-b284-894c3f0a1873",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b2205356-7b1b-4955-9142-d02c78c94651",
-                            Email = "francescoguagnano@alice.it",
+                            ConcurrencyStamp = "d092d71e-b8fe-44fb-85b6-06c27fab1fc1",
+                            Email = "admin@ecommerce.com",
                             EmailConfirmed = true,
                             LockoutEnabled = true,
-                            NormalizedEmail = "FRANCESCOGUAGNANO@ALICE.IT",
-                            NormalizedUserName = "FRANCESCOGUAGNANO@ALICE.IT",
-                            PasswordHash = "AQAAAAEAACcQAAAAEMlv8lrB6gzwN+Icpe4qmD0BQqw72MxJM9VwCUwzrdBcuBJtF8tiIGaim10UtNy51g==",
+                            NormalizedEmail = "ADMIN@ECOMMERCE.COM",
+                            NormalizedUserName = "ADMIN@ECOMMERCE.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIV3gNJplD9fTYjDhH/lOnFcVVF16+jxwjD6hHx3OPFjOsbJOZsZE9smVDPFxDbZbw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "SMKW4WM6MF266XGGFASDTP7H4Y2TK3QO",
+                            SecurityStamp = "4LMSVL7MBG3LGFPYFJ3QJTEMSPVVIWRD",
                             TwoFactorEnabled = false,
-                            UserName = "francescoguagnano@alice.it"
+                            UserName = "admin@ecommerce.com"
                         });
                 });
 

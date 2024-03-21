@@ -48,12 +48,14 @@ namespace eCommerce.Storefront.Controllers.Controllers
 
             if (transactionResult.PaymentOk)
             {
-                SetOrderPaymentRequest paymentRequest = new SetOrderPaymentRequest();
-                paymentRequest.Amount = transactionResult.Amount;
-                paymentRequest.PaymentToken = transactionResult.PaymentToken;
-                paymentRequest.PaymentMerchant = transactionResult.PaymentMerchant;
-                paymentRequest.OrderId = orderId;
-                paymentRequest.CustomerEmail = _cookieAuthentication.GetAuthenticationToken();
+                SetOrderPaymentRequest paymentRequest = new SetOrderPaymentRequest
+                {
+                    Amount = transactionResult.Amount,
+                    PaymentToken = transactionResult.PaymentToken,
+                    PaymentMerchant = transactionResult.PaymentMerchant,
+                    OrderId = orderId,
+                    CustomerEmail = _cookieAuthentication.GetAuthenticationToken()
+                };
 
                 _orderService.SetOrderPayment(paymentRequest);
             }

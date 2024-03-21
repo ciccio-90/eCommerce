@@ -50,25 +50,29 @@ namespace eCommerce.Storefront.Controllers.Controllers
             request.ItemsToRemove.Add(productId);
 
             request.BasketId = GetBasketId();
-            ModifyBasketResponse response = _basketService.ModifyBasket(request);            
-            BasketDetailView basketDetailView = new BasketDetailView();
-            basketDetailView.BasketSummary = new BasketSummaryView
+            ModifyBasketResponse response = _basketService.ModifyBasket(request);
+            BasketDetailView basketDetailView = new BasketDetailView
             {
-                BasketTotal = response.Basket.BasketTotal,
-                NumberOfItems = response.Basket.NumberOfItems
+                BasketSummary = new BasketSummaryView
+                {
+                    BasketTotal = response.Basket.BasketTotal,
+                    NumberOfItems = response.Basket.NumberOfItems
+                },
+                Basket = response.Basket,
+                DeliveryOptions = _basketService.GetAllDispatchOptions().DeliveryOptions
             };
-            basketDetailView.Basket = response.Basket;
-            basketDetailView.DeliveryOptions = _basketService.GetAllDispatchOptions().DeliveryOptions;
-            
+
             return Ok(basketDetailView);
         }
 
         [HttpPost]
         public IActionResult UpdateShipping(int shippingServiceId)
         {
-            ModifyBasketRequest request = new ModifyBasketRequest();
-            request.SetShippingServiceIdTo = shippingServiceId;
-            request.BasketId = GetBasketId();
+            ModifyBasketRequest request = new ModifyBasketRequest
+            {
+                SetShippingServiceIdTo = shippingServiceId,
+                BasketId = GetBasketId()
+            };
             BasketDetailView basketDetailView = new BasketDetailView();
             ModifyBasketResponse response = _basketService.ModifyBasket(request);            
             basketDetailView.BasketSummary = new BasketSummaryView
@@ -85,9 +89,11 @@ namespace eCommerce.Storefront.Controllers.Controllers
         [HttpPost]
         public IActionResult UpdateItems([FromBody] BasketQtyUpdateRequest jsonBasketQtyUpdateRequest)
         {
-            ModifyBasketRequest request = new ModifyBasketRequest();
-            request.BasketId = GetBasketId();
-            request.ItemsToUpdate = jsonBasketQtyUpdateRequest.ConvertToBasketItemUpdateRequests();
+            ModifyBasketRequest request = new ModifyBasketRequest
+            {
+                BasketId = GetBasketId(),
+                ItemsToUpdate = jsonBasketQtyUpdateRequest.ConvertToBasketItemUpdateRequests()
+            };
             BasketDetailView basketDetailView = new BasketDetailView();
             ModifyBasketResponse response = _basketService.ModifyBasket(request);
             basketDetailView.BasketSummary = new BasketSummaryView
@@ -129,8 +135,10 @@ namespace eCommerce.Storefront.Controllers.Controllers
 
             if (createNewBasket)
             {
-                CreateBasketRequest createBasketRequest = new CreateBasketRequest();
-                createBasketRequest.CustomerEmail = _cookieAuthentication.GetAuthenticationToken();
+                CreateBasketRequest createBasketRequest = new CreateBasketRequest
+                {
+                    CustomerEmail = _cookieAuthentication.GetAuthenticationToken()
+                };
 
                 createBasketRequest.ProductsToAdd.Add(productId);
 

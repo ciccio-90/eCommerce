@@ -36,27 +36,31 @@ namespace eCommerce.Storefront.Controllers.Controllers
 
         private ProductSearchResultView GetProductSearchResultViewFrom(GetProductsByCategoryResponse response)
         {
-            ProductSearchResultView productSearchResultView = new ProductSearchResultView();
-            productSearchResultView.BasketSummary = GetBasketSummaryView();
-            productSearchResultView.Categories = GetCategories();
-            productSearchResultView.CurrentPage = response.CurrentPage;
-            productSearchResultView.NumberOfTitlesFound = response.NumberOfTitlesFound;
-            productSearchResultView.Products = response.Products;
-            productSearchResultView.RefinementGroups = response.RefinementGroups;
-            productSearchResultView.SelectedCategory = response.SelectedCategory;
-            productSearchResultView.SelectedCategoryName = response.SelectedCategoryName;
-            productSearchResultView.TotalNumberOfPages = response.TotalNumberOfPages;
-            
+            ProductSearchResultView productSearchResultView = new ProductSearchResultView
+            {
+                BasketSummary = GetBasketSummaryView(),
+                Categories = GetCategories(),
+                CurrentPage = response.CurrentPage,
+                NumberOfTitlesFound = response.NumberOfTitlesFound,
+                Products = response.Products,
+                RefinementGroups = response.RefinementGroups,
+                SelectedCategory = response.SelectedCategory,
+                SelectedCategoryName = response.SelectedCategoryName,
+                TotalNumberOfPages = response.TotalNumberOfPages
+            };
+
             return productSearchResultView;
         }
 
         private GetProductsByCategoryRequest GenerateInitialProductSearchRequestFrom(int categoryId)
         {
-            GetProductsByCategoryRequest productSearchRequest = new GetProductsByCategoryRequest();
-            productSearchRequest.NumberOfResultsPerPage = int.Parse(_configuration["NumberOfResultsPerPage"]);
-            productSearchRequest.CategoryId = categoryId;
-            productSearchRequest.Index = 1;
-            productSearchRequest.SortBy = ProductsSortBy.PriceHighToLow;
+            GetProductsByCategoryRequest productSearchRequest = new GetProductsByCategoryRequest
+            {
+                NumberOfResultsPerPage = int.Parse(_configuration["NumberOfResultsPerPage"]),
+                CategoryId = categoryId,
+                Index = 1,
+                SortBy = ProductsSortBy.PriceHighToLow
+            };
 
             return productSearchRequest;
         }
@@ -73,8 +77,10 @@ namespace eCommerce.Storefront.Controllers.Controllers
 
         private GetProductsByCategoryRequest GenerateProductSearchRequestFrom(ProductSearchRequest jsonProductSearchRequest)
         {
-            GetProductsByCategoryRequest productSearchRequest = new GetProductsByCategoryRequest();
-            productSearchRequest.NumberOfResultsPerPage = int.Parse(_configuration["NumberOfResultsPerPage"]);
+            GetProductsByCategoryRequest productSearchRequest = new GetProductsByCategoryRequest
+            {
+                NumberOfResultsPerPage = int.Parse(_configuration["NumberOfResultsPerPage"])
+            };
 
             if (jsonProductSearchRequest != null)
             {

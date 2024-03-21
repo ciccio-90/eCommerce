@@ -23,15 +23,19 @@ namespace eCommerce.Storefront.Controllers.Controllers
 
         public async Task<IActionResult> Detail()
         {
-            GetCustomerRequest customerRequest = new GetCustomerRequest();
-            customerRequest.CustomerEmail = _cookieAuthentication.GetAuthenticationToken();
+            GetCustomerRequest customerRequest = new GetCustomerRequest
+            {
+                CustomerEmail = _cookieAuthentication.GetAuthenticationToken()
+            };
             GetCustomerResponse response = _customerService.GetCustomer(customerRequest);
 
             if (response.CustomerFound)
             {
-                CustomerDetailView customerDetailView = new CustomerDetailView();
-                customerDetailView.Customer = response.Customer;
-                customerDetailView.BasketSummary = GetBasketSummaryView();
+                CustomerDetailView customerDetailView = new CustomerDetailView
+                {
+                    Customer = response.Customer,
+                    BasketSummary = GetBasketSummaryView()
+                };
 
                 return View(customerDetailView);
             }
@@ -45,14 +49,18 @@ namespace eCommerce.Storefront.Controllers.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Detail(CustomerView customerView)
-        {          
-            ModifyCustomerRequest request = new ModifyCustomerRequest();
-            request.NewEmail = customerView.Email;
-            request.FirstName = customerView.FirstName;
-            request.SecondName = customerView.SecondName;
-            request.CurrentEmail = _cookieAuthentication.GetAuthenticationToken();
-            CustomerDetailView customerDetailView = new CustomerDetailView();
-            customerDetailView.BasketSummary = GetBasketSummaryView();
+        {
+            ModifyCustomerRequest request = new ModifyCustomerRequest
+            {
+                NewEmail = customerView.Email,
+                FirstName = customerView.FirstName,
+                SecondName = customerView.SecondName,
+                CurrentEmail = _cookieAuthentication.GetAuthenticationToken()
+            };
+            CustomerDetailView customerDetailView = new CustomerDetailView
+            {
+                BasketSummary = GetBasketSummaryView()
+            };
 
             try
             {       
@@ -72,15 +80,19 @@ namespace eCommerce.Storefront.Controllers.Controllers
 
         public async Task<IActionResult> DeliveryAddresses()
         {
-            GetCustomerRequest customerRequest = new GetCustomerRequest();
-            customerRequest.CustomerEmail = _cookieAuthentication.GetAuthenticationToken();
+            GetCustomerRequest customerRequest = new GetCustomerRequest
+            {
+                CustomerEmail = _cookieAuthentication.GetAuthenticationToken()
+            };
             GetCustomerResponse response = _customerService.GetCustomer(customerRequest);
 
             if (response.CustomerFound)
-            {                
-                CustomerDetailView customerDetailView = new CustomerDetailView();
-                customerDetailView.Customer = response.Customer;
-                customerDetailView.BasketSummary = GetBasketSummaryView();
+            {
+                CustomerDetailView customerDetailView = new CustomerDetailView
+                {
+                    Customer = response.Customer,
+                    BasketSummary = GetBasketSummaryView()
+                };
 
                 return View("DeliveryAddresses", customerDetailView);
             }
@@ -94,16 +106,20 @@ namespace eCommerce.Storefront.Controllers.Controllers
 
         public async Task<IActionResult> EditDeliveryAddress(int deliveryAddressId)
         {
-            GetCustomerRequest customerRequest = new GetCustomerRequest();
-            customerRequest.CustomerEmail = _cookieAuthentication.GetAuthenticationToken();
+            GetCustomerRequest customerRequest = new GetCustomerRequest
+            {
+                CustomerEmail = _cookieAuthentication.GetAuthenticationToken()
+            };
             GetCustomerResponse response = _customerService.GetCustomer(customerRequest);
 
             if (response.CustomerFound)
-            {                
-                CustomerDeliveryAddressView deliveryAddressView = new CustomerDeliveryAddressView();
-                deliveryAddressView.CustomerView = response.Customer;
-                deliveryAddressView.Address = response.Customer.DeliveryAddressBook.FirstOrDefault(d => d.Id == deliveryAddressId);
-                deliveryAddressView.BasketSummary = GetBasketSummaryView();
+            {
+                CustomerDeliveryAddressView deliveryAddressView = new CustomerDeliveryAddressView
+                {
+                    CustomerView = response.Customer,
+                    Address = response.Customer.DeliveryAddressBook.FirstOrDefault(d => d.Id == deliveryAddressId),
+                    BasketSummary = GetBasketSummaryView()
+                };
 
                 return View(deliveryAddressView);
             }
@@ -118,9 +134,11 @@ namespace eCommerce.Storefront.Controllers.Controllers
         [HttpPost]
         public async Task<IActionResult> EditDeliveryAddress(DeliveryAddressView deliveryAddressView)
         {
-            DeliveryAddressModifyRequest request = new DeliveryAddressModifyRequest();
-            request.Address = deliveryAddressView;
-            request.CustomerEmail = _cookieAuthentication.GetAuthenticationToken();
+            DeliveryAddressModifyRequest request = new DeliveryAddressModifyRequest
+            {
+                Address = deliveryAddressView,
+                CustomerEmail = _cookieAuthentication.GetAuthenticationToken()
+            };
 
             _customerService.ModifyDeliveryAddress(request);
 
@@ -129,9 +147,11 @@ namespace eCommerce.Storefront.Controllers.Controllers
 
         public IActionResult AddDeliveryAddress()
         {
-            CustomerDeliveryAddressView customerDeliveryAddressView = new CustomerDeliveryAddressView();
-            customerDeliveryAddressView.Address = new DeliveryAddressView();
-            customerDeliveryAddressView.BasketSummary = GetBasketSummaryView();
+            CustomerDeliveryAddressView customerDeliveryAddressView = new CustomerDeliveryAddressView
+            {
+                Address = new DeliveryAddressView(),
+                BasketSummary = GetBasketSummaryView()
+            };
 
             return View(customerDeliveryAddressView);
         }
@@ -139,10 +159,12 @@ namespace eCommerce.Storefront.Controllers.Controllers
         [HttpPost]
         public async Task<IActionResult> AddDeliveryAddress(DeliveryAddressView deliveryAddressView)
         {
-            DeliveryAddressAddRequest request = new DeliveryAddressAddRequest();
-            request.Address = deliveryAddressView;
-            request.CustomerEmail = _cookieAuthentication.GetAuthenticationToken();
-            
+            DeliveryAddressAddRequest request = new DeliveryAddressAddRequest
+            {
+                Address = deliveryAddressView,
+                CustomerEmail = _cookieAuthentication.GetAuthenticationToken()
+            };
+
             _customerService.AddDeliveryAddress(request);
 
             return await DeliveryAddresses();

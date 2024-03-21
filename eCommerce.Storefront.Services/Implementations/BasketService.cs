@@ -157,9 +157,11 @@ namespace eCommerce.Storefront.Services.Implementations
 
         public GetAllDispatchOptionsResponse GetAllDispatchOptions()
         {
-            GetAllDispatchOptionsResponse response = new GetAllDispatchOptionsResponse();
-            response.DeliveryOptions = _deliveryOptionRepository.FindAll().OrderBy(d => d.Cost).Select(d => _mapper.Map<DeliveryOption, DeliveryOptionView>(d));
-            
+            GetAllDispatchOptionsResponse response = new GetAllDispatchOptionsResponse
+            {
+                DeliveryOptions = _deliveryOptionRepository.FindAll().OrderBy(d => d.Cost).Select(d => _mapper.Map<DeliveryOption, DeliveryOptionView>(d))
+            };
+
             return response;
         }
     }

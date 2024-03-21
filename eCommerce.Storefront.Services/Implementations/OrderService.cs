@@ -103,9 +103,11 @@ namespace eCommerce.Storefront.Services.Implementations
 
         private Order ConvertToOrder(Basket basket)
         {
-            Order order = new Order();
-            order.ShippingCharge = basket.DeliveryCost();
-            order.ShippingService = basket.DeliveryOption.ShippingService;
+            Order order = new Order
+            {
+                ShippingCharge = basket.DeliveryCost(),
+                ShippingService = basket.DeliveryOption.ShippingService
+            };
 
             foreach (BasketItem item in basket.Items)
             {
